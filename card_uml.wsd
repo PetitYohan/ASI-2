@@ -1,0 +1,92 @@
+@startuml
+scale 2
+
+namespace card.model #DDDDDD{
+    class CardBasics {
+        - name: String 
+        - description: String
+        - family: String
+        - affinity: String
+        - imgUrl: String
+        - smallImgUrl: String
+        + getters()
+        + setters()
+    }
+
+    class CardDTO extends CardBasics{
+        - id: Integer
+        - energy: Float
+        - hp: Float
+        - defence: Float
+        - attack: Float
+        - price: Float
+        - userId: Integer
+        + getters()
+        + setters()
+    }
+
+    class CardModel extends CardBasics{
+        - id: Integer
+        - energy: Float
+        - hp: Float
+        - defence: Float
+        - attack: Float
+        - price: Float
+        - user: UserModel
+        - store: StoreTransaction
+        + getters()
+        + setters()
+        + computePrice()
+    }
+
+    class CardReference extends CardBasics implements Serializable {
+        - {static} serialVersionUID: long
+        - id: Integer
+        + getId()
+        + setId()
+    }
+}
+
+namespace card.controller #DDDDDD{
+    class CardReferenceService{
+        - {final} cardRefRepository: CardRefRepository
+        + getAllCardRef()
+        + addCardRef()
+        + updateCardRef()
+        + getRandCardRef()
+        + doInitAfterStartup()
+    }
+    CardReferenceService o-- CardRefRepository
+
+    class CardModelService{
+        - {final} cardRepository: CardModelRepository
+        - {final} cardRefService: CardReferenceService
+        + getAllCardModel()
+        + addCard()
+        + updateCardRef()
+        + updateCard()
+        + getCard()
+        + deleteCardModel()
+        + getRandCard()
+        + getAllCardToSell()
+    }
+    CardModelService o-- CardModelRepository
+    CardModelService o-- CardReferenceService
+
+    interface CardRefRepository extends CrudRepository{}
+
+    interface CardModelRepository extends CrudRepository{}
+
+    class CardRestController{
+        - {final} cardModelService: CardModelService
+        - getAllCards()
+        - getCard()
+        + addCard()
+        + updateCard()
+        + deleteUser()
+        - getCardsToSell()
+    }
+    CardRestController o-- CardModelService
+}
+
+card.controller o--o card.model
