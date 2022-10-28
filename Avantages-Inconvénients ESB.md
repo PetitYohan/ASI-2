@@ -1,7 +1,13 @@
 # Avantages  et inconvénients des bus de communication
 
 
-|   | Avantages       | Inconvénients |
-| :--------------- |:---------------:| -----:|
-| ActiveMq  |  |  |
-| RabbitMq |  |  |
+| ActiveMq | RabbitMq | Kafka | Mqtt | Msmq |
+| :--------------- |:---------------:| :-----:| :-----:|-----:|
+| Platform |  |  | ||
+| Protocoles |  |  | ||
+| Fonctionnalités |  |  |||
+| Fonctionnement |  |  |||
+| Spécialités |  |  |||
+| Charactéristiques des queues |  |  |||
+| Politiques |  |  |||
+| Aspect de développement |  |  |||
