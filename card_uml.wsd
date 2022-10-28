@@ -1,7 +1,7 @@
 @startuml
 scale 2
 
-namespace card.model #DDDDDD{
+namespace card.model #DDADEE{
     class CardBasics {
         - name: String 
         - description: String
@@ -90,3 +90,4 @@ namespace card.controller #DDDDDD{
 }
 
 card.controller o--o card.model
+@enduml

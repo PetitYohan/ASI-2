@@ -1,0 +1,76 @@
+@startuml
+
+namespace user.model #DDADEE{
+    
+    class AuthDTO {
+        - username: String
+        - password: String
+        + getters()
+        + setters()
+    } 
+
+    class UserDTO {
+        - id: Integer
+        - login: String
+        - pwd: String
+        - account: Float
+        - lastName: String
+        - surName: String
+        - email: String
+        - cardList: HashSet<Integer>
+        + getters()
+        + setters()
+    }
+    UserDTO <..> UserModel
+
+    class UserModel implements Serializable{
+        - {static} {final} serialVersionUID: long
+        - id: Integer
+        - login: String
+        - pwd: String
+        - account: Float
+        - lastName: String
+        - surName: String
+        - email: String
+        - cardList: HashSet<Integer>
+        + getters()
+        + setters()
+        + addAllCardList()
+        + addCard()
+        - checkIfCard()
+        }
+}
+
+namespace user.controller #DDDDED{
+
+    interface UserRepository extends CrudRepository{
+        {abstract} findByLoginAndPwd()
+    }
+
+    class UserRestController{
+        - {final} userService: UserService
+        - getUser()
+        - getAllUsers()
+        + addUser()
+        + updateUser()
+        + deleteUser()
+        - getAllCourses()
+    }
+    UserRestController o-- UserService
+
+    class UserService{
+        - userRepository: UserRepository 
+        - cardModelService: CardModelService 
+        + addUser()
+        + updateUser()
+        + updateUser()
+        + deleteUser()
+        + getUserByLoginPwd()
+        - fromUDtoToUModel()
+    }
+    UserService o-- UserRepository
+
+}
+
+
+@enduml
