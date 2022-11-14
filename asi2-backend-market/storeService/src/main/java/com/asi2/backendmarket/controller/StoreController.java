@@ -5,12 +5,10 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asi2.backendmarket.dto.store.StoreOrder;
 import com.asi2.backendmarket.dto.store.StoreTransactionDto;
-import com.asi2.backendmarket.dto.card.CardInstanceDto;
 import com.asi2.backendmarket.model.StoreTransaction;
 import com.asi2.backendmarket.rest.store.IStoreRest;
 import com.asi2.backendmarket.service.StoreService;
@@ -30,12 +28,12 @@ public class StoreController implements IStoreRest {
 	}
 
 	@Override
-	public boolean buyCard(StoreOrder order) {
+	public Boolean buyCard(StoreOrder order) {
 		return storeService.sellCard(order.getUser_id(), order.getCard_id());
 	}
 
 	@Override
-	public boolean sellCard(StoreOrder order) {
+	public Boolean sellCard(StoreOrder order) {
 		return storeService.buyCard(order.getUser_id(), order.getCard_id());
 	}
 

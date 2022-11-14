@@ -1,4 +1,4 @@
-package com.asi2.backendmarket.model;
+package com.asi2.backendmarket.dto.store;
 
 public class StoreOrder {
 	private int user_id;

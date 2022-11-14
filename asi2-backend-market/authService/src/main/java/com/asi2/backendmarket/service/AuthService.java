@@ -16,9 +16,10 @@ import org.springframework.http.HttpStatus;
 public class AuthService {
 
     private static final UserRestConsumer userRestConsumer = new UserRestConsumer();
+
     public UserDto getUserByLogin(String login) {
         Optional<UserDto> user = Optional.of(userRestConsumer.findByLogin(login).getBody());
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             return user.get();
         } else {
             return null;
@@ -26,15 +27,16 @@ public class AuthService {
     }
 
     public String login(UserDto user, String password) {
-        if(BCrypt.checkpw(password, user.getPwd())) {
+        if (BCrypt.checkpw(password, user.getPwd())) {
             return createTokenFromUser(user);
         } else {
             return null;
         }
     }
+
     private String createTokenFromUser(UserDto user) {
         return Jwts.builder()
-                .setIssuer("CardTrading")
+                .setIssuer("ASI2-backend-service")
                 .setSubject(user.getEmail())
                 .claim("fullName", user.getLastName() + " " + user.getSurName())
                 .claim("scope", "user")
@@ -42,18 +44,18 @@ public class AuthService {
                 .setExpiration(Date.from(Instant.ofEpochSecond(4622470422L)))
                 .signWith(
                         SignatureAlgorithm.HS256,
-                        TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=")
-                )
+                        TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E="))
                 .compact();
     }
+
     public boolean isValidUserRegistration(UserDto user) {
         boolean isValid = true;
-        if(this.isInDatabase(user)) {
-            if(user.getLastName() == null || user.getLastName().isEmpty()) {
+        if (this.isInDatabase(user)) {
+            if (user.getLastName() == null || user.getLastName().isEmpty()) {
                 isValid = false;
             }
 
-            if(user.getSurName() == null || user.getSurName().isEmpty()) {
+            if (user.getSurName() == null || user.getSurName().isEmpty()) {
                 isValid = false;
             }
         } else {
@@ -62,19 +64,16 @@ public class AuthService {
         return isValid;
     }
 
-    public boolean postUser(UserDto userDto){
-        return userRestConsumer.postUser(userDto);
+    public boolean postUser(UserDto userDto) {
+        return userRestConsumer.addUser(userDto).getStatusCode().equals(HttpStatus.OK);
     }
 
     public boolean isInDatabase(UserDto user) {
         return userRestConsumer.findByLogin(user.getLogin()).getStatusCode().equals(HttpStatus.OK);
     }
+
     public String hashPassword(String pwd) {
         return BCrypt.hashpw(pwd, BCrypt.gensalt());
     }
 
 }
-
-
-
-

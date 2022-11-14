@@ -23,10 +23,10 @@ public interface IStoreRest extends IRest {
 	public final String TRANSACTION = ROOT_PATH + "/transaction";
 
 	@PostMapping(BUY)
-	public boolean buyCard(@RequestBody StoreOrder orderDto);
+	public Boolean buyCard(@RequestBody StoreOrder orderDto);
 
 	@PostMapping(SELL)
-	public boolean sellCard(@RequestBody StoreOrder orderDto);
+	public Boolean sellCard(@RequestBody StoreOrder orderDto);
 
 	@GetMapping(TRANSACTION)
 	public List<StoreTransactionDto> getAllCards();

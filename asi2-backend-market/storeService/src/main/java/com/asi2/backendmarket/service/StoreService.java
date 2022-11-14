@@ -28,14 +28,11 @@ public class StoreService {
 	}
 
 	public boolean buyCard(Integer user_id, Integer card_id) {
-		Optional<UserDto> u_option = userRestConsumer.getUser(user_id);
-		Optional<CardDto> c_option = cardRestConsumer.getCard(card_id);
-		if (!u_option.isPresent() || !c_option.isPresent()) {
+		UserDto u = userRestConsumer.getUser(user_id);
+		CardDto c = cardRestConsumer.getCard(card_id);
+		if (u == null || c == null) {
 			return false;
 		}
-		//TODO use rest consumer
-		UserDto u = u_option.get();
-		CardDto c = c_option.get();
 		if (u.getAccount() > c.getPrice()) {
 			u.addCard(c);
 			u.setAccount(u.getAccount() - c.getPrice());

@@ -3,7 +3,7 @@ package com.asi2.backendmarket.service;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
-import com.asi2.backendmarket.dto.card.CardInstanceDto;
+import com.asi2.backendmarket.dto.card.CardDto;
 import com.asi2.backendmarket.dto.user.UserDto;
 import com.asi2.backendmarket.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +14,14 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.asi2.backendmarket.repository.UserRepository;
 import com.asi2.backendmarket.rest.card.CardRestConsumer;
 import com.asi2.backendmarket.rest.user.UserRestConsumer;
 
 import org.mindrot.jbcrypt.BCrypt;
+import org.modelmapper.ModelMapper;
 
 import java.net.URL;
 import java.time.Instant;
@@ -32,10 +34,14 @@ import io.jsonwebtoken.impl.TextCodec;
 
 @Service
 public class UserService {
-	CardRestConsumer cardRestConsumer;
+
+	private CardRestConsumer cardRestConsumer;
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	ModelMapper mapper;
 
 	@Autowired
 	private HttpServletRequest request;
@@ -45,140 +51,115 @@ public class UserService {
 		cardRestConsumer = new CardRestConsumer();
 	}
 
-	public Boolean addUser(UserDto user) {
+	public UserDto addUser(UserDto user) {
 		user.setAccount(1000.0F);
 		UserModel userModel = fromUDtoToUModel(user);
 		userRepository.save(userModel);
 		System.out.println("User created : " + userModel.getEmail());
-		
-		// get five card 
-		//cardInstanceService.giveCardsToNewUser(user);
-		System.out.println("TODO: Give card to user !");
+
+		// get five card
+		// cardInstanceService.giveCardsToNewUser(user);
 		try {
-			List<CardInstanceDto> cards = cardRestConsumer.generateCardsForNewUser(userModel.getId()).getBody();
-			return cards.size() != 0;
+			List<CardDto> cards = new ArrayList<CardDto>();// cardRestConsumer.generateCardsForNewUser(userModel.getId()).getBody();
+			return user;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
-	public UserDto updateUser(UserDto user) {
-		UserModel u = fromUDtoToUModel(user);
-		UserModel uBd =userRepository.save(u);
-		return fromUserModelToUserDTO(uBd);
+
+	// TODO use mapper
+	public UserDto updateUser(Integer id, UserDto user) {
+		if (id != user.getIdUser()) {
+			return null;
+		} else if (!userRepository.existsById(id)) {
+			return null;
+		} else {
+			UserModel u = mapper.map(user, UserModel.class);
+			UserModel uBd = userRepository.save(u);
+			return mapper.map(uBd, UserDto.class);
+		}
 	}
-	public void deleteUser(String id) {
+
+	public void deleteUser(Integer id) {
 		userRepository.deleteById(Integer.valueOf(id));
 	}
-	
-	public boolean isInDatabase(UserModel user) {
-		Optional<UserModel> userFind = userRepository.findByEmailUser(user.getEmail());
-		return userFind.isPresent();
-	}
-	
-	public boolean isValidUserRegistration(UserModel user) {
-		boolean isValid = true;
-		if(!this.isInDatabase(user)) {
-		
-			if(user.getLastName() == null || user.getLastName().isEmpty()) {
-				isValid = false;
-			}
-			
-			if(user.getSurName() == null || user.getSurName().isEmpty()) {
-				isValid = false;
-			}
-		} else {
-			isValid = false;
-		}
-		return isValid;
-	}
-	
-	public String login(UserModel user, String password) {
-		if(BCrypt.checkpw(password, user.getPwd())) {
-			return createTokenFromUser(user);
-		} else {
-			return null;
-		}
-    }
 
-	public UserModel getUserByLogin(String login) {
+	public UserDto getUserByLogin(String login) {
 		Optional<UserModel> user = userRepository.findByLoginUser(login);
-		if(user.isPresent()) {
-			return user.get();
+		if (user.isPresent()) {
+			return mapper.map(user.get(), UserDto.class);
 		} else {
 			return null;
 		}
 	}
-	public UserModel getUserByEmail(String email) {
+
+	public UserDto getUserByEmail(String email) {
 		Optional<UserModel> user = userRepository.findByEmailUser(email);
-		if(user.isPresent()) {
-			return user.get();
+		if (user.isPresent()) {
+			return mapper.map(user.get(), UserDto.class);
 		} else {
 			return null;
 		}
 	}
-	
-	public Optional<UserModel> getRequestUser() {
+
+	// TODO move to common to be used by any service
+	public Optional<UserDto> getRequestUser() {
 		String authToken = request.getHeader("Authorization");
-		
-		if(authToken == null || authToken.isEmpty()) {			
+
+		if (authToken == null || authToken.isEmpty()) {
 			return Optional.empty();
 		}
-		
+
 		String email = Jwts.parser()
 				.setSigningKey(TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E="))
 				.parseClaimsJws(authToken.replace("Bearer ", ""))
 				.getBody()
 				.getSubject();
-		
+
 		return Optional.of(getUserByEmail(email));
 	}
-	
-	public UserModel getUserById(int id) {
+
+	public UserDto getUserById(int id) {
 		Optional<UserModel> user = userRepository.findById(id);
 		if (user.isPresent()) {
-			return user.get();
+			return mapper.map(user.get(), UserDto.class);
 		} else {
 			return null;
 		}
 	}
-	
-	public Boolean changeMoneyOfUser(UserModel user,float balancedMoney) {
-		try {
-			float oldMoney = user.getAccount();
-			float newMoney = oldMoney + balancedMoney;
-			if (newMoney >= 0) {
-				user.setAccount(newMoney);
-				userRepository.save(user);
-				return true;
-			} else {
+
+	public Boolean changeMoneyOfUser(Integer userId, float balancedMoney) {
+
+		Optional<UserModel> u = userRepository.findById(userId);
+		if (!u.isPresent()) {
+			return false;
+		} else {
+			UserModel user = u.get();
+			try {
+				float oldMoney = user.getAccount();
+				float newMoney = oldMoney + balancedMoney;
+				if (newMoney >= 0) {
+					user.setAccount(newMoney);
+					userRepository.save(user);
+					return true;
+				} else {
+					return false;
+				}
+
+			} catch (Exception e) {
 				return false;
 			}
-
-		} catch (Exception e) {
-			return false;
 		}
 	}
-	
-	private String createTokenFromUser(UserModel user) {
-		return Jwts.builder()
-			  .setIssuer("CardTrading")
-			  .setSubject(user.getEmail())
-			  .claim("fullName", user.getLastName() + " " + user.getSurName())
-			  .claim("scope", "user")
-			  .setIssuedAt(Date.from(Instant.ofEpochSecond(1466796822L)))
-			  .setExpiration(Date.from(Instant.ofEpochSecond(4622470422L)))
-			  .signWith(
-			    SignatureAlgorithm.HS256,
-			    TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=")
-			  )
-			  .compact();
-	}
 
-	public List<UserModel> getAllUsers() {
+	public List<UserDto> getAllUsers() {
 		List<UserModel> userList = new ArrayList<>();
 		userRepository.findAll().forEach(userList::add);
-		return userList;
+		return userList
+				.stream()
+				.map(entry -> mapper.map(entry, UserDto.class))
+				.collect(Collectors.toList());
 	}
 
 	private UserModel fromUDtoToUModel(UserDto user) {

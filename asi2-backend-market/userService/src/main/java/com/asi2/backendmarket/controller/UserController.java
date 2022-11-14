@@ -15,87 +15,88 @@ import com.asi2.backendmarket.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserController implements IUserRest {
 	@Autowired
 	UserService userService;
-	
-	@Autowired
-	ModelMapper modelMapper;
+
 	public UserController(UserService userService) {
-		this.userService=userService;
-	}
-	@RequestMapping(method=RequestMethod.DELETE,value="/user/{id}")
-	public void deleteUser(@PathVariable String id) {
-		userService.deleteUser(id);
-	}
-	
-	@Override
-	@ResponseBody
-	public ResponseEntity<UserDto> getUserProfile() {
-		Optional<UserModel> currentUser = userService.getRequestUser();
-		if(currentUser.isPresent()) {
-			UserDto profilUserDto = modelMapper.map(currentUser, UserDto.class);
-			return new ResponseEntity<UserDto>(profilUserDto, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.BAD_REQUEST);
-		}
+		this.userService = userService;
 	}
 
 	@Override
 	public ResponseEntity<UserDto> getUser(Integer id) {
-		UserModel user = userService.getUserById(id);
-		if(user != null) {
-			return new ResponseEntity<UserDto>(userService.fromUserModelToUserDTO(user), HttpStatus.OK);
+		UserDto user = userService.getUserById(id);
+		if (user != null) {
+			return new ResponseEntity<UserDto>(user, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@Override
-	public Boolean postUser(UserDto userDto) {
-		return userService.addUser(userDto);
+	public ResponseEntity<UserDto> addUser(UserDto userDto) {
+		UserDto addedUser = userService.addUser(userDto);
+		if (addedUser != null) {
+			return new ResponseEntity<UserDto>(addedUser, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.BAD_REQUEST);
+		}
+
 	}
 
 	@Override
+	public ResponseEntity<UserDto> updateUser(Integer id, UserDto userDto) {
+		UserDto updatedUser = userService.updateUser(id, userDto);
+		if (updatedUser != null) {
+			return new ResponseEntity<UserDto>(updatedUser, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.BAD_REQUEST);
+		}
+
+	}
+
+	@Override
+	public void deleteUser(Integer id) {
+		userService.deleteUser(id);
+	}
+
+	@Override
+	public List<UserDto> getAllUsers() {
+		return userService.getAllUsers();
+	}
+
+	@ResponseBody
+	public ResponseEntity<UserDto> getUserProfile() {
+		Optional<UserDto> currentUser = userService.getRequestUser();
+		if (currentUser.isPresent()) {
+			return new ResponseEntity<UserDto>(currentUser.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.BAD_REQUEST);
+		}
+	}
+
 	public ResponseEntity<UserDto> findByLogin(String login) {
-		UserModel user = userService.getUserByLogin(login);
-		if(user != null) {
-			return new ResponseEntity<UserDto>(userService.fromUserModelToUserDTO(user), HttpStatus.OK);
+		UserDto user = userService.getUserByLogin(login);
+		if (user != null) {
+			return new ResponseEntity<UserDto>(user, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
-	@RequestMapping(method=RequestMethod.GET,value="/users")
-	private List<UserDto> getAllUsers() {
-		List<UserDto> uDTOList=new ArrayList<UserDto>();
-		for(UserModel uM: userService.getAllUsers()){
-			uDTOList.add(userService.fromUserModelToUserDTO(uM));
-		}
-		return uDTOList;
-
-	}
-	@PutMapping(value="/user/{id}")
-	public UserDto updateUser(@RequestBody UserDto user,@PathVariable String id) {
-		user.setIdUser(Integer.valueOf(id));
-		return userService.updateUser(user);
-	}
-	
-	@Override
 	@ResponseBody
 	public ResponseEntity<Boolean> balanceUserMoney(@RequestBody BalanceUserDto userDto) {
-		UserModel user = userService.getUserById(userDto.getIdUser());
-		
-		Boolean isMoneyChange = userService.changeMoneyOfUser(user, userDto.getBalanceMoney());
-		
-	    if (isMoneyChange) {
-	    	return new ResponseEntity<Boolean>(true, HttpStatus.OK);
-	    } else {
-	    	return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
-	    }
-	}
 
+		Boolean isMoneyChange = userService.changeMoneyOfUser(userDto.getIdUser(), userDto.getBalanceMoney());
+
+		if (isMoneyChange) {
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+		}
+	}
 
 }
