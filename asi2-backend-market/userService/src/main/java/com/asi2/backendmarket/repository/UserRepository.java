@@ -1,13 +1,16 @@
 package com.asi2.backendmarket.repository;
 
+import com.asi2.backendmarket.model.UserModel;
 import org.springframework.data.repository.CrudRepository;
 
-import com.asi2.backendmarket.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<User, Integer>{
+public interface UserRepository extends CrudRepository<UserModel, Integer>{
 	
-	public Optional<User> findByEmailUser(String emailUser);
+	public Optional<UserModel> findByEmailUser(String emailUser);
+	public Optional<UserModel> findByLoginUser(String loginUser);
+
 	
 }

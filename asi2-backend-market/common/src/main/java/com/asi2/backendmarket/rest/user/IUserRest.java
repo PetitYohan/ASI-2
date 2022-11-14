@@ -8,10 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 public interface IUserRest extends IRest {
-    public final String ROOT_PATH = "/api/users";
+    public final String ROOT_PATH = "/api/user";
 
 	public final String PROFILE = ROOT_PATH + "/profile";
 	public final String BALANCE = ROOT_PATH + "/balance";
@@ -19,6 +18,15 @@ public interface IUserRest extends IRest {
     
     @RequestMapping(PROFILE)
     public ResponseEntity<UserDto> getUserProfile();
+
+    @RequestMapping(PROFILE)
+    public ResponseEntity<UserDto> getUser(Integer id);
+
+    @RequestMapping(ROOT_PATH)
+    public Boolean postUser(UserDto userDto) ;
+
+    @RequestMapping(ROOT_PATH)
+    public ResponseEntity<UserDto> findByLogin(String login);
 
     @PostMapping(BALANCE)
 	public ResponseEntity<Boolean> balanceUserMoney(@RequestBody BalanceUserDto userDto);

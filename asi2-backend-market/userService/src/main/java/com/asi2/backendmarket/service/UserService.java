@@ -3,16 +3,18 @@ package com.asi2.backendmarket.service;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
+import com.asi2.backendmarket.dto.card.CardInstanceDto;
+import com.asi2.backendmarket.dto.user.UserDto;
+import com.asi2.backendmarket.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
-import com.asi2.backendmarket.dto.CardInstanceDto;
-import com.asi2.backendmarket.model.User;
 import com.asi2.backendmarket.repository.UserRepository;
 import com.asi2.backendmarket.rest.card.CardRestConsumer;
 import com.asi2.backendmarket.rest.user.UserRestConsumer;
@@ -43,37 +45,46 @@ public class UserService {
 		cardRestConsumer = new CardRestConsumer();
 	}
 
-	public Boolean addUser(User user) {
-		user.setMoneyUser(1000.0);
-		userRepository.save(user);
-		System.out.println("User created : " + user.getEmailUser());
+	public Boolean addUser(UserDto user) {
+		user.setAccount(1000.0F);
+		UserModel userModel = fromUDtoToUModel(user);
+		userRepository.save(userModel);
+		System.out.println("User created : " + userModel.getEmail());
 		
 		// get five card 
 		//cardInstanceService.giveCardsToNewUser(user);
 		System.out.println("TODO: Give card to user !");
 		try {
-			List<CardInstanceDto> cards = cardRestConsumer.generateCardsForNewUser(user.getIdUser()).getBody();
+			List<CardInstanceDto> cards = cardRestConsumer.generateCardsForNewUser(userModel.getId()).getBody();
 			return cards.size() != 0;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
+	public UserDto updateUser(UserDto user) {
+		UserModel u = fromUDtoToUModel(user);
+		UserModel uBd =userRepository.save(u);
+		return fromUserModelToUserDTO(uBd);
+	}
+	public void deleteUser(String id) {
+		userRepository.deleteById(Integer.valueOf(id));
+	}
 	
-	public boolean isInDatabase(User user) {
-		Optional<User> userFind = userRepository.findByEmailUser(user.getEmailUser());
+	public boolean isInDatabase(UserModel user) {
+		Optional<UserModel> userFind = userRepository.findByEmailUser(user.getEmail());
 		return userFind.isPresent();
 	}
 	
-	public boolean isValidUserRegistration(User user) {
+	public boolean isValidUserRegistration(UserModel user) {
 		boolean isValid = true;
 		if(!this.isInDatabase(user)) {
 		
-			if(user.getNameUser() == null || user.getNameUser().isEmpty()) {
+			if(user.getLastName() == null || user.getLastName().isEmpty()) {
 				isValid = false;
 			}
 			
-			if(user.getSurnameUser() == null || user.getSurnameUser().isEmpty()) {
+			if(user.getSurName() == null || user.getSurName().isEmpty()) {
 				isValid = false;
 			}
 		} else {
@@ -82,16 +93,24 @@ public class UserService {
 		return isValid;
 	}
 	
-	public String login(User user, String password) {
-		if(BCrypt.checkpw(password, user.getPasswordUser())) {
+	public String login(UserModel user, String password) {
+		if(BCrypt.checkpw(password, user.getPwd())) {
 			return createTokenFromUser(user);
 		} else {
 			return null;
 		}
     }
-	
-	public User getUserByEmail(String email) {
-		Optional<User> user = userRepository.findByEmailUser(email);
+
+	public UserModel getUserByLogin(String login) {
+		Optional<UserModel> user = userRepository.findByLoginUser(login);
+		if(user.isPresent()) {
+			return user.get();
+		} else {
+			return null;
+		}
+	}
+	public UserModel getUserByEmail(String email) {
+		Optional<UserModel> user = userRepository.findByEmailUser(email);
 		if(user.isPresent()) {
 			return user.get();
 		} else {
@@ -99,11 +118,11 @@ public class UserService {
 		}
 	}
 	
-	public User getRequestUser() {
+	public Optional<UserModel> getRequestUser() {
 		String authToken = request.getHeader("Authorization");
 		
 		if(authToken == null || authToken.isEmpty()) {			
-			return null;
+			return Optional.empty();
 		}
 		
 		String email = Jwts.parser()
@@ -112,11 +131,11 @@ public class UserService {
 				.getBody()
 				.getSubject();
 		
-		return getUserByEmail(email);
+		return Optional.of(getUserByEmail(email));
 	}
 	
-	public User getUserById(int id) {
-		Optional<User> user = userRepository.findById(id);
+	public UserModel getUserById(int id) {
+		Optional<UserModel> user = userRepository.findById(id);
 		if (user.isPresent()) {
 			return user.get();
 		} else {
@@ -124,12 +143,12 @@ public class UserService {
 		}
 	}
 	
-	public Boolean changeMoneyOfUser(User user,double balancedMoney) {
+	public Boolean changeMoneyOfUser(UserModel user,float balancedMoney) {
 		try {
-			double oldMoney = user.getMoneyUser();
-			double newMoney = oldMoney + balancedMoney;
+			float oldMoney = user.getAccount();
+			float newMoney = oldMoney + balancedMoney;
 			if (newMoney >= 0) {
-				user.setMoneyUser(newMoney);
+				user.setAccount(newMoney);
 				userRepository.save(user);
 				return true;
 			} else {
@@ -141,11 +160,11 @@ public class UserService {
 		}
 	}
 	
-	private String createTokenFromUser(User user) {
+	private String createTokenFromUser(UserModel user) {
 		return Jwts.builder()
 			  .setIssuer("CardTrading")
-			  .setSubject(user.getEmailUser())
-			  .claim("fullName", user.getNameUser() + " " + user.getSurnameUser())
+			  .setSubject(user.getEmail())
+			  .claim("fullName", user.getLastName() + " " + user.getSurName())
 			  .claim("scope", "user")
 			  .setIssuedAt(Date.from(Instant.ofEpochSecond(1466796822L)))
 			  .setExpiration(Date.from(Instant.ofEpochSecond(4622470422L)))
@@ -155,4 +174,28 @@ public class UserService {
 			  )
 			  .compact();
 	}
+
+	public List<UserModel> getAllUsers() {
+		List<UserModel> userList = new ArrayList<>();
+		userRepository.findAll().forEach(userList::add);
+		return userList;
+	}
+
+	private UserModel fromUDtoToUModel(UserDto user) {
+		UserModel u = new UserModel(user);
+		return u;
+	}
+
+	public static UserDto fromUserModelToUserDTO(UserModel uM) {
+		UserDto userDto = new UserDto();
+		userDto.setIdUser(uM.getId());
+		userDto.setLogin(uM.getLogin());
+		userDto.setPwd(uM.getPwd());
+		userDto.setAccount(uM.getAccount());
+		userDto.setLastName(uM.getLastName());
+		userDto.setSurName(uM.getSurName());
+		userDto.setEmail(uM.getEmail());
+		return userDto;
+	}
+
 }
