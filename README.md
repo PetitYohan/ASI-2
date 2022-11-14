@@ -2,6 +2,10 @@
 
 ASI-2: Framework frontend, services orientés architecture (S9)
 
+## Diagramme Monolithique :
+
+![image](Images/diagramme_archi_monolith.png)
+
 ## Diagramme des micro-services :
 
 ![image](Images/Diagramme-Micro-services.drawio.png)
