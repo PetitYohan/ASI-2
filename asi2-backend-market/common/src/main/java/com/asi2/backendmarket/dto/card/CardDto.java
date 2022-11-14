@@ -1,58 +1,75 @@
 package com.asi2.backendmarket.dto.card;
 
-import com.asi2.backendmarket.dto.card.FamilyDto;
-
 public class CardDto {
 
-	private int idCard;
-	private String nameCard;
-	private String descriptioncard;
-	private String affinityCard;
-	private int energyCard;
-	private FamilyDto familyCardDto;
-	private String sourceUrlCard;
-	
-	public int getIdCard() {
-		return idCard;
+	public class CardDTO extends CardBasics {
+		private Integer id;
+		private float energy;
+		private float hp;
+		private float defence;
+		private float attack;
+		private float price;
+		private Integer userId;
+
+		public CardDTO() {
+
+		}
+
+		public Integer getId() {
+			return id;
+		}
+
+		public void setId(Integer id) {
+			this.id = id;
+		}
+
+		public float getEnergy() {
+			return energy;
+		}
+
+		public void setEnergy(float energy) {
+			this.energy = energy;
+		}
+
+		public float getHp() {
+			return hp;
+		}
+
+		public void setHp(float hp) {
+			this.hp = hp;
+		}
+
+		public float getDefence() {
+			return defence;
+		}
+
+		public void setDefence(float defence) {
+			this.defence = defence;
+		}
+
+		public float getAttack() {
+			return attack;
+		}
+
+		public void setAttack(float attack) {
+			this.attack = attack;
+		}
+
+		public float getPrice() {
+			return price;
+		}
+
+		public void setPrice(float price) {
+			this.price = price;
+		}
+
+		public Integer getUserId() {
+			return userId;
+		}
+
+		public void setUserId(Integer userId) {
+			this.userId = userId;
+		}
+
 	}
-	public void setIdCard(int idCard) {
-		this.idCard = idCard;
-	}
-	public String getNameCard() {
-		return nameCard;
-	}
-	public void setNameCard(String nameCard) {
-		this.nameCard = nameCard;
-	}
-	public String getDescriptioncard() {
-		return descriptioncard;
-	}
-	public void setDescriptioncard(String descriptioncard) {
-		this.descriptioncard = descriptioncard;
-	}
-	public String getAffinityCard() {
-		return affinityCard;
-	}
-	public void setAffinityCard(String affinityCard) {
-		this.affinityCard = affinityCard;
-	}
-	public int getEnergyCard() {
-		return energyCard;
-	}
-	public void setEnergyCard(int energyCard) {
-		this.energyCard = energyCard;
-	}
-	public FamilyDto getFamilyCardDto() {
-		return familyCardDto;
-	}
-	public void setFamilyCardDto(FamilyDto familyCardDto) {
-		this.familyCardDto = familyCardDto;
-	}
-	public String getSourceUrlCard() {
-		return sourceUrlCard;
-	}
-	public void setSourceUrlCard(String sourceUrlCard) {
-		this.sourceUrlCard = sourceUrlCard;
-	}
-	
 }
