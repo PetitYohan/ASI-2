@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.asi2.backendmarket.dto.CardDto;
-import com.asi2.backendmarket.dto.CardInstanceDto;
+import com.asi2.backendmarket.dto.card.CardDto;
+import com.asi2.backendmarket.dto.card.CardInstanceDto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

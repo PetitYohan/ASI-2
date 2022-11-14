@@ -1,4 +1,4 @@
-package com.asi2.backendmarket.dto;
+package com.asi2.backendmarket.dto.store;
 
 public class StoreTransactionDto {
 	

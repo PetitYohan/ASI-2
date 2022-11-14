@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.http.ResponseEntity;
 import com.asi2.backendmarket.rest.store.IStoreRest;
-import com.asi2.backendmarket.dto.StoreDto;
-import com.asi2.backendmarket.dto.StoreTransactionDto;
+import com.asi2.backendmarket.dto.store.StoreDto;
+import com.asi2.backendmarket.dto.store.StoreTransactionDto;
 
 public class StoreRestConsumer implements IStoreRest {
     

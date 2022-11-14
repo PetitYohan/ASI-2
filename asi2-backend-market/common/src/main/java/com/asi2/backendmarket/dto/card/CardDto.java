@@ -1,6 +1,6 @@
-package com.asi2.backendmarket.dto;
+package com.asi2.backendmarket.dto.card;
 
-import com.asi2.backendmarket.dto.FamilyDto;
+import com.asi2.backendmarket.dto.card.FamilyDto;
 
 public class CardDto {
 

@@ -1,7 +1,7 @@
-package com.asi2.backendmarket.dto;
+package com.asi2.backendmarket.dto.store;
 
 import java.sql.Date;
-import com.asi2.backendmarket.dto.CardInstanceDto;
+import com.asi2.backendmarket.dto.card.CardInstanceDto;
 
 public class StoreDto {
     

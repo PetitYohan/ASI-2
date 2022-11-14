@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.asi2.backendmarket.model.Store;
 import com.asi2.backendmarket.repository.StoreRepository;
 
-import com.asi2.backendmarket.dto.CardInstanceDto;
+import com.asi2.backendmarket.dto.card.CardInstanceDto;
 import com.asi2.backendmarket.dto.user.BalanceUserDto;
 import com.asi2.backendmarket.dto.user.UserDto;
 import com.asi2.backendmarket.rest.card.CardRestConsumer;

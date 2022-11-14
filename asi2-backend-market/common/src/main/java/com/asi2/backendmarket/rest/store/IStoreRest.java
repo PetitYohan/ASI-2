@@ -2,8 +2,8 @@ package com.asi2.backendmarket.rest.store;
 
 import java.util.List;
 
-import com.asi2.backendmarket.dto.StoreDto;
-import com.asi2.backendmarket.dto.StoreTransactionDto;
+import com.asi2.backendmarket.dto.store.StoreDto;
+import com.asi2.backendmarket.dto.store.StoreTransactionDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.asi2.backendmarket.dto.StoreTransactionDto;
 import com.asi2.backendmarket.rest.IRest;
 
 public interface IStoreRest extends IRest {

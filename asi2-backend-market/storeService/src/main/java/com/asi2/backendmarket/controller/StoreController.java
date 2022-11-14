@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.asi2.backendmarket.dto.StoreDto;
-import com.asi2.backendmarket.dto.StoreTransactionDto;
-import com.asi2.backendmarket.dto.CardInstanceDto;
+import com.asi2.backendmarket.dto.store.StoreDto;
+import com.asi2.backendmarket.dto.store.StoreTransactionDto;
+import com.asi2.backendmarket.dto.card.CardInstanceDto;
 
 import com.asi2.backendmarket.model.Store;
 import com.asi2.backendmarket.rest.store.IStoreRest;

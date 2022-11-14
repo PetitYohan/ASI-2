@@ -2,8 +2,8 @@ package com.asi2.backendmarket.rest.card;
 
 import java.util.List;
 
-import com.asi2.backendmarket.dto.CardDto;
-import com.asi2.backendmarket.dto.CardInstanceDto;
+import com.asi2.backendmarket.dto.card.CardDto;
+import com.asi2.backendmarket.dto.card.CardInstanceDto;
 import com.asi2.backendmarket.rest.IRest;
 
 import org.springframework.http.ResponseEntity;

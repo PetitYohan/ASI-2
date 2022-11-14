@@ -1,4 +1,4 @@
-package com.asi2.backendmarket.dto;
+package com.asi2.backendmarket.dto.card;
 
 public class CardInstanceDto {
 	private int idInstance;
