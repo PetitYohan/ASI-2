@@ -49,7 +49,7 @@ namespace card.model #DDADEE{
 
 namespace card.controller #DDDDDD{
     class CardReferenceService{
-        - {final} cardRefRepository: CardRefRepository
+        - CARDREFREPOSITORY: CardRefRepository
         + getAllCardRef()
         + addCardRef()
         + updateCardRef()
@@ -59,8 +59,8 @@ namespace card.controller #DDDDDD{
     CardReferenceService o-- CardRefRepository
 
     class CardModelService{
-        - {final} cardRepository: CardModelRepository
-        - {final} cardRefService: CardReferenceService
+        - CARDREPOSITORY: CardModelRepository
+        - CARDREFSERVICE: CardReferenceService
         + getAllCardModel()
         + addCard()
         + updateCardRef()
@@ -78,7 +78,7 @@ namespace card.controller #DDDDDD{
     interface CardModelRepository extends CrudRepository{}
 
     class CardRestController{
-        - {final} cardModelService: CardModelService
+        - CARDMODELSERVICE: CardModelService
         - getAllCards()
         - getCard()
         + addCard()

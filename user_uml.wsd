@@ -24,7 +24,7 @@ namespace user.model #DDADEE{
     UserDTO <..> UserModel
 
     class UserModel implements Serializable{
-        - {static} {final} serialVersionUID: long
+        - {static} SERIALVERSIONUID: long
         - id: Integer
         - login: String
         - pwd: String
@@ -48,7 +48,7 @@ namespace user.controller #DDDDED{
     }
 
     class UserRestController{
-        - {final} userService: UserService
+        - USERSERVICE: UserService
         - getUser()
         - getAllUsers()
         + addUser()
@@ -71,6 +71,6 @@ namespace user.controller #DDDDED{
     UserService o-- UserRepository
 
 }
-
+user.controller o--o user.model
 
 @enduml
