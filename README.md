@@ -4,7 +4,7 @@ ASI-2: Framework frontend, services orientés architecture (S9)
 
 ## Diagramme des micro-services :
 
-![image](Diagramme-Micro-services.drawio.png)
+![image](Images/Diagramme-Micro-services.drawio.png)
 
 ## Liste requêtes :
 
@@ -17,3 +17,58 @@ ASI-2: Framework frontend, services orientés architecture (S9)
 | POST | Store  | User        | /api/user/                   | idTransaction, user_id, money    |
 | GET  | Card   | Store       | /api/store/transaction/card/ | idTransaction, card_id           |
 | GET  | User   | Store       | /api/store/transaction/user/ | idTransaction, user_id           |
+
+## Composants REACTJS :
+
+### NavBar :
+
+Paramètres : Utilisateur, pageTitle
+
+![image](Images/Composant_NavBar.png)
+
+### Log Up :
+
+Sorties : addUser()
+
+![image](Images/Composant_LogUp.png)
+
+### Log In :
+
+Sorties : login()
+
+![image](Images/Composant_LogIn.png)
+
+### Home :
+
+Composants : NavBar
+
+Liens : Buy, Shell, Play
+
+![image](Images/Composant_Home.png)
+
+### Card :
+
+Paramètres : Card
+
+![image](Images/Composant_Card.png)
+
+### CardList :
+
+Paramètres : CardList
+Sortie: CardSelect
+
+![image](Images/Composant_CardList.png)
+
+### CardTransfert :
+
+Paramètres : TransactionType, TitrePage
+
+Sorties : Action(Buy or Sell)
+
+Buy :
+
+![image](Images/Composant_Buy.png)
+
+Sell :
+
+![image](Images/Composant_Sell.png)
