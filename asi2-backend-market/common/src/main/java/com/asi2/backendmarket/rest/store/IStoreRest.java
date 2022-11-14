@@ -1,9 +1,9 @@
-package com.asi2.backendmarket.rest.sale;
+package com.asi2.backendmarket.rest.store;
 
 import java.util.List;
 
-import com.asi2.backendmarket.dto.SaleDto;
-import com.asi2.backendmarket.dto.SaleTransactionDto;
+import com.asi2.backendmarket.dto.StoreDto;
+import com.asi2.backendmarket.dto.StoreTransactionDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.asi2.backendmarket.dto.SaleTransactionDto;
+import com.asi2.backendmarket.dto.StoreTransactionDto;
 import com.asi2.backendmarket.rest.IRest;
 
-public interface ISaleRest extends IRest {
-	public final String ROOT_PATH = "/api/sales";
+public interface IStoreRest extends IRest {
+	public final String ROOT_PATH = "/api/stores";
 
 	public final String GET = ROOT_PATH + "/{id}";
 	public final String GET_ALL = ROOT_PATH + "/";
@@ -24,12 +24,12 @@ public interface ISaleRest extends IRest {
 	public final String SELL = ROOT_PATH + "/sell";
 
 	@GetMapping(GET_ALL)
-	public List<SaleDto> getAll();
+	public List<StoreDto> getAll();
 
 	@PostMapping(BUY)
-	public void buyCard(@RequestBody SaleTransactionDto saleDto);
+	public void buyCard(@RequestBody StoreTransactionDto storeDto);
 
 	@PostMapping(SELL)
-	public void sellCard(@RequestBody SaleTransactionDto saleDto);
+	public void sellCard(@RequestBody StoreTransactionDto storeDto);
 
 }

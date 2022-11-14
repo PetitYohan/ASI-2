@@ -23,21 +23,21 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import com.asi2.backendmarket.dto.user.BalanceUserDto;
-import com.asi2.backendmarket.model.Sale;
-import com.asi2.backendmarket.repository.SaleRepository;
+import com.asi2.backendmarket.model.Store;
+import com.asi2.backendmarket.repository.StoreRepository;
 import com.asi2.backendmarket.rest.card.CardRestConsumer;
 import com.asi2.backendmarket.rest.user.UserRestConsumer;
 
 
 @ExtendWith(MockitoExtension.class)
-class SaleServiceTest {
+class StoreServiceTest {
 
     @InjectMocks
     @Spy
-    SaleService saleService;
+    StoreService storeService;
 
     @Mock
-    SaleRepository saleRepositoryMock;
+    StoreRepository storeRepositoryMock;
 
     @Mock
     CardRestConsumer cardRestConsumerMock;
@@ -50,23 +50,23 @@ class SaleServiceTest {
 
     @Test
     void testBuyOk() {
-        Optional<Sale> oSale = Optional.of(new Sale(1, 1, 10));
+        Optional<Store> oStore = Optional.of(new Store(1, 1, 10));
 
-        when(saleRepositoryMock.findById(anyInt())).thenReturn(oSale);
+        when(storeRepositoryMock.findById(anyInt())).thenReturn(oStore);
         
         //when(userRestConsumerMock.balanceUserMoney(any(BalanceUserDto.class))).thenReturn(new ResponseEntity<Boolean>(true, HttpStatus.OK));
         //when(userRestConsumerMock.balanceUserMoney(any(BalanceUserDto.class))).thenReturn(new ResponseEntity<Boolean>(true, HttpStatus.OK));
         
         //when(cardRestConsumerMock.buyCard(anyInt(), anyInt())).thenReturn(new ResponseEntity<Boolean>(true, HttpStatus.OK));
 
-        Assertions.assertThat(saleService.buy(1, 1) == true);
+        Assertions.assertThat(storeService.buy(1, 1) == true);
     }
 
     @Test
     void testBuyBuyDidNotHappened() {
-        Optional<Sale> oSale = Optional.of(new Sale(1, 1, 10));
+        Optional<Store> oStore = Optional.of(new Store(1, 1, 10));
 
-        when(saleRepositoryMock.findById(anyInt())).thenReturn(oSale);
+        when(storeRepositoryMock.findById(anyInt())).thenReturn(oStore);
         
         //doReturn(ResponseEntity.ok(false)).when(userRestConsumerMock).balanceUserMoney(any(BalanceUserDto.class));
         //when(userRestConsumerMock.balanceUserMoney(new BalanceUserDto())).thenReturn(new ResponseEntity<Boolean>(false, HttpStatus.OK));
@@ -74,8 +74,8 @@ class SaleServiceTest {
         
         //when(cardRestConsumerMock.buyCard(anyInt(), anyInt())).thenReturn(new ResponseEntity<Boolean>(false, HttpStatus.OK));
 
-        System.out.println(saleService.buy(1, 1));
+        System.out.println(storeService.buy(1, 1));
 
-        Assertions.assertThat(saleService.buy(1, 1)).isFalse();
+        Assertions.assertThat(storeService.buy(1, 1)).isFalse();
     }
 }

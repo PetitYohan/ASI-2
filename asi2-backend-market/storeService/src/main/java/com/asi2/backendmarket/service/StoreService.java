@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.asi2.backendmarket.model.Sale;
-import com.asi2.backendmarket.repository.SaleRepository;
+import com.asi2.backendmarket.model.Store;
+import com.asi2.backendmarket.repository.StoreRepository;
 
 import com.asi2.backendmarket.dto.CardInstanceDto;
 import com.asi2.backendmarket.dto.user.BalanceUserDto;
@@ -21,35 +21,35 @@ import com.asi2.backendmarket.rest.card.CardRestConsumer;
 import com.asi2.backendmarket.rest.user.UserRestConsumer;
 
 @Service
-public class SaleService {
+public class StoreService {
 	
 	@Autowired
-	SaleRepository saleRepository;
+	StoreRepository storeRepository;
 
 	private static final CardRestConsumer cardRestConsumer = new CardRestConsumer();
 	private static final UserRestConsumer userRestConsumer = new UserRestConsumer();
 	
-	private Map<Sale, CardInstanceDto> zipSaleCardDto(List<Sale> sales, List<CardInstanceDto> cards) {
+	private Map<Store, CardInstanceDto> zipStoreCardDto(List<Store> stores, List<CardInstanceDto> cards) {
 		// On sort avant pour pouvoir matcher l'ordre d'index de la liste et l'ordre des id de cartes
-		sales.sort(Comparator.comparing(Sale::getCardInstanceIdSale));
+		stores.sort(Comparator.comparing(Store::getCardInstanceIdStore));
 		cards.sort(Comparator.comparing(CardInstanceDto::getIdInstance));
-		Map<Sale, CardInstanceDto> saleCardPairList = new HashMap<>();
+		Map<Store, CardInstanceDto> storeCardPairList = new HashMap<>();
 		for(int i = 0; i < cards.size(); i++) {
-			saleCardPairList.put(sales.get(i), cards.get(i));
+			storeCardPairList.put(stores.get(i), cards.get(i));
 		}
-		return saleCardPairList;
+		return storeCardPairList;
 	}
 	
-	public Map<Sale, CardInstanceDto> getAllSales() {
-		List<Sale> saleList = (List<Sale>) saleRepository.findAll();
-		Integer[] cardInstanceIdList = saleList
+	public Map<Store, CardInstanceDto> getAllStores() {
+		List<Store> storeList = (List<Store>) storeRepository.findAll();
+		Integer[] cardInstanceIdList = storeList
 			.stream()
-			.mapToInt(Sale::getCardInstanceIdSale)
+			.mapToInt(Store::getCardInstanceIdStore)
 			.boxed()
 			.toArray( Integer[]::new );
 		List<CardInstanceDto> cardInstanceDtoList = cardRestConsumer.getCardInstanceList(cardInstanceIdList).getBody();
-		Map<Sale, CardInstanceDto> zippedSaleCardDto = zipSaleCardDto(saleList, cardInstanceDtoList);
-		return zippedSaleCardDto;
+		Map<Store, CardInstanceDto> zippedStoreCardDto = zipStoreCardDto(storeList, cardInstanceDtoList);
+		return zippedStoreCardDto;
     }
 	
 	private void deduct(int userId, double amount){
@@ -63,42 +63,42 @@ public class SaleService {
     }	
 	
     //TODO catch en dehors pour msg d'erreur ?
-	private void buyTransaction(int buyerId, Sale sale) {
-		int sellerId = sale.getUserIdSale();
-		double price = sale.getPriceSale();
+	private void buyTransaction(int buyerId, Store store) {
+		int sellerId = store.getUserIdStore();
+		double price = store.getPriceStore();
 		//money transfer
 	    deduct(buyerId, price);
 	    deposit(sellerId, price);
 	    //update card
-	    int card = sale.getCardInstanceIdSale();
+	    int card = store.getCardInstanceIdStore();
 	    //card.setUserInstance(buyerId);
 	    //cardInstanceRepository.save(card);
-	    //delete sale
-	    saleRepository.delete(sale);	    	
+	    //delete store
+	    storeRepository.delete(store);	    	
 	}
 	
 	private void createOfferTransaction(int sellerId, int cardId, double price) {
-		//Sale sale = new Sale(sellerId, cardId, price);		
-		//saleRepository.save(sale);
+		//Store store = new Store(sellerId, cardId, price);		
+		//storeRepository.save(store);
 		//cardId.setUserInstance(null);
 		//cardInstanceRepository.save(cardId);
 	}
 	
-	public boolean buy(int idSale, int idUser) {
+	public boolean buy(int idStore, int idUser) {
 		
-		Optional<Sale> saleOpt = saleRepository.findById(idSale);
-		if(!saleOpt.isPresent()) {
+		Optional<Store> storeOpt = storeRepository.findById(idStore);
+		if(!storeOpt.isPresent()) {
 			return false;
 		}
-		Sale sale = saleOpt.get();
+		Store store = storeOpt.get();
 
 		BalanceUserDto buyer = new BalanceUserDto();
-		buyer.setBalanceMoney(-sale.getPriceSale());
+		buyer.setBalanceMoney(-store.getPriceStore());
 		buyer.setIdUser(idUser);
 
 		BalanceUserDto seller = new BalanceUserDto();
-		seller.setBalanceMoney(sale.getPriceSale());
-		seller.setIdUser(sale.getUserIdSale());
+		seller.setBalanceMoney(store.getPriceStore());
+		seller.setIdUser(store.getUserIdStore());
 
 		try {
 			System.out.println("Service_______________________________\n");
@@ -108,8 +108,8 @@ public class SaleService {
 			Boolean buyHappened = userRestConsumer.balanceUserMoney(buyer).getBody();
 			Boolean sellHappened = userRestConsumer.balanceUserMoney(seller).getBody();
 			
-			Boolean res = cardRestConsumer.buyCard(Integer.valueOf(sale.getCardInstanceIdSale()), Integer.valueOf(buyer.getIdUser())).getBody();
-			saleRepository.delete(sale);
+			Boolean res = cardRestConsumer.buyCard(Integer.valueOf(store.getCardInstanceIdStore()), Integer.valueOf(buyer.getIdUser())).getBody();
+			storeRepository.delete(store);
 			return buyHappened && sellHappened && res;
 		} catch (Exception e) {
 			System.out.println("_______________________________\n");
@@ -123,11 +123,11 @@ public class SaleService {
 	//TODO remove test sur User et use getCurrentUser() + utiliser des exceptions
 	public boolean sell(int idUser, int idCardInstance, double price) {
 		Boolean res = cardRestConsumer.sellCard(Integer.valueOf(idCardInstance)).getBody();
-		Sale s = new Sale();
-		s.setCardInstanceIdSale(idCardInstance);
-		s.setUserIdSale(idUser);
-		s.setPriceSale(price);
-		saleRepository.save(s);
+		Store s = new Store();
+		s.setCardInstanceIdStore(idCardInstance);
+		s.setUserIdStore(idUser);
+		s.setPriceStore(price);
+		storeRepository.save(s);
 		return res;
 			
 	}

@@ -23,7 +23,7 @@
         <module>authService</module>
         <module>userService</module>
         <module>cardService</module>
-        <module>saleService</module>
+        <module>storeService</module>
         <module>common</module>
     </modules>
 

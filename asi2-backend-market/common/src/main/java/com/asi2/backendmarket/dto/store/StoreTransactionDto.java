@@ -1,25 +1,25 @@
 package com.asi2.backendmarket.dto;
 
-public class SaleTransactionDto {
+public class StoreTransactionDto {
 	
-	private double priceSale;
-	private int idSale;
+	private double priceStore;
+	private int idStore;
 	//TODO rename en cardInstanceId
 	private int idCard;
 	//TODO delete ou rename en userId
 	private int idUser;
 	
-	public double getPriceSale() {
-		return priceSale;
+	public double getPriceStore() {
+		return priceStore;
 	}
-	public void setPriceSale(double price) {
-		this.priceSale = price;
+	public void setPriceStore(double price) {
+		this.priceStore = price;
 	}
-	public int getIdSale() {
-		return idSale;
+	public int getIdStore() {
+		return idStore;
 	}
-	public void setIdSale(int idSale) {
-		this.idSale = idSale;
+	public void setIdStore(int idStore) {
+		this.idStore = idStore;
 	}
 	public int getIdCard() {
 		return idCard;
