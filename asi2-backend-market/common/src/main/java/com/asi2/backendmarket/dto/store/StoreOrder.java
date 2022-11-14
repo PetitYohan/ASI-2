@@ -3,7 +3,7 @@ package com.asi2.backendmarket.model;
 public class StoreOrder {
 	private int user_id;
 	private int card_id;
-	
+
 	public StoreOrder() {
 	}
 
@@ -22,7 +22,5 @@ public class StoreOrder {
 	public void setCard_id(int card_id) {
 		this.card_id = card_id;
 	}
-	
-	
 
 }

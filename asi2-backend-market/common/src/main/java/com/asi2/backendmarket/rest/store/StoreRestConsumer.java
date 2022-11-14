@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.http.ResponseEntity;
 import com.asi2.backendmarket.rest.store.IStoreRest;
-import com.asi2.backendmarket.dto.store.StoreDto;
+import com.asi2.backendmarket.dto.store.StoreOrder;
 import com.asi2.backendmarket.dto.store.StoreTransactionDto;
 
 public class StoreRestConsumer implements IStoreRest {
@@ -25,8 +25,8 @@ public class StoreRestConsumer implements IStoreRest {
 	private RestTemplate restTemplate = new RestTemplate();
 	
 	@Override
-	public List<StoreDto> getAll() {
-		return (List<StoreDto>) restTemplate.getForEntity(GET_ALL, StoreDto[].class);
+	public List<StoreOrder> getAll() {
+		return (List<StoreOrder>) restTemplate.getForEntity(GET_ALL, StoreOrder[].class);
 	}
 
 	@Override

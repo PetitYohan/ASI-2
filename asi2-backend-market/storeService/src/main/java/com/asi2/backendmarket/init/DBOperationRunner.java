@@ -3,7 +3,7 @@ package com.asi2.backendmarket.init;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
-import com.asi2.backendmarket.model.Store;
+import com.asi2.backendmarket.model.StoreTransaction;
 import com.asi2.backendmarket.repository.StoreRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

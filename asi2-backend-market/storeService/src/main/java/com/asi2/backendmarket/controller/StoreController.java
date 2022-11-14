@@ -8,11 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.asi2.backendmarket.dto.store.StoreDto;
+import com.asi2.backendmarket.dto.store.StoreOrder;
 import com.asi2.backendmarket.dto.store.StoreTransactionDto;
 import com.asi2.backendmarket.dto.card.CardInstanceDto;
-
-import com.asi2.backendmarket.model.Store;
+import com.asi2.backendmarket.model.StoreTransaction;
 import com.asi2.backendmarket.rest.store.IStoreRest;
 import com.asi2.backendmarket.service.StoreService;
 
@@ -25,29 +24,28 @@ public class StoreController implements IStoreRest {
 	@Autowired
 	ModelMapper modelMapper;
 
-	private StoreDto convertToStoreDto(Store store, CardInstanceDto card) {
-		StoreDto storeDto = modelMapper.map(store, StoreDto.class);
-		storeDto.setCardInstance(card);
-	    return storeDto;
+	private StoreTransactionDto convertToStoreTransactionDto(StoreTransaction store) {
+		StoreTransactionDto storeTransactionDto = modelMapper.map(store, StoreTransactionDto.class);
+	    return storeTransactionDto;
 	}
-	
+
 	@Override
-	public List<StoreDto> getAll() {
-		return storeService.getAllStores()
-			.entrySet()
+	public boolean buyCard(StoreOrder order) {
+		return storeService.sellCard(order.getUser_id(), order.getCard_id());
+	}
+
+	@Override
+	public boolean sellCard(StoreOrder order) {
+		return storeService.buyCard(order.getUser_id(), order.getCard_id());
+	}
+
+	@Override
+	public List<StoreTransactionDto> getAllCards() {
+		return storeService.getAllTransactions()
 			.stream()
-			.map(entry -> convertToStoreDto(entry.getKey(), entry.getValue()))
+			.map(entry -> convertToStoreTransactionDto(entry))
 			.collect(Collectors.toList());
 	}
-
-	@Override
-	public void sellCard(@RequestBody StoreTransactionDto storeDto) {
-		storeService.sell(storeDto.getIdUser(), storeDto.getIdCard(), storeDto.getPriceStore());
-	}
 	
-	@Override
-	public void buyCard(@RequestBody StoreTransactionDto storeDto) {
-		storeService.buy(storeDto.getIdStore(), storeDto.getIdUser());
-	}
-
+	
 }

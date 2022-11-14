@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import com.asi2.backendmarket.dto.user.BalanceUserDto;
-import com.asi2.backendmarket.model.Store;
+import com.asi2.backendmarket.model.StoreTransaction;
 import com.asi2.backendmarket.repository.StoreRepository;
 import com.asi2.backendmarket.rest.card.CardRestConsumer;
 import com.asi2.backendmarket.rest.user.UserRestConsumer;
@@ -50,7 +50,7 @@ class StoreServiceTest {
 
     @Test
     void testBuyOk() {
-        Optional<Store> oStore = Optional.of(new Store(1, 1, 10));
+        Optional<StoreTransaction> oStore = Optional.of(new StoreTransaction(1, 1, 10));
 
         when(storeRepositoryMock.findById(anyInt())).thenReturn(oStore);
         
@@ -64,7 +64,7 @@ class StoreServiceTest {
 
     @Test
     void testBuyBuyDidNotHappened() {
-        Optional<Store> oStore = Optional.of(new Store(1, 1, 10));
+        Optional<StoreTransaction> oStore = Optional.of(new StoreTransaction(1, 1, 10));
 
         when(storeRepositoryMock.findById(anyInt())).thenReturn(oStore);
         
