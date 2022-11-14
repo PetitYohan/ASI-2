@@ -17,19 +17,19 @@ import com.asi2.backendmarket.repository.StoreRepository;;
 @Service
 public class StoreService {
 
-	private final CardRestConsumer cardService;
-	private final UserRestConsumer userService;
+	private final CardRestConsumer cardRestConsumer;
+	private final UserRestConsumer userRestConsumer;
 	private final StoreRepository storeRepository;
 
 	public StoreService(CardRestConsumer cardService, UserRestConsumer userService, StoreRepository storeRepository) {
-		this.cardService = cardService;
-		this.userService = userService;
+		this.cardRestConsumer = cardService;
+		this.userRestConsumer = userService;
 		this.storeRepository = storeRepository;
 	}
 
 	public boolean buyCard(Integer user_id, Integer card_id) {
-		Optional<UserDto> u_option = userService.getUser(user_id);
-		Optional<CardDto> c_option = cardService.getCard(card_id);
+		Optional<UserDto> u_option = userRestConsumer.getUser(user_id);
+		Optional<CardDto> c_option = cardRestConsumer.getCard(card_id);
 		if (!u_option.isPresent() || !c_option.isPresent()) {
 			return false;
 		}
@@ -39,7 +39,7 @@ public class StoreService {
 		if (u.getAccount() > c.getPrice()) {
 			u.addCard(c);
 			u.setAccount(u.getAccount() - c.getPrice());
-			userService.updateUser(u);
+			userRestConsumer.updateUser(u);
 			StoreTransaction sT = new StoreTransaction(user_id, card_id, StoreAction.BUY);
 			storeRepository.save(sT);
 			return true;
@@ -49,8 +49,8 @@ public class StoreService {
 	}
 
 	public boolean sellCard(Integer user_id, Integer card_id) {
-		Optional<UserDto> u_option = userService.getUser(user_id);
-		Optional<CardDto> c_option = cardService.getCard(card_id);
+		Optional<UserDto> u_option = userRestConsumer.getUser(user_id);
+		Optional<CardDto> c_option = cardRestConsumer.getCard(card_id);
 		if (!u_option.isPresent() || !c_option.isPresent()) {
 			return false;
 		}
@@ -58,9 +58,9 @@ public class StoreService {
 		CardDto c = c_option.get();
 		//TODO use rest consumer
 		c.setUser(null);
-		cardService.updateCard(c);
+		cardRestConsumer.updateCard(c);
 		u.setAccount(u.getAccount() + c.computePrice());
-		userService.updateUser(u);
+		userRestConsumer.updateUser(u);
 		StoreTransaction sT = new StoreTransaction(user_id, card_id, StoreAction.SELL);
 		storeRepository.save(sT);
 		return true;

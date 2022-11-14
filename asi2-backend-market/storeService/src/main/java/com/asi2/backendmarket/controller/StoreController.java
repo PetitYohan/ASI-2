@@ -17,7 +17,7 @@ import com.asi2.backendmarket.service.StoreService;
 
 @RestController
 public class StoreController implements IStoreRest {
-	
+
 	@Autowired
 	StoreService storeService;
 
@@ -26,7 +26,7 @@ public class StoreController implements IStoreRest {
 
 	private StoreTransactionDto convertToStoreTransactionDto(StoreTransaction store) {
 		StoreTransactionDto storeTransactionDto = modelMapper.map(store, StoreTransactionDto.class);
-	    return storeTransactionDto;
+		return storeTransactionDto;
 	}
 
 	@Override
@@ -42,10 +42,9 @@ public class StoreController implements IStoreRest {
 	@Override
 	public List<StoreTransactionDto> getAllCards() {
 		return storeService.getAllTransactions()
-			.stream()
-			.map(entry -> convertToStoreTransactionDto(entry))
-			.collect(Collectors.toList());
+				.stream()
+				.map(entry -> convertToStoreTransactionDto(entry))
+				.collect(Collectors.toList());
 	}
-	
-	
+
 }
