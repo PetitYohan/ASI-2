@@ -1,0 +1,55 @@
+@startuml
+
+namespace store.model #DDADEE{
+
+    class StoreTransaction {
+        - id: Integer
+        - userId: Integer
+        - cardId: Integer
+        - action: StoreAction
+        - timeSt: Timestamp
+        + StoreTransaction()
+        + getters()
+        + setters()
+    }
+    StoreTransaction *-- StoreAction : use
+
+    class StoreOrder {
+        - user_id: Integer
+        - card_id: Integer
+        + getters()
+        + setters()
+    }
+
+    enum StoreAction {
+        BUY
+        SELL
+    }
+}
+
+namespace store.controller #DDDDED{
+
+    interface StoreRepository extends CrudRepository {
+
+    }
+
+    class StoreRestController {
+        - STORESERVICE: StoreService
+        - getAllCards()
+        - getCard() : boolean
+        - getCard() : List<StoreTransaction>
+    }
+
+    class StoreService {
+        - CARDSERVICE: CardModelService
+        - USERSERVICE: UserService
+        - STOREREPOSITORY: StoreRepository
+        + buyCard(): boolean
+        + sellCard(): boolean
+        + getAllTransactions(): List<StoreTransaction>
+    }   
+}
+store.controller o--o store.model
+
+
+@enduml
