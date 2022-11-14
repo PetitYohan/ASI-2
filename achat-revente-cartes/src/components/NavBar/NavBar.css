@@ -1,0 +1,32 @@
+ul {
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    justify-content: space-between;
+}
+
+li {
+    color: white;
+    padding: 2vh 3vh;
+    text-decoration: none;
+
+}
+
+span {
+    font-size: 20px;
+}
+
+#titre {
+    font-size: 30px;
+}
+
+img {
+    width: 3vw;
+    height: 3vw;
+    min-width: 30px;
+    min-height: 30px;
+}
