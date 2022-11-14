@@ -8,105 +8,104 @@ import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.asi2.backendmarket.model.Card;
-import com.asi2.backendmarket.model.CardInstance;
-import com.asi2.backendmarket.repository.CardInstanceRepository;
+import com.asi2.backendmarket.dto.card.CardDto;
+import com.asi2.backendmarket.model.CardReference;
+import com.asi2.backendmarket.repository.CardRefRepository;
 import com.asi2.backendmarket.repository.CardRepository;
-import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 @Service
 public class CardService {
 	private final static Logger LOG = LoggerFactory.getLogger(CardService.class);
-	
+
 	@Autowired
 	CardRepository cardRepository;
-	
+
 	@Autowired
-	CardInstanceRepository cardInstanceRepository;
-	
+	CardRefRepository CardRefRepository;
+
 	private int numberOfCardThoGenerate = 5;
-	
-	public Card getCard(int idCard) {
+
+	public CardDto getCard(int idCard) {
 		LOG.info("[getCard] idCard: " + idCard);
 
-		Optional<Card> c = cardRepository.findById(idCard);
+		Optional<CardDto> c = cardRepository.findById(idCard);
 		if (c.isPresent())
 			return c.get();
 		throw new RuntimeException("Ressource not found");
 	}
-	
-	public List<CardInstance> getCardsByUser(int idUser) {
-		Optional<List<CardInstance>> oCards = cardInstanceRepository.findByIdUser(idUser);
+
+	public List<CardReference> getCardsByUser(int idUser) {
+		Optional<List<CardReference>> oCards = CardRefRepository.findByIdUser(idUser);
 		if (oCards.isPresent())
 			return oCards.get();
-		return new ArrayList<CardInstance>();
+		return new ArrayList<CardReference>();
 	}
-	
-	public List<Card> getAll() {
-		List<Card> cards = (ArrayList<Card>) cardRepository.findAll();
+
+	public List<CardDto> getAll() {
+		List<CardDto> cards = (ArrayList<CardDto>) cardRepository.findAll();
 		return cards;
 	}
-	
-	public List<CardInstance> getAllInstanceByIds(Integer[] ids) {
-		List<CardInstance> cards = new ArrayList<CardInstance>(); 
-		cardInstanceRepository.findAllById(Arrays.asList(ids)).forEach(cards::add);
-		
+
+	public List<CardReference> getAllInstanceByIds(Integer[] ids) {
+		List<CardReference> cards = new ArrayList<CardReference>();
+		CardRefRepository.findAllById(Arrays.asList(ids)).forEach(cards::add);
+
 		return cards;
 	}
-	
-	private List<Card> getRandomCards(int nbToGenerate) {
-		List<Card> allCards = this.getAll();
-		List<Card> cards = new ArrayList<Card>();
+
+	private List<CardDto> getRandomCards(int nbToGenerate) {
+		List<CardDto> allCards = this.getAll();
+		List<CardDto> cards = new ArrayList<CardDto>();
 		Random r = new Random();
-		
+
 		for (int i = 0; i < nbToGenerate; i++) {
 			cards.add(allCards.get(r.nextInt(allCards.size())));
 		}
-		
+
 		if (cards.size() < nbToGenerate)
 			throw new RuntimeException("Pas assez de cartes générées aléatoirement");
-		
+
 		return cards;
 	}
-	
-	public List<CardInstance> registerNewUserCards(int idUser) {
-		List<Card> cards = this.getRandomCards(this.numberOfCardThoGenerate);
-		List<CardInstance> cardsInstances = new ArrayList<CardInstance>();
-		for (Card card : cards) {
-			CardInstance ci = convertCardToCardInstance(card);
+
+	public List<CardReference> registerNewUserCards(int idUser) {
+		List<CardDto> cards = this.getRandomCards(this.numberOfCardThoGenerate);
+		List<CardReference> cardsInstances = new ArrayList<CardReference>();
+		for (CardDto card : cards) {
+			CardReference ci = convertCardToCardInstance(card);
 			ci.setIdUser(idUser);
-			cardsInstances.add(cardInstanceRepository.save(ci));
+			cardsInstances.add(CardRefRepository.save(ci));
 		}
 		return cardsInstances;
 	}
 
 	public Boolean buyCard(Integer idCardInstance, Integer idUser) {
 		try {
-			CardInstance card = cardInstanceRepository.findById(idCardInstance).get();
+			CardReference card = CardRefRepository.findById(idCardInstance).get();
 			card.setIdUser(idUser);
-			cardInstanceRepository.save(card);
+			CardRefRepository.save(card);
 			return true;
 		} catch (Exception e) {
 			return false;
 		}
 	}
+
 	public Boolean sellCard(Integer idCardInstance) {
 		try {
-			CardInstance card = cardInstanceRepository.findById(idCardInstance).get();
+			CardReference card = CardRefRepository.findById(idCardInstance).get();
 			card.setIdUser(-1);
-			cardInstanceRepository.save(card);
+			CardRefRepository.save(card);
 			return true;
 		} catch (Exception e) {
 			return false;
 		}
 	}
-	
-	private CardInstance convertCardToCardInstance(Card card) {
-		CardInstance ci = new CardInstance(
+
+	private CardReference convertCardToCardInstance(CardDto card) {
+		CardReference ci = new CardReference(
 				card,
 				card.getEnergyCard(),
 				card.getHpCard(),
@@ -114,6 +113,5 @@ public class CardService {
 				card.getDefenceCard());
 		return ci;
 	}
-	
-	
+
 }
