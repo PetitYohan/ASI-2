@@ -1,5 +1,8 @@
 package com.asi2.backendmarket.dto.card;
 
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public class CardBasics {
 	private String name;
 	private String description;

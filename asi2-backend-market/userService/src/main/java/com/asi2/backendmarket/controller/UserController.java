@@ -1,7 +1,5 @@
 package com.asi2.backendmarket.controller;
 
-import com.asi2.backendmarket.model.UserModel;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +10,12 @@ import com.asi2.backendmarket.dto.user.UserDto;
 import com.asi2.backendmarket.rest.user.IUserRest;
 import com.asi2.backendmarket.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 public class UserController implements IUserRest {
+	
 	@Autowired
 	UserService userService;
 

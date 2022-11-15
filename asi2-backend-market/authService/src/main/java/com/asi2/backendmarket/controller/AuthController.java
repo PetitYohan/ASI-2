@@ -16,7 +16,7 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @RequestMapping(value = "/api/auth/register", method=RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/register", method=RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public ResponseEntity<?> register(@RequestBody UserDto userDto) {
         userDto.setPwd(authService.hashPassword(userDto.getPwd()));
@@ -36,7 +36,7 @@ public class AuthController {
         }
     }
 
-    @RequestMapping(value = "/api/auth/login", method=RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/login", method=RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public ResponseEntity<?> login(@RequestBody AuthDto userDto) {
         UserDto user = authService.getUserByLogin(userDto.getUsername());

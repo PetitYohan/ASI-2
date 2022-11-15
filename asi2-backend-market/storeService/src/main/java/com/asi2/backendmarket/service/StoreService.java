@@ -3,10 +3,14 @@ package com.asi2.backendmarket.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asi2.backendmarket.dto.card.CardDto;
+import com.asi2.backendmarket.dto.store.StoreTransactionDto;
 import com.asi2.backendmarket.dto.user.UserDto;
 import com.asi2.backendmarket.model.StoreAction;
 import com.asi2.backendmarket.model.StoreTransaction;
@@ -17,15 +21,14 @@ import com.asi2.backendmarket.repository.StoreRepository;;
 @Service
 public class StoreService {
 
-	private final CardRestConsumer cardRestConsumer;
-	private final UserRestConsumer userRestConsumer;
-	private final StoreRepository storeRepository;
+	private static final CardRestConsumer cardRestConsumer = new CardRestConsumer();
+	private static final UserRestConsumer userRestConsumer = new UserRestConsumer();
 
-	public StoreService(CardRestConsumer cardService, UserRestConsumer userService, StoreRepository storeRepository) {
-		this.cardRestConsumer = cardService;
-		this.userRestConsumer = userService;
-		this.storeRepository = storeRepository;
-	}
+	@Autowired
+	StoreRepository storeRepository;
+
+	@Autowired
+	ModelMapper mapper;
 
 	public boolean buyCard(Integer user_id, Integer card_id) {
 		// TODO test mauvais res + quel msg de synchro avec esb ??
@@ -62,10 +65,12 @@ public class StoreService {
 		return true;
 	}
 
-	public List<StoreTransaction> getAllTransactions() {
+	public List<StoreTransactionDto> getAllTransactions() {
 		List<StoreTransaction> sTList = new ArrayList<>();
 		this.storeRepository.findAll().forEach(sTList::add);
-		return sTList;
+		return sTList.stream()
+				.map(entry -> mapper.map(entry, StoreTransactionDto.class))
+				.collect(Collectors.toList());
 
 	}
 

@@ -85,7 +85,7 @@ public class UserService {
 	}
 
 	public UserDto getUserByLogin(String login) {
-		Optional<UserModel> user = userRepository.findByLoginUser(login);
+		Optional<UserModel> user = userRepository.findByLogin(login);
 		if (user.isPresent()) {
 			return mapper.map(user.get(), UserDto.class);
 		} else {
@@ -94,7 +94,7 @@ public class UserService {
 	}
 
 	public UserDto getUserByEmail(String email) {
-		Optional<UserModel> user = userRepository.findByEmailUser(email);
+		Optional<UserModel> user = userRepository.findByEmail(email);
 		if (user.isPresent()) {
 			return mapper.map(user.get(), UserDto.class);
 		} else {

@@ -15,44 +15,44 @@ public class UserRestConsumer implements IUserRest {
 
     @Override
     public ResponseEntity<UserDto> getUserProfile() {
-        return restTemplate.getForEntity(PROFILE, UserDto.class);
+        return restTemplate.getForEntity(BASE_PATH + PROFILE, UserDto.class);
     }
 
     @Override
     public ResponseEntity<UserDto> findByLogin(String login) {
-        return restTemplate.getForEntity(LOGIN_PATH, UserDto.class, login);
+        return restTemplate.getForEntity(BASE_PATH + LOGIN_PATH, UserDto.class, login);
     }
 
     @Override
     public ResponseEntity<Boolean> balanceUserMoney(BalanceUserDto userDto) {
-        return restTemplate.postForEntity(BALANCE, userDto, Boolean.class);
+        return restTemplate.postForEntity(BASE_PATH + BALANCE, userDto, Boolean.class);
     }
 
     @Override
     public ResponseEntity<UserDto> getUser(Integer id) {
-        return restTemplate.getForEntity(ID_PATH, UserDto.class, id);
+        return restTemplate.getForEntity(BASE_PATH + ID_PATH, UserDto.class, id);
     }
 
     @Override
     public ResponseEntity<UserDto> addUser(UserDto userDto) {
-        return restTemplate.getForEntity(USER_PATH, UserDto.class);
+        return restTemplate.getForEntity(BASE_PATH + USER, UserDto.class);
     }
 
     @Override
     public ResponseEntity<UserDto> updateUser(Integer id, UserDto userDto) {
         HttpEntity<UserDto> request = new HttpEntity<>(userDto);
-        return restTemplate.postForEntity(ID_PATH, request, UserDto.class, id);
+        return restTemplate.postForEntity(BASE_PATH + ID_PATH, request, UserDto.class, id);
     }
 
     @Override
     public void deleteUser(Integer id) {
         //TODO notify others
-        restTemplate.delete(ID_PATH, id);
+        restTemplate.delete(BASE_PATH + ID_PATH, id);
     }
 
     @Override
     public List<UserDto> getAllUsers() {
-        UserDto[] users = restTemplate.getForEntity(GET_ALL, UserDto[].class).getBody();
+        UserDto[] users = restTemplate.getForEntity(BASE_PATH + GET_ALL, UserDto[].class).getBody();
         return Arrays.asList(users);
     }
 }

@@ -13,16 +13,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 public interface ICardRest extends IRest {
-	public final String ROOT_PATH = "/api";
-	public final String CARD_PATH = ROOT_PATH + "/card";
-
-	public final String GET_ID = CARD_PATH + "/{id}";
-	public final String UPDATE_CARD = CARD_PATH + "/{id}";
-	public final String DELETE_CARD = CARD_PATH + "/{id}";
-	public final String ADD_CARD = ROOT_PATH;
+	
+	public final String ROOT_PATH = "/api/card";
+	public final String GET_ID = ROOT_PATH + "/{id}";
+	public final String UPDATE_CARD = ROOT_PATH + "/{id}";
+	public final String DELETE_CARD = ROOT_PATH + "/{id}";
+	public final String ADD_CARD = ROOT_PATH + "/";
 	public final String GET_ALL = ROOT_PATH + "/cards";
 	public final String GET_CARDS_TO_SELL = ROOT_PATH + "/cards_to_sell";
-	public final String GET_USER_CARDS = CARD_PATH + "/user/{id}";
+	public final String GET_USER_CARDS = ROOT_PATH + "/user/{id}";
 
 	@GetMapping(GET_ID)
 	public ResponseEntity<CardDto> getCard(@PathVariable Integer id);

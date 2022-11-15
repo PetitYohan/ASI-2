@@ -16,16 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 public interface IUserRest extends IRest {
-    public final String ROOT_PATH = "/api";
-    public final String USER_PATH = ROOT_PATH + "/user";
 
-    public final String USER = USER_PATH + "/";
-    public final String ID_PATH = USER_PATH + "/{id}";
-    public final String LOGIN_PATH = USER_PATH + "/{login}";
+    public final String ROOT_PATH = "/api/user";
+    public final String USER = ROOT_PATH + "/";
+    public final String ID_PATH = ROOT_PATH + "/{id}";
+    public final String LOGIN_PATH = ROOT_PATH + "/{login}";
     public final String GET_ALL = ROOT_PATH + "/users";
-
-    public final String PROFILE = USER_PATH + "/profile";
-    public final String BALANCE = USER_PATH + "/balance";
+    public final String PROFILE = ROOT_PATH + "/profile";
+    public final String BALANCE = ROOT_PATH + "/balance";
 
     @RequestMapping(PROFILE)
     public ResponseEntity<UserDto> getUserProfile();
