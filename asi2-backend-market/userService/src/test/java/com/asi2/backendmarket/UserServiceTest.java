@@ -1,4 +1,4 @@
-package com.asi2.backendmarket.service;
+package com.asi2.backendmarket;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
@@ -91,7 +91,7 @@ class UserServiceTest {
         UserModel user = new UserModel(1, "TestName", "TestSurname", "TestEmail", 100, "pwd");
         doReturn(true).when(userService).isInDatabase(user);
         Assertions.assertThat(userService.isValidUserRegistration(user)).isFalse();
-    } */
+    } 
     
     // =========== changeMoneyOfUser ===========
     @Test
@@ -111,6 +111,6 @@ class UserServiceTest {
     void testChangeMoneyOfUser() {
         UserModel user = new UserModel(1, "TestName", "TestSurname", "TestEmail", 200, "pwd");
         Assertions.assertThat(userService.changeMoneyOfUser(1, -100)).isTrue();
-    }
+    }*/
 
 }

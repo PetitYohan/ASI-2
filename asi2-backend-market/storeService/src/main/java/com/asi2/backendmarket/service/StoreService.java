@@ -28,15 +28,17 @@ public class StoreService {
 	}
 
 	public boolean buyCard(Integer user_id, Integer card_id) {
-		UserDto u = userRestConsumer.getUser(user_id);
-		CardDto c = cardRestConsumer.getCard(card_id);
+		// TODO test mauvais res + quel msg de synchro avec esb ??
+		UserDto u = userRestConsumer.getUser(user_id).getBody();
+		CardDto c = cardRestConsumer.getCard(card_id).getBody();
 		if (u == null || c == null) {
 			return false;
 		}
 		if (u.getAccount() > c.getPrice()) {
-			u.addCard(c);
+			c.setUserId(u.getIdUser());
+			cardRestConsumer.updateCard(c.getId(), c);
 			u.setAccount(u.getAccount() - c.getPrice());
-			userRestConsumer.updateUser(u);
+			userRestConsumer.updateUser(u.getIdUser(), u);
 			StoreTransaction sT = new StoreTransaction(user_id, card_id, StoreAction.BUY);
 			storeRepository.save(sT);
 			return true;
@@ -46,18 +48,15 @@ public class StoreService {
 	}
 
 	public boolean sellCard(Integer user_id, Integer card_id) {
-		Optional<UserDto> u_option = userRestConsumer.getUser(user_id);
-		Optional<CardDto> c_option = cardRestConsumer.getCard(card_id);
-		if (!u_option.isPresent() || !c_option.isPresent()) {
+		UserDto u = userRestConsumer.getUser(user_id).getBody();
+		CardDto c = cardRestConsumer.getCard(card_id).getBody();
+		if (u == null || c == null) {
 			return false;
 		}
-		UserDto u = u_option.get();
-		CardDto c = c_option.get();
-		//TODO use rest consumer
-		c.setUser(null);
-		cardRestConsumer.updateCard(c);
+		c.setUserId(null);
+		cardRestConsumer.updateCard(c.getId(), c);
 		u.setAccount(u.getAccount() + c.computePrice());
-		userRestConsumer.updateUser(u);
+		userRestConsumer.updateUser(u.getIdUser(), u);
 		StoreTransaction sT = new StoreTransaction(user_id, card_id, StoreAction.SELL);
 		storeRepository.save(sT);
 		return true;

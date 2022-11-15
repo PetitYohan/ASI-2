@@ -5,6 +5,7 @@ import java.util.List;
 import com.asi2.backendmarket.dto.card.CardDto;
 import com.asi2.backendmarket.rest.IRest;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,23 +22,27 @@ public interface ICardRest extends IRest {
 	public final String ADD_CARD = ROOT_PATH;
 	public final String GET_ALL = ROOT_PATH + "/cards";
 	public final String GET_CARDS_TO_SELL = ROOT_PATH + "/cards_to_sell";
+	public final String GET_USER_CARDS = CARD_PATH + "/user/{id}";
 
 	@GetMapping(GET_ID)
-	public CardDto getCard(@PathVariable int id);
+	public ResponseEntity<CardDto> getCard(@PathVariable Integer id);
 
 	@PutMapping(UPDATE_CARD)
-	public CardDto update(@PathVariable int id);
+	public ResponseEntity<CardDto> updateCard(@PathVariable Integer id, CardDto cardDto);
 
 	@DeleteMapping(DELETE_CARD)
-	public boolean delete_card(@PathVariable int id);
+	public void deleteCard(@PathVariable Integer id);
 
 	@PostMapping(ADD_CARD)
-	public CardDto add(CardDto cardDto);
+	public ResponseEntity<CardDto> addCard(CardDto cardDto);
 
 	@GetMapping(GET_ALL)
 	public List<CardDto> getAllCards();
 
 	@GetMapping(GET_CARDS_TO_SELL)
 	public List<CardDto> getCardsToSell();
+
+	@GetMapping(GET_USER_CARDS)
+	public List<CardDto> getUserCards(@PathVariable Integer id);
 
 }

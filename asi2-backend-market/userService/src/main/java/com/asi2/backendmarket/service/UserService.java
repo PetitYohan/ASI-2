@@ -68,7 +68,6 @@ public class UserService {
 		}
 	}
 
-	// TODO use mapper
 	public UserDto updateUser(Integer id, UserDto user) {
 		if (id != user.getIdUser()) {
 			return null;
