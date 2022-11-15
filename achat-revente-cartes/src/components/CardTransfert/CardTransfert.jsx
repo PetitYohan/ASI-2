@@ -17,38 +17,15 @@ const CardTransfert = ({ user, transac }) => {
   let title = "BUY";
   let txtbtn = "Buy";
   let userId = null;
-  let cardPut = {};
 
   function doTransaction() {
-    cardPut = {
-      name: card.name,
-      description: card.description,
-      family: card.family,
-      affinity: card.affinity,
-      imgUrl: card.imgUrl,
-      smallImgUrl: card.smallImgUrl,
-      id: card.id,
-      energy: card.energy,
-      hp: card.hp,
-      defence: card.defence,
-      attack: card.attack,
-      price: card.price,
-      userId: user.id,
-    };
-    if (transac == "sell") {
-      cardPut.userId = 0;
-    }
-    putCard(cardPut);
-  }
-
-  function putCard(card) {
     const requestOptions = {
-      method: "PUT",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(card),
+      body: JSON.stringify({ user_id: userId, card_id: card.id }),
     };
     fetch(
-      "https://asi2-backend-market.herokuapp.com/cards/" + card.id,
+      "https://asi2-backend-market.herokuapp.com/" + transac,
       requestOptions
     )
       .then((response) => response.json())
