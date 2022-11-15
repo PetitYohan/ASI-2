@@ -2,36 +2,59 @@ import "./CardList.css";
 import { DataGrid } from "@mui/x-data-grid";
 
 const columns = [
-  { field: "id", headerName: "ID", width: 70 },
-  { field: "firstName", headerName: "First name", width: 130 },
-  { field: "lastName", headerName: "Last name", width: 130 },
+  { field: "name", headerName: "Name", width: 150 },
   {
-    field: "age",
-    headerName: "Age",
+    field: "description",
+    headerName: "Description",
+    width: 350,
+  },
+  { field: "family", headerName: "Family", width: 150 },
+  {
+    field: "hp",
+    headerName: "HP",
     type: "number",
-    width: 90,
+    width: 75,
   },
   {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 160,
-    valueGetter: (params) =>
-      `${params.row.firstName || ""} ${params.row.lastName || ""}`,
+    field: "energy",
+    headerName: "Energy",
+    type: "number",
+    width: 75,
+  },
+  {
+    field: "defence",
+    headerName: "Defence",
+    type: "number",
+    width: 75,
+  },
+  {
+    field: "attack",
+    headerName: "Attack",
+    type: "number",
+    width: 75,
+  },
+  {
+    field: "price",
+    headerName: "Price",
+    type: "number",
+    width: 75,
+    valueGetter: (params) => `${params.row.price || ""} $`,
   },
 ];
 
 const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
+  {
+    id: 1,
+    name: "Superman",
+    description:
+      "The origin story of Superman relates that he was born Kal-El on the planet Krypton, before being rocketed to Earth as an infant by his scientist father Jor-El, moments before Krypton's destruction. Discovered and adopted by a farm couple from Kansas, the child is raised as Clark Kent and imbued with a strong moral compass. Early in his childhood, he displays various superhuman abilities, which, upon reaching maturity, he resolves to use for the benefit of humanity through a 'Superman' identity.",
+    family: "DC Comic",
+    hp: 50,
+    energy: 100,
+    defence: 80,
+    attack: 100,
+    price: 100,
+  },
 ];
 
 const CardList = () => {

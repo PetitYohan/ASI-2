@@ -1,5 +1,24 @@
-.button {
+#cardTranfert {
+    width: auto;
+}
+
+#cardlist {
+    width: 80vw;
+    margin-left: 5vw;
+}
+
+#cardshort {
+    margin-left: -12vw;
+    text-align: center;
+}
+
+#cardshort .button {
     background-color: rgb(73, 175, 64);
     color: rgb(233, 233, 250);
-    margin: 0.5em;
+    margin: 1em;
+}
+
+.carddisplay {
+    display: inline-block;
+    vertical-align: middle;
 }
