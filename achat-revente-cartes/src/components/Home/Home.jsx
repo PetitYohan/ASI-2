@@ -3,10 +3,12 @@ import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import "./home.css";
 
-const Home = () => {
+const title = "HOME";
+
+const Home = ({ user }) => {
   return (
     <>
-      <NavBar />
+      <NavBar user={user} title={title} />
       <div id="home">
         <div class="choice">
           <Link to="/buy">

@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import "./NavBar.css";
 
-const NavBar = () => {
+const NavBar = ({ user, title }) => {
   return (
     <div id="navbar">
-      <span id="solde">Solde $</span>
+      <span id="solde">{user.accountUser} $</span>
       <span id="titre">
-        <b>TITRE</b>
+        <b>{title}</b>
       </span>
       <div id="user">
         <Link to="/">
-          <span>Jdoe</span>
+          <span>{user.surName}</span>
           <img
             id="profile"
             src="./src/assets/profil_logo.png"

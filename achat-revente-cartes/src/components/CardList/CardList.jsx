@@ -1,5 +1,7 @@
 import "./CardList.css";
 import { DataGrid } from "@mui/x-data-grid";
+import { useDispatch } from "react-redux";
+import { setSelectedCard } from "../../core/actions";
 
 const columns = [
   { field: "name", headerName: "Name", width: 150 },
@@ -42,22 +44,38 @@ const columns = [
   },
 ];
 
-const rows = [
-  {
-    id: 1,
-    name: "Superman",
-    description:
-      "The origin story of Superman relates that he was born Kal-El on the planet Krypton, before being rocketed to Earth as an infant by his scientist father Jor-El, moments before Krypton's destruction. Discovered and adopted by a farm couple from Kansas, the child is raised as Clark Kent and imbued with a strong moral compass. Early in his childhood, he displays various superhuman abilities, which, upon reaching maturity, he resolves to use for the benefit of humanity through a 'Superman' identity.",
-    family: "DC Comic",
-    hp: 50,
-    energy: 100,
-    defence: 80,
-    attack: 100,
-    price: 100,
-  },
-];
+let rows = [];
 
-const CardList = () => {
+const CardList = ({ cardList, user }) => {
+  const dispatch = useDispatch();
+
+  const onCardSelected = (card) => {
+    dispatch(setSelectedCard(card));
+  };
+
+  const handleRowClick = (params) => {
+    onCardSelected(params.row);
+  };
+
+  if (cardList.length != 0) {
+    rows = [];
+    cardList.forEach((card) => {
+      if (card.userId == user) {
+        rows.push({
+          id: card.id,
+          name: card.name,
+          description: card.description,
+          family: card.family,
+          hp: card.hp,
+          energy: card.energy,
+          defence: card.defence,
+          attack: card.attack,
+          price: card.price,
+        });
+      }
+    });
+  }
+
   return (
     <div id="table" style={{ height: 400, width: "70%" }}>
       <DataGrid
@@ -65,6 +83,7 @@ const CardList = () => {
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
+        onRowClick={handleRowClick}
       />
     </div>
   );
