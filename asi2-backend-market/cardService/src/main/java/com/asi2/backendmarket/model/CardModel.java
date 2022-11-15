@@ -138,4 +138,13 @@ public class CardModel extends CardBasics {
 		this.reference = reference;
 	}
 
+	@Override
+	public String toString() {
+		return "CardModel [id=" + id + ", energy=" + energy + ", hp=" + hp + ", defence=" + defence + ", attack="
+				+ attack + ", price=" + price + ", reference=" + reference + ", userId=" + userId + ", storeId="
+				+ storeId + "]";
+	}
+
+	
+
 }

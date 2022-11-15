@@ -66,6 +66,7 @@ public class CardDto extends CardBasics {
 	}
 
 	public void setUserId(Integer userId) {
+		System.out.println("[CARD CLASS] UPDATE CARD ID USER TO " + userId);
 		this.userId = userId;
 	}
 
@@ -73,4 +74,10 @@ public class CardDto extends CardBasics {
 		return this.hp * 20 + this.defence * 20 + this.energy * 20 + this.attack * 20;
 	}
 
+	@Override
+	public String toString() {
+		return "CardDto [id=" + id + ", energy=" + energy + ", hp=" + hp + ", defence=" + defence + ", attack=" + attack
+				+ ", price=" + price + ", userId=" + userId + "]";
+	}
+	
 }

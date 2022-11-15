@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.asi2.backendmarket.dto.user.BalanceUserDto;
 import com.asi2.backendmarket.dto.user.UserDto;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 public class UserController implements IUserRest {
-	
+
 	@Autowired
 	UserService userService;
 
@@ -31,6 +32,7 @@ public class UserController implements IUserRest {
 		} else {
 			return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.BAD_REQUEST);
 		}
+
 	}
 
 	@Override
@@ -58,6 +60,7 @@ public class UserController implements IUserRest {
 	@Override
 	public void deleteUser(Integer id) {
 		userService.deleteUser(id);
+
 	}
 
 	@Override

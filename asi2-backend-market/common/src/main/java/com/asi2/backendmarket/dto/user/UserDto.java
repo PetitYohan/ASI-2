@@ -10,7 +10,6 @@ public class UserDto {
 	private String email;
 	private String token;
 
-
 	public String getLogin() {
 		return login;
 	}
@@ -43,28 +42,42 @@ public class UserDto {
 		this.pwd = pwd;
 	}
 
-	public int getIdUser() {
+	public Integer getIdUser() {
 		return idUser;
 	}
-	public void setIdUser(int idUser) {
+
+	public void setIdUser(Integer idUser) {
 		this.idUser = idUser;
 	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public String getSurName() {
 		return surName;
 	}
+
 	public void setSurName(String surname) {
 		this.surName = surname;
 	}
+
 	public String getToken() {
 		return token;
 	}
+
 	public void setToken(String token) {
 		this.token = token;
 	}
+
+	@Override
+	public String toString() {
+		return "UserDto [idUser=" + idUser + ", login=" + login + ", account=" + account + ", pwd=" + pwd
+				+ ", lastName=" + lastName + ", surName=" + surName + ", email=" + email + ", token=" + token + "]";
 	}
+	
+}

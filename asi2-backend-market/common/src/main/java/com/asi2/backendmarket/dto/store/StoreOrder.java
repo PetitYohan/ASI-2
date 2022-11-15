@@ -1,26 +1,31 @@
 package com.asi2.backendmarket.dto.store;
 
 public class StoreOrder {
-	private int user_id;
-	private int card_id;
+	private Integer userId;
+	private Integer cardId;
 
 	public StoreOrder() {
 	}
 
-	public int getUser_id() {
-		return user_id;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
-	public int getCard_id() {
-		return card_id;
+	public Integer getCardId() {
+		return cardId;
 	}
 
-	public void setCard_id(int card_id) {
-		this.card_id = card_id;
+	public void setCardId(Integer cardId) {
+		this.cardId = cardId;
 	}
+
+	@Override
+	public String toString() {
+		return "StoreOrder [userId=" + userId + ", cardId=" + cardId + "]";
+	}	
 
 }

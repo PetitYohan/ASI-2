@@ -37,6 +37,7 @@ public class CardController implements ICardRest {
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card id:" + id + ", not found", null);
 		}
+
 	}
 
 	@Override
@@ -47,23 +48,26 @@ public class CardController implements ICardRest {
 		} else {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Card:" + card + ", could not be inserted", null);
 		}
-
 	}
 
 	@Override
 	public ResponseEntity<CardDto> updateCard(Integer id, CardDto card) {
+		System.out.println("[CARD REST CONTROLLER] " + card);
 		CardDto updatedCard = cardModelService.updateCard(id, card);
 		if (updatedCard != null) {
 			return new ResponseEntity<CardDto>(updatedCard, HttpStatus.OK);
 		} else {
 			// TODO catch exception before to modify msg
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Card:" + card + ", could not be updated", null);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Card:" + card + ", could not be updated",
+					null);
 		}
+
 	}
 
 	@Override
 	public void deleteCard(Integer id) {
 		cardModelService.deleteCardModel(id);
+
 	}
 
 	@Override
@@ -74,6 +78,7 @@ public class CardController implements ICardRest {
 	@Override
 	public List<CardDto> getUserCards(Integer id) {
 		return cardModelService.getUserCards(id);
-	}	
+
+	}
 
 }

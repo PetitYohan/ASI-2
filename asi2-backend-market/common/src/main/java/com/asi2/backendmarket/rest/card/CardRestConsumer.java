@@ -8,8 +8,11 @@ import com.asi2.backendmarket.dto.card.CardDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 public class CardRestConsumer implements ICardRest {
 
@@ -25,8 +28,8 @@ public class CardRestConsumer implements ICardRest {
     @Override
     public ResponseEntity<CardDto> updateCard(Integer id, CardDto cardDto) {
         HttpEntity<CardDto> request = new HttpEntity<>(cardDto);
-        return restTemplate.postForEntity(BASE_PATH + UPDATE_CARD, request, CardDto.class, id);
-
+        System.out.println("[CARD REST CONS] " + cardDto);
+        return restTemplate.exchange(BASE_PATH + UPDATE_CARD, HttpMethod.PUT, request, CardDto.class, id);
     }
 
     // TODO: update others
