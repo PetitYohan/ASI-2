@@ -76,3 +76,16 @@ Buy :
 Sell :
 
 ![image](Images/Composant_Sell.png)
+
+## UML monolithique :
+### diagramme UML card
+
+![image](Images/card_uml.png)
+
+### diagramme UML store
+
+![image](images/../Images/store_uml.png)
+
+### diagramme UML user
+
+![image](Images/user_uml.png)
