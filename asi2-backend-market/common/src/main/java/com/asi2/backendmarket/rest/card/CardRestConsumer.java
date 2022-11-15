@@ -19,40 +19,40 @@ public class CardRestConsumer implements ICardRest {
 
     @Override
     public ResponseEntity<CardDto> getCard(Integer id) {
-        return restTemplate.getForEntity(GET_ID, CardDto.class, id);
+        return restTemplate.getForEntity(BASE_PATH + GET_ID, CardDto.class, id);
     }
 
     @Override
     public ResponseEntity<CardDto> updateCard(Integer id, CardDto cardDto) {
         HttpEntity<CardDto> request = new HttpEntity<>(cardDto);
-        return restTemplate.postForEntity(UPDATE_CARD, request, CardDto.class, id);
+        return restTemplate.postForEntity(BASE_PATH + UPDATE_CARD, request, CardDto.class, id);
 
     }
 
     // TODO: update others
     @Override
     public void deleteCard(Integer id) {
-        restTemplate.delete(DELETE_CARD, id);
+        restTemplate.delete(BASE_PATH + DELETE_CARD, id);
     }
 
     @Override
     public ResponseEntity<CardDto> addCard(CardDto cardDto) {
-        return restTemplate.postForEntity(ADD_CARD, cardDto, CardDto.class);
+        return restTemplate.postForEntity(BASE_PATH + ADD_CARD, cardDto, CardDto.class);
     }
 
     @Override
     public List<CardDto> getAllCards() {
-        return Arrays.asList(restTemplate.getForEntity(GET_ALL, CardDto[].class).getBody());
+        return Arrays.asList(restTemplate.getForEntity(BASE_PATH + GET_ALL, CardDto[].class).getBody());
     }
 
     @Override
     public List<CardDto> getCardsToSell() {
-        return Arrays.asList(restTemplate.getForEntity(GET_CARDS_TO_SELL, CardDto[].class).getBody());
+        return Arrays.asList(restTemplate.getForEntity(BASE_PATH + GET_CARDS_TO_SELL, CardDto[].class).getBody());
     }
 
     @Override
     public List<CardDto> getUserCards(Integer id) {
-        return Arrays.asList(restTemplate.getForEntity(GET_USER_CARDS, CardDto[].class).getBody());
+        return Arrays.asList(restTemplate.getForEntity(BASE_PATH + GET_USER_CARDS, CardDto[].class).getBody());
     }
 
 }

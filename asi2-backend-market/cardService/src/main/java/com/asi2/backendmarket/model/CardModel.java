@@ -28,7 +28,6 @@ public class CardModel extends CardBasics {
 	@Column
 	private float price;
 	@ManyToOne
-	@Column
 	private CardReference reference;
 	@Column
 	private Integer userId;
