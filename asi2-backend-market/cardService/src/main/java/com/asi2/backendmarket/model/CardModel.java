@@ -1,10 +1,10 @@
 package com.asi2.backendmarket.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.asi2.backendmarket.dto.card.CardBasics;
@@ -17,19 +17,23 @@ public class CardModel extends CardBasics {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+	@Column
 	private float energy;
+	@Column
 	private float hp;
+	@Column
 	private float defence;
+	@Column
 	private float attack;
+	@Column
 	private float price;
-
 	@ManyToOne
-	@JoinColumn
-	private UserModel user;
-
-	@ManyToOne
-	@JoinColumn
-	private StoreTransaction store;
+	@Column
+	private CardReference reference;
+	@Column
+	private Integer userId;
+	@Column
+	private Integer storeId;
 
 	public CardModel() {
 		super();
@@ -99,20 +103,20 @@ public class CardModel extends CardBasics {
 		this.price = price;
 	}
 
-	public UserModel getUser() {
-		return user;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setUser(UserModel user) {
-		this.user = user;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
-	public void setStore(StoreTransaction storeModel) {
-		this.store = storeModel;
+	public void setStoreId(Integer storeModelId) {
+		this.storeId = storeModelId;
 	}
 
-	public StoreTransaction getStore() {
-		return store;
+	public Integer getStoreId() {
+		return storeId;
 	}
 
 	public float computePrice() {
@@ -125,6 +129,14 @@ public class CardModel extends CardBasics {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public CardReference getreference() {
+		return reference;
+	}
+
+	public void setreference(CardReference reference) {
+		this.reference = reference;
 	}
 
 }

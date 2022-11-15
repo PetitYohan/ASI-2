@@ -75,6 +75,13 @@ services:
       - store-service-network
       - general-network
 
+  auth-service:
+    build: authService/
+    container_name: auth-service
+    networks:
+      - auth-service-network
+      - general-network
+
   reverse-proxy:
     build: reverse-proxy/
     container_name: reverse-proxy
@@ -85,6 +92,7 @@ services:
       - "card-service"
       - "user-service"
       - "store-service"
+      - "auth-service"
       - "static"
     networks:
       - general-network
@@ -100,4 +108,5 @@ networks:
   card-service-network:
   user-service-network:
   store-service-network:
+  auth-service-network:
   general-network:

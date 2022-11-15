@@ -69,4 +69,8 @@ public class CardDto extends CardBasics {
 		this.userId = userId;
 	}
 
+	public float computePrice() {
+		return this.hp * 20 + this.defence * 20 + this.energy * 20 + this.attack * 20;
+	}
+
 }

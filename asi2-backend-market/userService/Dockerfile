@@ -1,7 +1,7 @@
 #
 # Packaging stage
 #
-FROM openjdk:8-jdk-alpine
+FROM adoptopenjdk/openjdk11:x86_64-alpine-jdk-11.0.10_9-slim
 # COPY --from=build /home/app/target/*.jar app.jar
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
