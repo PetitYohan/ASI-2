@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import Home from "./components/Home/Home";
 import ErrorPage from "./components/Error/error-page";
 import CardTransfert from "./components/CardTransfert/CardTransfert";
+import Auth from "./components/Auth/Auth";
 import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 import "./index.css";
 
@@ -11,6 +12,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <Home />,
     errorElement: <ErrorPage />,
+  },
+  {
+    path: "/auth",
+    element: <Auth />,
   },
   {
     path: "/buy",
