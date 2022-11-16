@@ -41,7 +41,7 @@ public class UserRestConsumer implements IUserRest {
     @Override
     public ResponseEntity<UserDto> updateUser(Integer id, UserDto userDto) {
         HttpEntity<UserDto> request = new HttpEntity<>(userDto);
-        return restTemplate.postForEntity(BASE_PATH + ID_PATH, request, UserDto.class, id);
+        return restTemplate.exchange(BASE_PATH + ID_PATH, HttpMethod.PUT, request, UserDto.class, id);
     }
 
     @Override

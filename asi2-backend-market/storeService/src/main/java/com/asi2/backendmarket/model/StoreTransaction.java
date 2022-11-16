@@ -16,17 +16,19 @@ public class StoreTransaction {
 	private Integer userId;
 	private Integer cardId;
 	private StoreAction action;
+	private double price;
 	private java.sql.Timestamp timeSt;
 
 	public StoreTransaction() {
 		this.timeSt = new Timestamp(System.currentTimeMillis());
 	}
 
-	public StoreTransaction(Integer userId, Integer cardId, StoreAction action) {
+	public StoreTransaction(Integer userId, Integer cardId, StoreAction action, double price) {
 		super();
 		this.userId = userId;
 		this.cardId = cardId;
 		this.action = action;
+		this.price = price;
 		this.timeSt = new Timestamp(System.currentTimeMillis());
 	}
 
@@ -37,7 +39,7 @@ public class StoreTransaction {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	
 	public Integer getUserId() {
 		return userId;
 	}
@@ -60,6 +62,14 @@ public class StoreTransaction {
 
 	public void setAction(StoreAction action) {
 		this.action = action;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setAction(double price) {
+		this.price = price;
 	}
 
 	public java.sql.Timestamp getTimeSt() {

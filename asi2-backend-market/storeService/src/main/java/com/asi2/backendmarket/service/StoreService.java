@@ -30,19 +30,19 @@ public class StoreService {
 	@Autowired
 	ModelMapper mapper;
 
-	public boolean buyCard(Integer user_id, Integer card_id) {
+	public boolean buyCard(Integer userId, Integer cardId) {
 		// TODO test mauvais res + quel msg de synchro avec esb ??
-		UserDto u = userRestConsumer.getUser(user_id).getBody();
-		CardDto c = cardRestConsumer.getCard(card_id).getBody();
+		UserDto u = userRestConsumer.getUser(userId).getBody();
+		CardDto c = cardRestConsumer.getCard(cardId).getBody();
 		if (u == null || c == null) {
 			return false;
 		}
 		if (u.getAccount() > c.getPrice()) {
 			c.setUserId(u.getIdUser());
-			cardRestConsumer.updateCard(c.getId(), c);
 			u.setAccount(u.getAccount() - c.getPrice());
-			userRestConsumer.updateUser(u.getIdUser(), u);
-			StoreTransaction sT = new StoreTransaction(user_id, card_id, StoreAction.BUY);
+			CardDto cardUpdateResult = cardRestConsumer.updateCard(c.getId(), c).getBody();
+			UserDto userUpdateResult = userRestConsumer.updateUser(u.getIdUser(), u).getBody();
+			StoreTransaction sT = new StoreTransaction(userId, cardId, StoreAction.BUY, c.getPrice());
 			storeRepository.save(sT);
 			return true;
 		} else {
@@ -50,17 +50,17 @@ public class StoreService {
 		}
 	}
 
-	public boolean sellCard(Integer user_id, Integer card_id) {
-		UserDto u = userRestConsumer.getUser(user_id).getBody();
-		CardDto c = cardRestConsumer.getCard(card_id).getBody();
+	public boolean sellCard(Integer userId, Integer cardId) {
+		UserDto u = userRestConsumer.getUser(userId).getBody();
+		CardDto c = cardRestConsumer.getCard(cardId).getBody();
 		if (u == null || c == null) {
 			return false;
 		}
 		c.setUserId(null);
-		cardRestConsumer.updateCard(c.getId(), c);
 		u.setAccount(u.getAccount() + c.computePrice());
+		cardRestConsumer.updateCard(c.getId(), c);
 		userRestConsumer.updateUser(u.getIdUser(), u);
-		StoreTransaction sT = new StoreTransaction(user_id, card_id, StoreAction.SELL);
+		StoreTransaction sT = new StoreTransaction(userId, cardId, StoreAction.SELL, c.computePrice());
 		storeRepository.save(sT);
 		return true;
 	}
