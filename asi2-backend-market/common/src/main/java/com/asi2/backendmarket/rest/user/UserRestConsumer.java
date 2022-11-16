@@ -1,6 +1,5 @@
 package com.asi2.backendmarket.rest.user;
 
-import com.asi2.backendmarket.dto.user.BalanceUserDto;
 import com.asi2.backendmarket.dto.user.UserDto;
 
 import java.util.Arrays;

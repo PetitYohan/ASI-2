@@ -8,7 +8,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.asi2.backendmarket.ESB.UserMessage;
 import com.asi2.backendmarket.ESB.Utils.Sender;
-import com.asi2.backendmarket.dto.user.BalanceUserDto;
 import com.asi2.backendmarket.dto.user.UserDto;
 import com.asi2.backendmarket.rest.user.IUserRest;
 import com.asi2.backendmarket.service.UserService;

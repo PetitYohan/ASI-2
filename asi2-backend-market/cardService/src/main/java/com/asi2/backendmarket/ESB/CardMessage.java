@@ -7,21 +7,33 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CardMessage {
 
-    private List<CardDto> cardDtoList;
+    private CardDto cardDto;
+
+    private Integer cardId;
 
     private String callbackUrl;
-    public List<CardDto> getCardDtoList() {
-        return cardDtoList;
+
+    public CardDto getCardDto() {
+        return cardDto;
     }
 
-    public void setCardDtoList(List<CardDto> cardDtoList) {
-        this.cardDtoList = cardDtoList;
+    public void setCardDto(CardDto cardDto) {
+        this.cardDto = cardDto;
+    }
+
+    public Integer getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(Integer cardId) {
+        this.cardId = cardId;
     }
 
     public String getCallbackUrl() {

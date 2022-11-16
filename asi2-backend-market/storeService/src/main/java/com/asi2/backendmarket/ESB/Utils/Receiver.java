@@ -1,8 +1,8 @@
 package com.asi2.backendmarket.ESB.Utils;
 
 import com.asi2.backendmarket.ESB.StoreMessage;
-import com.asi2.backendmarket.dto.store.StoreTransactionDto;
-import com.asi2.backendmarket.model.StoreAction;
+import com.asi2.backendmarket.dto.store.StoreAction;
+import com.asi2.backendmarket.dto.store.StoreOrder;
 import com.asi2.backendmarket.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -18,20 +18,16 @@ public class Receiver {
     @Autowired
     public StoreService storeService;
 
-
     @JmsListener(destination = "${spring-messaging.queue.name}")
     public void receiveMessage(StoreMessage message) {
         log.info(message);
-        if(message.getAction().equals(StoreAction.BUY)){
-            for(StoreTransactionDto transaction : message.getTransactionDtoList()){
-                 storeService.buyCard(transaction.getIdUser(), transaction.getIdCard());
-            }
-        }else if(message.getAction().equals(StoreAction.SELL)){
-            for(StoreTransactionDto transaction : message.getTransactionDtoList()){
-                storeService.sellCard(transaction.getIdUser(), transaction.getIdCard());
-            }
-        }
+        if (message.getAction().equals(StoreAction.BUY)) {
+            storeService.buyCard(message.getOrder().getUserId(), message.getOrder().getCardId());
 
+        } else if (message.getAction().equals(StoreAction.SELL)) {
+            storeService.sellCard(message.getOrder().getUserId(), message.getOrder().getCardId());
+
+        }
 
     }
 }

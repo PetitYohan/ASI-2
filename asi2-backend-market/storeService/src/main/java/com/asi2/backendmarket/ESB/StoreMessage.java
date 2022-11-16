@@ -1,8 +1,8 @@
 package com.asi2.backendmarket.ESB;
 
-import com.asi2.backendmarket.dto.store.StoreTransactionDto;
+import com.asi2.backendmarket.dto.store.StoreAction;
+import com.asi2.backendmarket.dto.store.StoreOrder;
 import com.asi2.backendmarket.dto.user.UserDto;
-import com.asi2.backendmarket.model.StoreAction;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,10 +15,10 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StoreMessage {
 
-    private List<StoreTransactionDto> transactionDtoList;
+    private StoreOrder order;
 
-    private String callbackUrl;
     private StoreAction action;
+    private String callbackUrl;
 
     public StoreAction getAction() {
         return action;
@@ -28,12 +28,12 @@ public class StoreMessage {
         this.action = action;
     }
 
-    public List<StoreTransactionDto> getTransactionDtoList() {
-        return transactionDtoList;
+    public StoreOrder getOrder() {
+        return order;
     }
 
-    public void setTransactionDtoList(List<StoreTransactionDto> transactionDtoList) {
-        this.transactionDtoList = transactionDtoList;
+    public void setOrder(StoreOrder orderList) {
+        this.order = orderList;
     }
 
     public String getCallbackUrl() {

@@ -18,7 +18,7 @@ public class Sender {
 
     private final JmsTemplate jmsTemplate;
 
-    private static final String QUEUE_KEY = "Queue.User";
+    private static final String QUEUE_KEY = "spring-messaging.queue.name";
 
     private String queue;
 
@@ -33,6 +33,7 @@ public class Sender {
 
         // Send a message with a POJO - the template reuse the message converter
         System.out.println("Sending an userModel message " + message);
+        System.out.println("Queue " + queue);
         jmsTemplate.convertAndSend(queue, message);
     }
 }

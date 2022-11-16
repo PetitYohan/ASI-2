@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asi2.backendmarket.dto.card.CardDto;
+import com.asi2.backendmarket.dto.store.StoreAction;
 import com.asi2.backendmarket.dto.store.StoreTransactionDto;
 import com.asi2.backendmarket.dto.user.UserDto;
-import com.asi2.backendmarket.model.StoreAction;
 import com.asi2.backendmarket.model.StoreTransaction;
 import com.asi2.backendmarket.rest.card.CardRestConsumer;
 import com.asi2.backendmarket.rest.user.UserRestConsumer;
