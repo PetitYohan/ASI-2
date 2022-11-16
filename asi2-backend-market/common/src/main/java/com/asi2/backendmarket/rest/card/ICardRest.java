@@ -3,47 +3,47 @@ package com.asi2.backendmarket.rest.card;
 import java.util.List;
 
 import com.asi2.backendmarket.dto.card.CardDto;
-import com.asi2.backendmarket.dto.card.CardInstanceDto;
 import com.asi2.backendmarket.rest.IRest;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface ICardRest extends IRest {
-    public final String ROOT_PATH = "/api/cards";
-
-	public final String GET = ROOT_PATH + "/template/{id}";
-	public final String GET_ALL = ROOT_PATH + "/template/";
 	
-	public final String GET_CARD_FROM_INSTANCE = ROOT_PATH + "/{ids}";
-	
-	public final String ADD = ROOT_PATH + "/users/";
-	public final String REGISTER = ROOT_PATH + "/users/register/{idUser}";
-	public final String BUY = ROOT_PATH + "/users/buy/{idCardInstance}/{idUser}";
-	public final String SELL = ROOT_PATH + "/users/sell/{idCardInstance}";
-	
+	public final String ROOT_PATH = "/api/card";
+	public final String GET_ID = ROOT_PATH + "/{id}";
+	public final String UPDATE_CARD = ROOT_PATH + "/{id}";
+	public final String DELETE_CARD = ROOT_PATH + "/{id}";
+	public final String ADD_CARD = ROOT_PATH + "/";
+	public final String GET_ALL = ROOT_PATH + "/cards";
+	public final String GET_CARDS_TO_SELL = ROOT_PATH + "/cards_to_sell";
+	public final String GET_USER_CARDS = ROOT_PATH + "/user/{id}";
 
+	@GetMapping(GET_ID)
+	public ResponseEntity<CardDto> getCard(@PathVariable Integer id);
 
-    @GetMapping(GET)
-	public ResponseEntity<CardDto> get(@PathVariable int id);
+	@PutMapping(UPDATE_CARD)
+	public ResponseEntity<CardDto> updateCard(@PathVariable Integer id, @RequestBody CardDto cardDto);
 
-    @GetMapping(GET_ALL)
-	public List<CardDto> getAll();
-    
-    @GetMapping(GET_CARD_FROM_INSTANCE)
-    public ResponseEntity<List<CardInstanceDto>> getCardInstanceList(@PathVariable Integer[] ids);
+	@DeleteMapping(DELETE_CARD)
+	public void deleteCard(@PathVariable Integer id);
 
-    @PostMapping(ADD)
-	public void add(CardInstanceDto cardInstanceDto);
+	@PostMapping(ADD_CARD)
+	public ResponseEntity<CardDto> addCard(@RequestBody CardDto cardDto);
 
-    @PostMapping(REGISTER)
-	public ResponseEntity<List<CardInstanceDto>> generateCardsForNewUser(@PathVariable int idUser);
+	@GetMapping(GET_ALL)
+	public List<CardDto> getAllCards();
 
-	@PostMapping(BUY)
-	public ResponseEntity<Boolean> buyCard(@PathVariable Integer idCardInstance, @PathVariable Integer idUser);
-	@PostMapping(SELL)
-	public ResponseEntity<Boolean> sellCard(@PathVariable Integer idCardInstance);
+	@GetMapping(GET_CARDS_TO_SELL)
+	public List<CardDto> getCardsToSell();
+
+	@GetMapping(GET_USER_CARDS)
+	public List<CardDto> getUserCards(@PathVariable Integer id);
+
 }

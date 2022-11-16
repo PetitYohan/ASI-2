@@ -33,5 +33,11 @@ public class StoreTransactionDto {
 	public void setIdUser(int idUser) {
 		this.idUser = idUser;
 	}
-		
+	
+	@Override
+	public String toString() {
+		return "StoreTransactionDto [priceStore=" + priceStore + ", idStore=" + idStore + ", idCard=" + idCard
+				+ ", idUser=" + idUser + "]";
+	}
+	
 }

@@ -2,7 +2,7 @@ package com.asi2.backendmarket.dto.user;
 
 public class BalanceUserDto {
 	public int idUser;
-	public double balanceMoney;
+	public float balanceMoney;
 	
 	public int getIdUser() {
 		return idUser;
@@ -10,10 +10,10 @@ public class BalanceUserDto {
 	public void setIdUser(int idUser) {
 		this.idUser = idUser;
 	}
-	public double getBalanceMoney() {
+	public float getBalanceMoney() {
 		return balanceMoney;
 	}
-	public void setBalanceMoney(double balanceMoney) {
+	public void setBalanceMoney(float balanceMoney) {
 		this.balanceMoney = balanceMoney;
 	}
 	

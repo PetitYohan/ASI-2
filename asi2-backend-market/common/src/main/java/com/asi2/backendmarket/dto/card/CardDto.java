@@ -1,58 +1,79 @@
 package com.asi2.backendmarket.dto.card;
 
-import com.asi2.backendmarket.dto.card.FamilyDto;
+public class CardDto extends CardBasics {
+	private Integer id;
+	private float energy;
+	private float hp;
+	private float defence;
+	private float attack;
+	private float price;
+	private Integer userId;
 
-public class CardDto {
 
-	private int idCard;
-	private String nameCard;
-	private String descriptioncard;
-	private String affinityCard;
-	private int energyCard;
-	private FamilyDto familyCardDto;
-	private String sourceUrlCard;
-	
-	public int getIdCard() {
-		return idCard;
+	public Integer getId() {
+		return id;
 	}
-	public void setIdCard(int idCard) {
-		this.idCard = idCard;
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
-	public String getNameCard() {
-		return nameCard;
+
+	public float getEnergy() {
+		return energy;
 	}
-	public void setNameCard(String nameCard) {
-		this.nameCard = nameCard;
+
+	public void setEnergy(float energy) {
+		this.energy = energy;
 	}
-	public String getDescriptioncard() {
-		return descriptioncard;
+
+	public float getHp() {
+		return hp;
 	}
-	public void setDescriptioncard(String descriptioncard) {
-		this.descriptioncard = descriptioncard;
+
+	public void setHp(float hp) {
+		this.hp = hp;
 	}
-	public String getAffinityCard() {
-		return affinityCard;
+
+	public float getDefence() {
+		return defence;
 	}
-	public void setAffinityCard(String affinityCard) {
-		this.affinityCard = affinityCard;
+
+	public void setDefence(float defence) {
+		this.defence = defence;
 	}
-	public int getEnergyCard() {
-		return energyCard;
+
+	public float getAttack() {
+		return attack;
 	}
-	public void setEnergyCard(int energyCard) {
-		this.energyCard = energyCard;
+
+	public void setAttack(float attack) {
+		this.attack = attack;
 	}
-	public FamilyDto getFamilyCardDto() {
-		return familyCardDto;
+
+	public float getPrice() {
+		return price;
 	}
-	public void setFamilyCardDto(FamilyDto familyCardDto) {
-		this.familyCardDto = familyCardDto;
+
+	public void setPrice(float price) {
+		this.price = price;
 	}
-	public String getSourceUrlCard() {
-		return sourceUrlCard;
+
+	public Integer getUserId() {
+		return userId;
 	}
-	public void setSourceUrlCard(String sourceUrlCard) {
-		this.sourceUrlCard = sourceUrlCard;
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public float computePrice() {
+		return this.hp * 20 + this.defence * 20 + this.energy * 20 + this.attack * 20;
+	}
+
+	@Override
+	public String toString() {
+		return "CardDto [id=" + id + ", energy=" + energy + ", hp=" + hp + ", defence=" + defence + ", attack=" + attack
+				+ ", price=" + price + ", userId=" + userId + "]";
 	}
 	
 }
