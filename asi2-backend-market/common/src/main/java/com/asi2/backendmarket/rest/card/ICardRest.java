@@ -21,7 +21,7 @@ public interface ICardRest extends IRest {
 	public final String UPDATE_CARD = ROOT_PATH + "/{id}";
 	public final String DELETE_CARD = ROOT_PATH + "/{id}";
 	public final String ADD_CARD = ROOT_PATH + "/";
-	public final String CREATE_CARD_USER = ROOT_PATH + "/{id}";
+	public final String CREATE_CARD_USER = ROOT_PATH + "/{idUser}";
 	public final String GET_ALL = ROOT_PATH + "/cards";
 	public final String GET_CARDS_TO_SELL = ROOT_PATH + "/cards_to_sell";
 	public final String GET_USER_CARDS = ROOT_PATH + "/user/{id}";
