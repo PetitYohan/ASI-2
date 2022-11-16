@@ -1,6 +1,7 @@
 package com.asi2.backendmarket.dto.store;
 
 public class StoreOrder {
+	
 	private Integer userId;
 	private Integer cardId;
 

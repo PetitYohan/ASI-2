@@ -8,7 +8,15 @@ public class StoreTransactionDto {
 	private int idCard;
 	//TODO delete ou rename en userId
 	private int idUser;
-	
+	private StoreAction action;
+
+	public StoreAction getAction() {
+		return action;
+	}
+	public void setAction(StoreAction action) {
+		this.action = action;
+	}
+
 	public double getPriceStore() {
 		return priceStore;
 	}

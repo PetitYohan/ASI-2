@@ -1,6 +1,9 @@
 package com.asi2.backendmarket.controller;
 
 import java.util.List;
+
+import com.asi2.backendmarket.ESB.CardMessage;
+import com.asi2.backendmarket.ESB.Utils.Sender;
 import com.asi2.backendmarket.dto.card.CardDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,9 @@ public class CardController implements ICardRest {
 
 	@Autowired
 	CardModelService cardModelService;
+
+	@Autowired
+	Sender sender;
 
 	@Override
 	public List<CardDto> getAllCards() {
@@ -52,16 +58,9 @@ public class CardController implements ICardRest {
 	}
 
 	@Override
-	public ResponseEntity<CardDto> updateCard(Integer id, CardDto card) {
-		CardDto updatedCard = cardModelService.updateCard(id, card);
-		if (updatedCard != null) {
-			return new ResponseEntity<CardDto>(updatedCard, HttpStatus.OK);
-		} else {
-			// TODO catch exception before to modify msg
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Card:" + card + ", could not be updated",
-					null);
-		}
-
+	public ResponseEntity<CardDto> updateCard(Integer id, CardDto cardDto) {
+		sender.sendMessage(new CardMessage(cardDto, id, null));
+		return new ResponseEntity<CardDto>(cardDto, HttpStatus.OK);	
 	}
 
 	@Override
