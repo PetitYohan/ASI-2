@@ -7,7 +7,7 @@ import CardTransfert from "./components/CardTransfert/CardTransfert";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import globalReducer from "./core/reducers";
-import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 
 const store = createStore(globalReducer);

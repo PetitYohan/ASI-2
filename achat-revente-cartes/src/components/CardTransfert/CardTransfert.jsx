@@ -8,6 +8,7 @@ import { setCards, setUser } from "../../core/actions";
 import { selectCards, selectCard, selectUser } from "../../core/selectors";
 import "./CardTransfert.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CardTransfert = ({ transac }) => {
   const dispatch = useDispatch();
@@ -15,7 +16,6 @@ const CardTransfert = ({ transac }) => {
   const card = useSelector(selectCard);
   const userSelect = useSelector(selectUser);
   const [refresh, setRefresh] = useState(false);
-
   let title = "BUY";
   let txtbtn = "Buy";
   let titlepage = "Market";
