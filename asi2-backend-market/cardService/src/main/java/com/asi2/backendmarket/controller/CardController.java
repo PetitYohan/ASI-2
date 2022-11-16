@@ -57,6 +57,12 @@ public class CardController implements ICardRest {
 	}
 
 	@Override
+	public ResponseEntity<CardDto> createCardForUser(Integer userId) {
+		sender.sendMessage(new CardMessage(null, userId, null));
+		return new ResponseEntity<CardDto>(new CardDto(), HttpStatus.OK);
+	}
+
+	@Override
 	public ResponseEntity<CardDto> updateCard(Integer id, CardDto cardDto) {
 		sender.sendMessage(new CardMessage(cardDto, id, null));
 		return new ResponseEntity<CardDto>(cardDto, HttpStatus.OK);	
