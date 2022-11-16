@@ -15,6 +15,7 @@ import com.asi2.backendmarket.service.UserService;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 public class UserController implements IUserRest {
 

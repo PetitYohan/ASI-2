@@ -1,0 +1,17 @@
+.choice {
+    display: flex;
+    justify-content: center;
+}
+
+.choice button {
+    width: 20vw;
+    min-width: 160px;
+    height: 20vh;
+    background-color: rgb(77, 111, 214);
+    color: rgb(233, 233, 250);
+    margin: 2em;
+}
+
+#home>*:first-child {
+    margin-top: 10em;
+}
