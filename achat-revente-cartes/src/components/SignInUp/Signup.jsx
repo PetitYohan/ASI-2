@@ -1,5 +1,4 @@
 import { useInput } from "./input-hook";
-import { useNavigate } from "react-router-dom";
 import "./Signin.css";
 
 const Login = () => {
@@ -8,7 +7,6 @@ const Login = () => {
   const { value: login, bind: bindLogin, reset: resetLogin } = useInput("");
   const { value: pwd, bind: bindPwd, reset: resetPwd } = useInput("");
   const { value: email, bind: bindEmail, reset: resetEmail } = useInput("");
-  const navigate = useNavigate();
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
@@ -24,14 +22,21 @@ const Login = () => {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lastName: name, surName: uname, pwd: pwd }),
+      body: JSON.stringify({
+        lastName: name,
+        surName: uname,
+        login: login,
+        pwd: pwd,
+        email: email,
+      }),
     };
     const resp = await fetch(
       "http://127.0.0.1/api/auth/register",
       requestOptions
-    ).then((response) => response.json());
-
-    navigate("/");
+    ).then((response) => response);
+    if (resp.status === 200) {
+      alert("User created, you can now login with the Sign In section 😊");
+    }
   }
 
   return (

@@ -4,51 +4,55 @@ import Card from "../Card/Card";
 import Button from "@material-ui/core/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { setCards } from "../../core/actions";
+import { setCards, setUser } from "../../core/actions";
 import { selectCards, selectCard, selectUser } from "../../core/selectors";
 import "./CardTransfert.css";
+import { useState } from "react";
 
 const CardTransfert = ({ transac }) => {
   const dispatch = useDispatch();
   const cardList = useSelector(selectCards);
   const card = useSelector(selectCard);
   const userSelect = useSelector(selectUser);
+  const [refresh, setRefresh] = useState(false);
 
   let title = "BUY";
   let txtbtn = "Buy";
   let titlepage = "Market";
-  let userId = null;
 
   function doTransaction() {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: userId, card_id: card.id }),
+      body: JSON.stringify({ userId: userSelect.idUser, cardId: card.id }),
     };
-    fetch(
-      "https://asi2-backend-market.herokuapp.com/" + transac,
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((data) => this.setState({ postId: data.id }));
+    fetch("http://127.0.0.1/api/store/" + transac, requestOptions).then(
+      (response) => response.json()
+    );
+    setRefresh(!refresh);
   }
 
   useEffect(() => {
-    const fetchData = async () => {
-      const resp = await fetch(
-        "https://asi2-backend-market.herokuapp.com/cards"
-      );
-      const cardList = await resp.json();
-      dispatch(setCards(cardList));
+    const getCards = async () => {
+      const resp = await fetch("http://127.0.0.1/api/card/cards");
+      const cards = await resp.json();
+      dispatch(setCards(cards));
     };
-    fetchData();
-  }, [dispatch]);
+    const updateSolde = async () => {
+      const resp = await fetch(
+        "http://127.0.0.1/api/user/" + userSelect.idUser
+      );
+      const user = await resp.json();
+      dispatch(setUser(user));
+    };
+    getCards();
+    updateSolde();
+  }, [refresh]);
 
   if (transac == "sell") {
     title = "SELL";
     txtbtn = "Sell";
     titlepage = "My Card";
-    userId = userSelect.id;
   }
 
   return (
@@ -57,7 +61,11 @@ const CardTransfert = ({ transac }) => {
       <span id="titlepage">{titlepage}</span>
       <div id="cardTransfert">
         <div id="cardlist" class="carddisplay">
-          <CardList cardList={cardList} user={userId} />
+          <CardList
+            cardList={cardList}
+            user={userSelect.idUser}
+            transac={transac}
+          />
         </div>
         <div id="cardshort" class="carddisplay">
           <Card />

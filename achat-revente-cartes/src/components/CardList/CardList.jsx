@@ -46,7 +46,7 @@ const columns = [
 
 let rows = [];
 
-const CardList = ({ cardList, user }) => {
+const CardList = ({ cardList, user, transac }) => {
   const dispatch = useDispatch();
 
   const onCardSelected = (card) => {
@@ -60,18 +60,34 @@ const CardList = ({ cardList, user }) => {
   if (cardList.length != 0) {
     rows = [];
     cardList.forEach((card) => {
-      if (card.userId == user) {
-        rows.push({
-          id: card.id,
-          name: card.name,
-          description: card.description,
-          family: card.family,
-          hp: card.hp,
-          energy: card.energy,
-          defence: card.defence,
-          attack: card.attack,
-          price: card.price,
-        });
+      if (transac === "sell") {
+        if (card.userId === user) {
+          rows.push({
+            id: card.id,
+            name: card.name,
+            description: card.description,
+            family: card.family,
+            hp: card.hp,
+            energy: card.energy,
+            defence: card.defence,
+            attack: card.attack,
+            price: card.price,
+          });
+        }
+      } else {
+        if (card.userId !== user) {
+          rows.push({
+            id: card.id,
+            name: card.name,
+            description: card.description,
+            family: card.family,
+            hp: card.hp,
+            energy: card.energy,
+            defence: card.defence,
+            attack: card.attack,
+            price: card.price,
+          });
+        }
       }
     });
   }
