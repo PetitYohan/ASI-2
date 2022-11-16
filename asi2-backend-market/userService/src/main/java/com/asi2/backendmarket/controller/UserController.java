@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.asi2.backendmarket.ESB.UserMessage;
+import com.asi2.backendmarket.ESB.Utils.Sender;
 import com.asi2.backendmarket.dto.user.BalanceUserDto;
 import com.asi2.backendmarket.dto.user.UserDto;
 import com.asi2.backendmarket.rest.user.IUserRest;
@@ -19,6 +21,9 @@ public class UserController implements IUserRest {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	Sender sender;
 
 	public UserController(UserService userService) {
 		this.userService = userService;
@@ -48,13 +53,8 @@ public class UserController implements IUserRest {
 
 	@Override
 	public ResponseEntity<UserDto> updateUser(Integer id, UserDto userDto) {
-		UserDto updatedUser = userService.updateUser(id, userDto);
-		if (updatedUser != null) {
-			return new ResponseEntity<UserDto>(updatedUser, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.BAD_REQUEST);
-		}
-
+		sender.sendMessage(new UserMessage(userDto, id, null));
+		return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);	
 	}
 
 	@Override

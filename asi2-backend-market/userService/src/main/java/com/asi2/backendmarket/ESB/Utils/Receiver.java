@@ -22,9 +22,8 @@ public class Receiver {
     @JmsListener(destination = "${spring-messaging.queue.name}")
     public void receiveMessage(UserMessage message) {
         log.info(message);
-        for(UserDto user : message.getUserDtoList()){
-            userService.updateUser(user.getIdUser(), user);
-        }
+        userService.updateUser(message.getUserId(), message.getUserDto());
+        
 
     }
 }
