@@ -53,7 +53,6 @@ public class UserService {
 		UserModel userModel = mapper.map(user, UserModel.class);
 		UserDto userDto = mapper.map(userRepository.save(userModel), UserDto.class);
 		// get five card
-		// cardInstanceService.giveCardsToNewUser(user);
 		System.out.println("UserDto " + userDto);
 		for(int i = 0; i<5; i++){
 			cardRestConsumer.createCardForUser(userDto.getIdUser());
