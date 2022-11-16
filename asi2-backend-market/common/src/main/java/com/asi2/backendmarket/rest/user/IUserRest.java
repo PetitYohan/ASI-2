@@ -29,7 +29,7 @@ public interface IUserRest extends IRest {
     public ResponseEntity<UserDto> getUserProfile();
 
     @RequestMapping(LOGIN_PATH)
-    public ResponseEntity<UserDto> findByLogin(String login);
+    public ResponseEntity<UserDto> findByLogin(@PathVariable String login);
 
     @PostMapping(BALANCE)
     public ResponseEntity<Boolean> balanceUserMoney(@RequestBody BalanceUserDto userDto);
