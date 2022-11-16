@@ -66,7 +66,6 @@ public class CardDto extends CardBasics {
 	}
 
 	public void setUserId(Integer userId) {
-		System.out.println("[CARD CLASS] UPDATE CARD ID USER TO " + userId);
 		this.userId = userId;
 	}
 

@@ -17,13 +17,11 @@ public class StoreController implements IStoreRest {
 
 	@Override
 	public Boolean buyCard(StoreOrder order) {
-		System.out.println("[STORE] BUY " + order);
 		return storeService.buyCard(order.getUserId(), order.getCardId());
 	}
 
 	@Override
 	public Boolean sellCard(StoreOrder order) {
-		System.out.println("[STORE] SELL " + order);
 		return storeService.sellCard(order.getUserId(), order.getCardId());
 	}
 

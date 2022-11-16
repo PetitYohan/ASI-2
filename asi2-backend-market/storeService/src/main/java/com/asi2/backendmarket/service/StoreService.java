@@ -34,25 +34,14 @@ public class StoreService {
 		// TODO test mauvais res + quel msg de synchro avec esb ??
 		UserDto u = userRestConsumer.getUser(userId).getBody();
 		CardDto c = cardRestConsumer.getCard(cardId).getBody();
-		System.out.println("[BUY] " + u);
-		System.out.println("[BUY] " + c);
 		if (u == null || c == null) {
 			return false;
 		}
 		if (u.getAccount() > c.getPrice()) {
-			System.out.println("[BUY] UPDATE CARD ID USER TO " + u.getIdUser());
 			c.setUserId(u.getIdUser());
 			u.setAccount(u.getAccount() - c.getPrice());
-			System.out.println("[BUY] " + u);
-			System.out.println("[BUY] " + c);
 			CardDto cardUpdateResult = cardRestConsumer.updateCard(c.getId(), c).getBody();
 			UserDto userUpdateResult = userRestConsumer.updateUser(u.getIdUser(), u).getBody();
-			System.out.println("[BUY UPDATE RESULT] " + cardUpdateResult);
-			System.out.println("[BUY UPDATE RESULT] " + userUpdateResult);
-			UserDto u2 = userRestConsumer.getUser(userId).getBody();
-			CardDto c2 = cardRestConsumer.getCard(cardId).getBody();
-			System.out.println("[BUY] " + u2);
-			System.out.println("[BUY] " + c2);
 			StoreTransaction sT = new StoreTransaction(userId, cardId, StoreAction.BUY, c.getPrice());
 			storeRepository.save(sT);
 			return true;
@@ -67,10 +56,9 @@ public class StoreService {
 		if (u == null || c == null) {
 			return false;
 		}
-		System.out.println("[SELL] user : " + u + " | card : " + c);
 		c.setUserId(null);
-		cardRestConsumer.updateCard(c.getId(), c);
 		u.setAccount(u.getAccount() + c.computePrice());
+		cardRestConsumer.updateCard(c.getId(), c);
 		userRestConsumer.updateUser(u.getIdUser(), u);
 		StoreTransaction sT = new StoreTransaction(userId, cardId, StoreAction.SELL, c.computePrice());
 		storeRepository.save(sT);

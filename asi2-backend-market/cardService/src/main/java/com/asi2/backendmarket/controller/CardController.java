@@ -52,7 +52,6 @@ public class CardController implements ICardRest {
 
 	@Override
 	public ResponseEntity<CardDto> updateCard(Integer id, CardDto card) {
-		System.out.println("[CARD REST CONTROLLER] " + card);
 		CardDto updatedCard = cardModelService.updateCard(id, card);
 		if (updatedCard != null) {
 			return new ResponseEntity<CardDto>(updatedCard, HttpStatus.OK);

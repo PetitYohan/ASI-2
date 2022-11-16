@@ -51,7 +51,6 @@ public class UserService {
 		}
 		user.setAccount(1000.0F);
 		UserModel userModel = mapper.map(user, UserModel.class);
-		System.out.println("User created : " + userModel.getEmail());
 		// get five card
 		// cardInstanceService.giveCardsToNewUser(user);
 		return mapper.map(userRepository.save(userModel), UserDto.class);
@@ -65,7 +64,6 @@ public class UserService {
 		} else {
 			UserModel u = mapper.map(user, UserModel.class);
 			UserModel uBd = userRepository.save(u);
-			System.out.println("[USER SERVICE] " + user);
 			return mapper.map(uBd, UserDto.class);
 		}
 	}

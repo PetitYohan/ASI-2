@@ -28,7 +28,6 @@ public class CardRestConsumer implements ICardRest {
     @Override
     public ResponseEntity<CardDto> updateCard(Integer id, CardDto cardDto) {
         HttpEntity<CardDto> request = new HttpEntity<>(cardDto);
-        System.out.println("[CARD REST CONS] " + cardDto);
         return restTemplate.exchange(BASE_PATH + UPDATE_CARD, HttpMethod.PUT, request, CardDto.class, id);
     }
 

@@ -56,9 +56,7 @@ public class CardModelService {
 		} else if (!cardRepository.existsById(id)) {
 			return null;
 		} else {
-			System.out.println("[CARD SERVICE] DTO " + cardDto);
 			CardModel c = mapper.map(cardDto, CardModel.class);
-			System.out.println("[CARD SERVICE] MODEL " + c);
 			CardModel cBd = cardRepository.save(c);
 			return mapper.map(cBd, CardDto.class);
 		}
