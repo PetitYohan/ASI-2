@@ -5,10 +5,10 @@ import "./home.css";
 
 const title = "HOME";
 
-const Home = ({ user }) => {
+const Home = () => {
   return (
     <>
-      <NavBar user={user} title={title} />
+      <NavBar title={title} />
       <div id="home">
         <div class="choice">
           <Link to="/buy">

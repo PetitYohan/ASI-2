@@ -22,3 +22,9 @@
     display: inline-block;
     vertical-align: middle;
 }
+
+#titlepage {
+    position: relative;
+    top: 3vh;
+    left: 2vw
+}

@@ -1,24 +1,31 @@
 import { useInput } from "./input-hook";
-import { useSelector, useDispatch } from "react-redux";
-import { selectUser } from "../../core/selectors";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../core/actions";
+import { selectUser } from "../../core/selectors";
 import "./Signin.css";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const userSelect = useSelector(selectUser);
   const { value: uname, bind: bindUname, reset: resetUname } = useInput("");
   const { value: pwd, bind: bindPwd, reset: resetPwd } = useInput("");
+  const userSelect = useSelector(selectUser);
+  const navigate = useNavigate();
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
     login();
     getUser();
-    console.log(userSelect);
-    console.log(userSelect);
     resetUname();
     resetPwd();
+    nav();
   };
+
+  function nav() {
+    if (userSelect !== undefined) {
+      navigate("/home");
+    }
+  }
 
   async function login() {
     {

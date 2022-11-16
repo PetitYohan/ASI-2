@@ -10,26 +10,25 @@ import globalReducer from "./core/reducers";
 import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 import "./index.css";
 
-const user = { id: 8, surName: "Bobby", accountUser: 1000 };
 const store = createStore(globalReducer);
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home user={user} />,
+    element: <Auth />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/auth",
-    element: <Auth />,
+    path: "/home",
+    element: <Home />,
   },
   {
     path: "/buy",
-    element: <CardTransfert user={user} transac="buy" />,
+    element: <CardTransfert transac="buy" />,
   },
   {
     path: "/sell",
-    element: <CardTransfert user={user} transac="sell" />,
+    element: <CardTransfert transac="sell" />,
   },
 ]);
 

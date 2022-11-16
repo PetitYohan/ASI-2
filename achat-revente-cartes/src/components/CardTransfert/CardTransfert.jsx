@@ -5,17 +5,18 @@ import Button from "@material-ui/core/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setCards } from "../../core/actions";
-import { selectCards } from "../../core/selectors";
-import { selectCard } from "../../core/selectors";
+import { selectCards, selectCard, selectUser } from "../../core/selectors";
 import "./CardTransfert.css";
 
-const CardTransfert = ({ user, transac }) => {
+const CardTransfert = ({ transac }) => {
   const dispatch = useDispatch();
   const cardList = useSelector(selectCards);
   const card = useSelector(selectCard);
+  const userSelect = useSelector(selectUser);
 
   let title = "BUY";
   let txtbtn = "Buy";
+  let titlepage = "Market";
   let userId = null;
 
   function doTransaction() {
@@ -46,13 +47,14 @@ const CardTransfert = ({ user, transac }) => {
   if (transac == "sell") {
     title = "SELL";
     txtbtn = "Sell";
-    userId = user.id;
+    titlepage = "My Card";
+    userId = userSelect.id;
   }
 
   return (
     <>
-      <NavBar user={user} title={title} />
-      <span>Titre</span>
+      <NavBar title={title} />
+      <span id="titlepage">{titlepage}</span>
       <div id="cardTransfert">
         <div id="cardlist" class="carddisplay">
           <CardList cardList={cardList} user={userId} />
