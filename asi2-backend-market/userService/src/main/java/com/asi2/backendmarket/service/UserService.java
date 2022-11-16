@@ -55,7 +55,7 @@ public class UserService {
 		// get five card
 		// cardInstanceService.giveCardsToNewUser(user);
 		for(int i = 0; i<5; i++){
-			cardRestConsumer.createCardForUser(user.getIdUser());
+			cardRestConsumer.createCardForUser(userDto.getIdUser());
 		}
 		return userDto;
 	}
