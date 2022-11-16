@@ -60,7 +60,6 @@ public class UserController implements IUserRest {
 	@Override
 	public void deleteUser(Integer id) {
 		userService.deleteUser(id);
-
 	}
 
 	@Override
@@ -78,24 +77,13 @@ public class UserController implements IUserRest {
 		}
 	}
 
-	public ResponseEntity<UserDto> findByLogin(String login) {
+	@Override
+	public ResponseEntity<UserDto> getUserByLogin(String login) {
 		UserDto user = userService.getUserByLogin(login);
 		if (user != null) {
 			return new ResponseEntity<UserDto>(user, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	@ResponseBody
-	public ResponseEntity<Boolean> balanceUserMoney(@RequestBody BalanceUserDto userDto) {
-
-		Boolean isMoneyChange = userService.changeMoneyOfUser(userDto.getIdUser(), userDto.getBalanceMoney());
-
-		if (isMoneyChange) {
-			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 		}
 	}
 

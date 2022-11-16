@@ -9,9 +9,6 @@ public class CardDto extends CardBasics {
 	private float price;
 	private Integer userId;
 
-	public CardDto() {
-
-	}
 
 	public Integer getId() {
 		return id;

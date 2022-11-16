@@ -19,13 +19,8 @@ public class UserRestConsumer implements IUserRest {
     }
 
     @Override
-    public ResponseEntity<UserDto> findByLogin(String login) {
+    public ResponseEntity<UserDto> getUserByLogin(String login) {
         return restTemplate.getForEntity(BASE_PATH + LOGIN_PATH, UserDto.class, login);
-    }
-
-    @Override
-    public ResponseEntity<Boolean> balanceUserMoney(BalanceUserDto userDto) {
-        return restTemplate.postForEntity(BASE_PATH + BALANCE, userDto, Boolean.class);
     }
 
     @Override
@@ -35,7 +30,7 @@ public class UserRestConsumer implements IUserRest {
 
     @Override
     public ResponseEntity<UserDto> addUser(UserDto userDto) {
-        return restTemplate.getForEntity(BASE_PATH + USER, UserDto.class);
+        return restTemplate.postForEntity(BASE_PATH + USER, userDto, UserDto.class);
     }
 
     @Override

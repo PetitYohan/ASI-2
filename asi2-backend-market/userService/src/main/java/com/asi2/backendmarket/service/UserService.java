@@ -99,7 +99,7 @@ public class UserService {
 		}
 
 		String email = Jwts.parser()
-				.setSigningKey(TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E="))
+				.setSigningKey(TextCodec.BASE64.decode("QWxsIHdvcmsgYW5kIG5vIHBsYXkgbWFrZXMgSmFjayBhIGR1bGwgYm95Cg=="))
 				.parseClaimsJws(authToken.replace("Bearer ", ""))
 				.getBody()
 				.getSubject();
@@ -113,30 +113,6 @@ public class UserService {
 			return mapper.map(user.get(), UserDto.class);
 		} else {
 			return null;
-		}
-	}
-
-	public Boolean changeMoneyOfUser(Integer userId, float balancedMoney) {
-
-		Optional<UserModel> u = userRepository.findById(userId);
-		if (!u.isPresent()) {
-			return false;
-		} else {
-			UserModel user = u.get();
-			try {
-				float oldMoney = user.getAccount();
-				float newMoney = oldMoney + balancedMoney;
-				if (newMoney >= 0) {
-					user.setAccount(newMoney);
-					userRepository.save(user);
-					return true;
-				} else {
-					return false;
-				}
-
-			} catch (Exception e) {
-				return false;
-			}
 		}
 	}
 

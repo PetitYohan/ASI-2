@@ -2,7 +2,6 @@ package com.asi2.backendmarket.rest.user;
 
 import com.asi2.backendmarket.dto.user.UserDto;
 import com.asi2.backendmarket.rest.IRest;
-import com.asi2.backendmarket.dto.user.BalanceUserDto;
 
 import java.util.List;
 
@@ -20,19 +19,15 @@ public interface IUserRest extends IRest {
     public final String ROOT_PATH = "/api/user";
     public final String USER = ROOT_PATH + "/";
     public final String ID_PATH = ROOT_PATH + "/{id}";
-    public final String LOGIN_PATH = ROOT_PATH + "/{login}";
+    public final String LOGIN_PATH = ROOT_PATH + "/login/{login}";
     public final String GET_ALL = ROOT_PATH + "/users";
     public final String PROFILE = ROOT_PATH + "/profile";
-    public final String BALANCE = ROOT_PATH + "/balance";
 
     @RequestMapping(PROFILE)
     public ResponseEntity<UserDto> getUserProfile();
 
-    @RequestMapping(LOGIN_PATH)
-    public ResponseEntity<UserDto> findByLogin(@PathVariable String login);
-
-    @PostMapping(BALANCE)
-    public ResponseEntity<Boolean> balanceUserMoney(@RequestBody BalanceUserDto userDto);
+    @GetMapping(LOGIN_PATH)
+    public ResponseEntity<UserDto> getUserByLogin(@PathVariable String login);
 
     @GetMapping(ID_PATH)
     public ResponseEntity<UserDto> getUser(@PathVariable Integer id);
