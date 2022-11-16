@@ -28,7 +28,6 @@ public class CardModel extends CardBasics {
 	@Column
 	private float price;
 	@ManyToOne
-	@Column
 	private CardReference reference;
 	@Column
 	private Integer userId;
@@ -138,5 +137,14 @@ public class CardModel extends CardBasics {
 	public void setreference(CardReference reference) {
 		this.reference = reference;
 	}
+
+	@Override
+	public String toString() {
+		return "CardModel [id=" + id + ", energy=" + energy + ", hp=" + hp + ", defence=" + defence + ", attack="
+				+ attack + ", price=" + price + ", reference=" + reference + ", userId=" + userId + ", storeId="
+				+ storeId + "]";
+	}
+
+	
 
 }

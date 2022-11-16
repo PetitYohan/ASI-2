@@ -3,10 +3,14 @@ package com.asi2.backendmarket.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asi2.backendmarket.dto.card.CardDto;
+import com.asi2.backendmarket.dto.store.StoreTransactionDto;
 import com.asi2.backendmarket.dto.user.UserDto;
 import com.asi2.backendmarket.model.StoreAction;
 import com.asi2.backendmarket.model.StoreTransaction;
@@ -17,29 +21,28 @@ import com.asi2.backendmarket.repository.StoreRepository;;
 @Service
 public class StoreService {
 
-	private final CardRestConsumer cardRestConsumer;
-	private final UserRestConsumer userRestConsumer;
-	private final StoreRepository storeRepository;
+	private static final CardRestConsumer cardRestConsumer = new CardRestConsumer();
+	private static final UserRestConsumer userRestConsumer = new UserRestConsumer();
 
-	public StoreService(CardRestConsumer cardService, UserRestConsumer userService, StoreRepository storeRepository) {
-		this.cardRestConsumer = cardService;
-		this.userRestConsumer = userService;
-		this.storeRepository = storeRepository;
-	}
+	@Autowired
+	StoreRepository storeRepository;
 
-	public boolean buyCard(Integer user_id, Integer card_id) {
+	@Autowired
+	ModelMapper mapper;
+
+	public boolean buyCard(Integer userId, Integer cardId) {
 		// TODO test mauvais res + quel msg de synchro avec esb ??
-		UserDto u = userRestConsumer.getUser(user_id).getBody();
-		CardDto c = cardRestConsumer.getCard(card_id).getBody();
+		UserDto u = userRestConsumer.getUser(userId).getBody();
+		CardDto c = cardRestConsumer.getCard(cardId).getBody();
 		if (u == null || c == null) {
 			return false;
 		}
 		if (u.getAccount() > c.getPrice()) {
 			c.setUserId(u.getIdUser());
-			cardRestConsumer.updateCard(c.getId(), c);
 			u.setAccount(u.getAccount() - c.getPrice());
-			userRestConsumer.updateUser(u.getIdUser(), u);
-			StoreTransaction sT = new StoreTransaction(user_id, card_id, StoreAction.BUY);
+			CardDto cardUpdateResult = cardRestConsumer.updateCard(c.getId(), c).getBody();
+			UserDto userUpdateResult = userRestConsumer.updateUser(u.getIdUser(), u).getBody();
+			StoreTransaction sT = new StoreTransaction(userId, cardId, StoreAction.BUY, c.getPrice());
 			storeRepository.save(sT);
 			return true;
 		} else {
@@ -47,25 +50,27 @@ public class StoreService {
 		}
 	}
 
-	public boolean sellCard(Integer user_id, Integer card_id) {
-		UserDto u = userRestConsumer.getUser(user_id).getBody();
-		CardDto c = cardRestConsumer.getCard(card_id).getBody();
+	public boolean sellCard(Integer userId, Integer cardId) {
+		UserDto u = userRestConsumer.getUser(userId).getBody();
+		CardDto c = cardRestConsumer.getCard(cardId).getBody();
 		if (u == null || c == null) {
 			return false;
 		}
 		c.setUserId(null);
-		cardRestConsumer.updateCard(c.getId(), c);
 		u.setAccount(u.getAccount() + c.computePrice());
+		cardRestConsumer.updateCard(c.getId(), c);
 		userRestConsumer.updateUser(u.getIdUser(), u);
-		StoreTransaction sT = new StoreTransaction(user_id, card_id, StoreAction.SELL);
+		StoreTransaction sT = new StoreTransaction(userId, cardId, StoreAction.SELL, c.computePrice());
 		storeRepository.save(sT);
 		return true;
 	}
 
-	public List<StoreTransaction> getAllTransactions() {
+	public List<StoreTransactionDto> getAllTransactions() {
 		List<StoreTransaction> sTList = new ArrayList<>();
 		this.storeRepository.findAll().forEach(sTList::add);
-		return sTList;
+		return sTList.stream()
+				.map(entry -> mapper.map(entry, StoreTransactionDto.class))
+				.collect(Collectors.toList());
 
 	}
 

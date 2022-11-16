@@ -1,24 +1,22 @@
 package com.asi2.backendmarket.controller;
 
-import com.asi2.backendmarket.model.UserModel;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.asi2.backendmarket.dto.user.BalanceUserDto;
 import com.asi2.backendmarket.dto.user.UserDto;
 import com.asi2.backendmarket.rest.user.IUserRest;
 import com.asi2.backendmarket.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 public class UserController implements IUserRest {
+
 	@Autowired
 	UserService userService;
 
@@ -34,6 +32,7 @@ public class UserController implements IUserRest {
 		} else {
 			return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.BAD_REQUEST);
 		}
+
 	}
 
 	@Override
@@ -78,24 +77,13 @@ public class UserController implements IUserRest {
 		}
 	}
 
-	public ResponseEntity<UserDto> findByLogin(String login) {
+	@Override
+	public ResponseEntity<UserDto> getUserByLogin(String login) {
 		UserDto user = userService.getUserByLogin(login);
 		if (user != null) {
 			return new ResponseEntity<UserDto>(user, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	@ResponseBody
-	public ResponseEntity<Boolean> balanceUserMoney(@RequestBody BalanceUserDto userDto) {
-
-		Boolean isMoneyChange = userService.changeMoneyOfUser(userDto.getIdUser(), userDto.getBalanceMoney());
-
-		if (isMoneyChange) {
-			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 		}
 	}
 

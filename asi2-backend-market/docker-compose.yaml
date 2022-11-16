@@ -24,7 +24,7 @@ services:
     networks:
       - card-service-network
       - general-network
-      
+
   user-db:
     image: postgres:14-alpine
     container_name: user-db

@@ -4,26 +4,24 @@ import com.asi2.backendmarket.dto.user.UserDto;
 import com.asi2.backendmarket.rest.user.UserRestConsumer;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.Optional;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.TextCodec;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
+@Service
 public class AuthService {
 
     private static final UserRestConsumer userRestConsumer = new UserRestConsumer();
 
     public UserDto getUserByLogin(String login) {
-        Optional<UserDto> user = Optional.of(userRestConsumer.findByLogin(login).getBody());
-        if (user.isPresent()) {
-            return user.get();
-        } else {
-            return null;
-        }
+        return userRestConsumer.getUserByLogin(login).getBody();
     }
 
     public String login(UserDto user, String password) {
@@ -40,36 +38,24 @@ public class AuthService {
                 .setSubject(user.getEmail())
                 .claim("fullName", user.getLastName() + " " + user.getSurName())
                 .claim("scope", "user")
-                .setIssuedAt(Date.from(Instant.ofEpochSecond(1466796822L)))
-                .setExpiration(Date.from(Instant.ofEpochSecond(4622470422L)))
+                .setIssuedAt(Date.from(Instant.now()))
+                .setExpiration(Date.from(Instant.now().plus(24, ChronoUnit.HOURS)))
                 .signWith(
                         SignatureAlgorithm.HS256,
-                        TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E="))
+                        TextCodec.BASE64.decode("QWxsIHdvcmsgYW5kIG5vIHBsYXkgbWFrZXMgSmFjayBhIGR1bGwgYm95Cg=="))
                 .compact();
     }
 
-    public boolean isValidUserRegistration(UserDto user) {
-        boolean isValid = true;
-        if (this.isInDatabase(user)) {
-            if (user.getLastName() == null || user.getLastName().isEmpty()) {
-                isValid = false;
-            }
-
-            if (user.getSurName() == null || user.getSurName().isEmpty()) {
-                isValid = false;
-            }
-        } else {
-            isValid = false;
-        }
-        return isValid;
-    }
-
-    public boolean postUser(UserDto userDto) {
+    public boolean registerUser(UserDto userDto) {
         return userRestConsumer.addUser(userDto).getStatusCode().equals(HttpStatus.OK);
     }
 
-    public boolean isInDatabase(UserDto user) {
-        return userRestConsumer.findByLogin(user.getLogin()).getStatusCode().equals(HttpStatus.OK);
+    public boolean isLoginAvailable(String login) {
+        try {
+            return !userRestConsumer.getUserByLogin(login).getStatusCode().equals(HttpStatus.OK);
+        } catch (HttpClientErrorException.BadRequest e) {
+            return true;
+        }
     }
 
     public String hashPassword(String pwd) {

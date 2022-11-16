@@ -9,9 +9,6 @@ public class CardDto extends CardBasics {
 	private float price;
 	private Integer userId;
 
-	public CardDto() {
-
-	}
 
 	public Integer getId() {
 		return id;
@@ -73,4 +70,10 @@ public class CardDto extends CardBasics {
 		return this.hp * 20 + this.defence * 20 + this.energy * 20 + this.attack * 20;
 	}
 
+	@Override
+	public String toString() {
+		return "CardDto [id=" + id + ", energy=" + energy + ", hp=" + hp + ", defence=" + defence + ", attack=" + attack
+				+ ", price=" + price + ", userId=" + userId + "]";
+	}
+	
 }

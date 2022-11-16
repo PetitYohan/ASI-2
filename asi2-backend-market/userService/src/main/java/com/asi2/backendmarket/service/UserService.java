@@ -1,6 +1,5 @@
 package com.asi2.backendmarket.service;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import com.asi2.backendmarket.dto.card.CardDto;
@@ -35,7 +34,7 @@ import io.jsonwebtoken.impl.TextCodec;
 @Service
 public class UserService {
 
-	private CardRestConsumer cardRestConsumer;
+	private static final CardRestConsumer cardRestConsumer = new CardRestConsumer();
 
 	@Autowired
 	UserRepository userRepository;
@@ -46,26 +45,15 @@ public class UserService {
 	@Autowired
 	private HttpServletRequest request;
 
-	@PostConstruct
-	void initConsumer() {
-		cardRestConsumer = new CardRestConsumer();
-	}
-
 	public UserDto addUser(UserDto user) {
-		user.setAccount(1000.0F);
-		UserModel userModel = fromUDtoToUModel(user);
-		userRepository.save(userModel);
-		System.out.println("User created : " + userModel.getEmail());
-
-		// get five card
-		// cardInstanceService.giveCardsToNewUser(user);
-		try {
-			List<CardDto> cards = new ArrayList<CardDto>();// cardRestConsumer.generateCardsForNewUser(userModel.getId()).getBody();
-			return user;
-		} catch (Exception e) {
-			e.printStackTrace();
+		if(user.getIdUser() != null && userRepository.existsById(user.getIdUser())){
 			return null;
 		}
+		user.setAccount(1000.0F);
+		UserModel userModel = mapper.map(user, UserModel.class);
+		// get five card
+		// cardInstanceService.giveCardsToNewUser(user);
+		return mapper.map(userRepository.save(userModel), UserDto.class);
 	}
 
 	public UserDto updateUser(Integer id, UserDto user) {
@@ -85,7 +73,7 @@ public class UserService {
 	}
 
 	public UserDto getUserByLogin(String login) {
-		Optional<UserModel> user = userRepository.findByLoginUser(login);
+		Optional<UserModel> user = userRepository.findByLogin(login);
 		if (user.isPresent()) {
 			return mapper.map(user.get(), UserDto.class);
 		} else {
@@ -94,7 +82,7 @@ public class UserService {
 	}
 
 	public UserDto getUserByEmail(String email) {
-		Optional<UserModel> user = userRepository.findByEmailUser(email);
+		Optional<UserModel> user = userRepository.findByEmail(email);
 		if (user.isPresent()) {
 			return mapper.map(user.get(), UserDto.class);
 		} else {
@@ -111,7 +99,7 @@ public class UserService {
 		}
 
 		String email = Jwts.parser()
-				.setSigningKey(TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E="))
+				.setSigningKey(TextCodec.BASE64.decode("QWxsIHdvcmsgYW5kIG5vIHBsYXkgbWFrZXMgSmFjayBhIGR1bGwgYm95Cg=="))
 				.parseClaimsJws(authToken.replace("Bearer ", ""))
 				.getBody()
 				.getSubject();
@@ -128,30 +116,6 @@ public class UserService {
 		}
 	}
 
-	public Boolean changeMoneyOfUser(Integer userId, float balancedMoney) {
-
-		Optional<UserModel> u = userRepository.findById(userId);
-		if (!u.isPresent()) {
-			return false;
-		} else {
-			UserModel user = u.get();
-			try {
-				float oldMoney = user.getAccount();
-				float newMoney = oldMoney + balancedMoney;
-				if (newMoney >= 0) {
-					user.setAccount(newMoney);
-					userRepository.save(user);
-					return true;
-				} else {
-					return false;
-				}
-
-			} catch (Exception e) {
-				return false;
-			}
-		}
-	}
-
 	public List<UserDto> getAllUsers() {
 		List<UserModel> userList = new ArrayList<>();
 		userRepository.findAll().forEach(userList::add);
@@ -160,22 +124,4 @@ public class UserService {
 				.map(entry -> mapper.map(entry, UserDto.class))
 				.collect(Collectors.toList());
 	}
-
-	private UserModel fromUDtoToUModel(UserDto user) {
-		UserModel u = new UserModel(user);
-		return u;
-	}
-
-	public static UserDto fromUserModelToUserDTO(UserModel uM) {
-		UserDto userDto = new UserDto();
-		userDto.setIdUser(uM.getId());
-		userDto.setLogin(uM.getLogin());
-		userDto.setPwd(uM.getPwd());
-		userDto.setAccount(uM.getAccount());
-		userDto.setLastName(uM.getLastName());
-		userDto.setSurName(uM.getSurName());
-		userDto.setEmail(uM.getEmail());
-		return userDto;
-	}
-
 }

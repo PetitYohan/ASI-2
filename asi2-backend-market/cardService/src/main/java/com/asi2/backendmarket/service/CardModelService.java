@@ -51,7 +51,6 @@ public class CardModelService {
 	}
 
 	public CardDto updateCard(Integer id, CardDto cardDto) {
-
 		if (id != cardDto.getId()) {
 			return null;
 		} else if (!cardRepository.existsById(id)) {

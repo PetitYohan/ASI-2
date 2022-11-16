@@ -10,21 +10,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
+
+@RestController
 public class AuthController {
 
     @Autowired
     private AuthService authService;
 
-    @RequestMapping(value = "/api/auth/register", method=RequestMethod.POST, produces = "application/json")
+    private final String ROOT_PATH = "/api/auth";
+
+    @RequestMapping(value = ROOT_PATH + "/register", method=RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public ResponseEntity<?> register(@RequestBody UserDto userDto) {
         userDto.setPwd(authService.hashPassword(userDto.getPwd()));
-
-
-        if (authService.isValidUserRegistration(userDto)) {
+        if (authService.isLoginAvailable(userDto.getLogin())) {
             // Send response
-            Boolean isRegistred = authService.postUser(userDto);
+            Boolean isRegistred = authService.registerUser(userDto);
             if (isRegistred) {
                 return new ResponseEntity<>("User registred", HttpStatus.OK);
             } else {
@@ -36,19 +40,19 @@ public class AuthController {
         }
     }
 
-    @RequestMapping(value = "/api/auth/login", method=RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = ROOT_PATH + "/login", method=RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public ResponseEntity<?> login(@RequestBody AuthDto userDto) {
-        UserDto user = authService.getUserByLogin(userDto.getUsername());
+    public ResponseEntity<?> login(@RequestBody AuthDto authDto) {
+        UserDto user = authService.getUserByLogin(authDto.getUsername());
 
         if(user != null) {
-            String token = authService.login(user, userDto.getPassword());
+            String token = authService.login(user, authDto.getPassword());
 
             if(token != null) {
                 user.setToken(token);
                 return new ResponseEntity<>(user, HttpStatus.OK);
             }
         }
-        return new ResponseEntity<String>("Bad request", HttpStatus.BAD_REQUEST);
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Authentification Failed", null);
     }
 }
