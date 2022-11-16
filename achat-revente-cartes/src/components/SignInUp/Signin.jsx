@@ -4,6 +4,7 @@ import { setUser } from "../../core/actions";
 import { selectUser } from "../../core/selectors";
 import "./Signin.css";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -12,20 +13,12 @@ const Login = () => {
   const userSelect = useSelector(selectUser);
   const navigate = useNavigate();
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = async (evt) => {
     evt.preventDefault();
-    login();
-    getUser();
+    await login();
     resetUname();
     resetPwd();
-    nav();
   };
-
-  function nav() {
-    if (userSelect !== undefined) {
-      navigate("/home");
-    }
-  }
 
   async function login() {
     {
@@ -35,25 +28,21 @@ const Login = () => {
         body: JSON.stringify({ username: uname, password: pwd }),
       };
       const resp = await fetch(
-        "https://asi2-backend-market.herokuapp.com/auth",
+        "http://127.0.0.1/api/auth/login",
         requestOptions
       ).then((response) => response.json());
-      getUser(resp);
+
+      dispatch(setUser(resp));
     }
   }
 
-  async function getUser(userId) {
-    if (userId != undefined) {
-      if (Number.isInteger(userId)) {
-        const fetchData = async () => {
-          const resp = await fetch(
-            "https://asi2-backend-market.herokuapp.com/user/" + userId
-          );
-          const user = await resp.json();
-          dispatch(setUser(user));
-        };
-        fetchData();
-      }
+  useEffect(() => {
+    nav();
+  }, [userSelect]);
+
+  function nav() {
+    if (userSelect.login !== undefined) {
+      navigate("/home");
     }
   }
 
