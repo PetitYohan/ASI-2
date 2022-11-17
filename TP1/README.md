@@ -17,6 +17,10 @@ ESB : **Catherine**
 
 https://github.com/PetitYohan/ASI-2.git
 
+FrontEnd : achat-revente-cartes
+
+BackEnd : asi2-backend-market
+
 ## Elements réalisés
 
 Front : login, register, home, buy, sell, header, actualisation automatique des cartes et de l'account après achat/vente,  
@@ -45,5 +49,15 @@ De plus, nous avions réfléchi à un système de Transaction Tampon dans lequel
 ### FrontEnd React :
 
 cd ./achat-revente-cartes
+
 npm install
+
 npm start
+
+### BackEnd SpringBoot : 
+
+Prérequis : maven version 3.6.0, docker installés
+
+cd asi2-backend-market
+
+./launch.sh
