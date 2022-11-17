@@ -1,7 +1,6 @@
 const express = require('express');
 const socketio = require('socket.io');
 const http = require('http');
-const formatMessage = require('../sheeshconnect/helpers/formatDate');
 
 const app = express();
 const server = http.createServer(app);
@@ -16,17 +15,19 @@ server.listen(PORT, () => console.log('server started'));
 const waitingList = [];
 const rooms = [];
 const users = [];
+const userCards = [];
 
 //Handle connection
 io.on('connection', function (socket) {
-    socket.on('joinRoom', (username) => {
-        if (waitingList.length === 0) {
-            waitingList.push(socket.id);
-        } else {
+    socket.on('joinRoom', () => {
 
-            const u1 = { id: socket.id, room: room };
-            users.push(u1);
 
+        waitingList.push(socket.id);
+
+        if (waitingList.length > 1) {
+
+            var room = Date.now();
+            var u1 = { id: waitingList.pop(), room: room };
 
             var u2 = { id: waitingList.pop(), room: room };
             io.in(u2.id).socketsJoin(room);
