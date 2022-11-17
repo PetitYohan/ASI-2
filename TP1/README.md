@@ -1,91 +1,37 @@
-# ASI-2
+# Atelier 1
 
-ASI-2: Framework frontend, services orientés architecture (S9)
+Membres : 
+- Bertrand Pautet
+- Loïc Ameglio
+- Yohan Petit
+- Catherine Vanden Hende
 
-## Diagramme Monolithique :
+## Activités réalisées
 
-![image](Images/diagramme_archi_monolith.png)
+Front en React par **Yohan**
+Backend Microservices : **Bertrand, Loïc, Catherine**
+ESB : **Catherine**
 
-## Diagramme des micro-services :
+## Lien GitHub
+https://github.com/PetitYohan/ASI-2.git
 
-![image](Images/Diagramme-Micro-services.drawio.png)
+## Elements réalisés
+Front : login, register, home, buy, sell, header, actualisation automatique des cartes et de l'account après achat/vente,  
+Backend : 
+- Microservices : 
+    - CardService + ESB
+    - AuthService
+    - UserService + ESB
+    - StoreService + ESB
 
-## Liste requêtes :
+Un user peut se créer un compte, se logguer, acheter des cartes et vendre les siennes. Quand son compte est créé, le user a automatiquement 1000$ et 5 cartes aléatoirement générées.
 
-| Type | Source | Destination | Requête                      | Attributs                        |
-| ---- | ------ | ----------- | ---------------------------- | -------------------------------- |
-| GET  | Client | Auth        | /api/auth/                   | user_id, mdp                     |
-| GET  | Auth   | User        | /api/user/                   | user_id                          |
-| GET  | Client | Store       | /api/store/buy/              | user_id, card_id                 |
-| POST | Store  | Card        | /api/card/                   | idTransaction, card_id , user_id |
-| POST | Store  | User        | /api/user/                   | idTransaction, user_id, money    |
-| GET  | Card   | Store       | /api/store/transaction/card/ | idTransaction, card_id           |
-| GET  | User   | Store       | /api/store/transaction/user/ | idTransaction, user_id           |
+## Elements non-réalisés
 
-## Composants REACTJS :
+Microservice Notifications.
 
-### NavBar :
+Le reload de la page lors de l'achat-revente est capricieux.
 
-Paramètres : Utilisateur, pageTitle
+Le callback dans les messages dans les ESB ne sont pas configurés. On pensait transmettre l'url de callback directement dans le message et ainsi par requette HTTP (avec l'id de la transaction), transmettre l'information de bon déroulement des update (Card et User).
 
-![image](Images/Composant_NavBar.png)
-
-### Log Up :
-
-Sorties : addUser()
-
-![image](Images/Composant_LogUp.png)
-
-### Log In :
-
-Sorties : login()
-
-![image](Images/Composant_LogIn.png)
-
-### Home :
-
-Composants : NavBar
-
-Liens : Buy, Shell, Play
-
-![image](Images/Composant_Home.png)
-
-### Card :
-
-Paramètres : Card
-
-![image](Images/Composant_Card.png)
-
-### CardList :
-
-Paramètres : CardList
-Sortie: CardSelect
-
-![image](Images/Composant_CardList.png)
-
-### CardTransfert :
-
-Paramètres : TransactionType, TitrePage
-
-Sorties : Action(Buy or Sell)
-
-Buy :
-
-![image](Images/Composant_Buy.png)
-
-Sell :
-
-![image](Images/Composant_Sell.png)
-
-## UML monolithique :
-### diagramme UML card
-
-![image](Images/card_uml.png)
-
-### diagramme UML store
-
-![image](images/../Images/store_uml.png)
-
-### diagramme UML user
-
-![image](Images/user_uml.png)
+De plus, nous avions réfléchi à un système de Transaction Tampon dans lequel l'état de la transaction est stocké (userUpdate : true-false, cardUpdate : true-false). Une fois que ces attributs sont tous les deux a true, le tampon est supprimé (envoie au service notification pour notifier le user) et la transaction est donc terminée.
