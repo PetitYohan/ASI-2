@@ -15,19 +15,18 @@ server.listen(PORT, () => console.log('server started'));
 const waitingList = [];
 const rooms = [];
 const users = [];
-const userCards = [];
 
 //Handle connection
-io.on('connection', function (socket) {
+io.on('connection', function (socket, userCards) {
     socket.on('joinRoom', () => {
 
 
-        waitingList.push(socket.id);
+        waitingList.push({ userId: socket.id, cards: userCards });
 
         if (waitingList.length > 1) {
 
             var room = Date.now();
-            var u1 = { id: waitingList.pop(), room: room };
+            var u1 = { id: waitingList.pop().userId, cards, room: room };
 
             var u2 = { id: waitingList.pop(), room: room };
             io.in(u2.id).socketsJoin(room);
