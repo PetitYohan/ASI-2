@@ -32,6 +32,6 @@ Microservice Notifications.
 
 Le reload de la page lors de l'achat-revente est capricieux.
 
-Le callback dans les messages dans les ESB ne sont pas configurés. On pensait transmettre l'url de callback directement dans le message et ainsi par requette HTTP (avec l'id de la transaction), transmettre l'information de bon déroulement des update (Card et User).
+Le callback dans les messages dans les ESB ne sont pas configurés. On pensait transmettre l'url de callback directement dans le message (attribut callback) et ainsi par requette HTTP (avec l'id de la transaction) transmettre l'information de bon déroulement des update (Card et User).
 
-De plus, nous avions réfléchi à un système de Transaction Tampon dans lequel l'état de la transaction est stocké (userUpdate : true-false, cardUpdate : true-false). Une fois que ces attributs sont tous les deux a true, le tampon est supprimé (envoie au service notification pour notifier le user) et la transaction est donc terminée.
+De plus, nous avions réfléchi à un système de Transaction Tampon dans lequel l'état de la transaction est stocké en base(idTransac : lien vers la vraie transaction, userUpdate : true-false, cardUpdate : true-false). Une fois que les attributs d'update sont tous les deux a true, le tampon est supprimé et on envoie au service notification les infos de la transaction pour notifier le user. La ttransaction est donc terminée à la fin de ce process.
