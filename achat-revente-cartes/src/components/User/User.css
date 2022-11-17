@@ -1,0 +1,12 @@
+.selected {
+  background-color: #1164a3;
+}
+.user {
+  padding: 10px;
+}
+.description {
+  display: inline-block;
+}
+.status {
+  color: #92959e;
+}

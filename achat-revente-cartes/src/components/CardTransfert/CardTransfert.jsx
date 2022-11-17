@@ -1,7 +1,7 @@
 import NavBar from "../NavBar/NavBar";
 import CardList from "../CardList/CardList";
 import Card from "../Card/Card";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setCards, setUser } from "../../core/actions";

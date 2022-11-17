@@ -1,7 +1,7 @@
 import NavBar from "../NavBar/NavBar";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
-import "./home.css";
+import "./Home.css";
 
 const title = "HOME";
 

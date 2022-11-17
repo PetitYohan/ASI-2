@@ -1,15 +1,16 @@
 import React, { useState, useContext, useCallback, useEffect } from "react"
-import { SocketContext } from "../socket"
-import User from "./User"
-import MessagePanel from "./MessagePanel"
+import { socket } from "../../service/socket"
+import User from "../User/User"
+import MessagePanel from "../MessagePanel/MessagePanel"
+import "./Chat.css"
 
-const Chat = (prop) => {
-	const socket = useContext(SocketContext)
+const Chat = () => {
+	//const socket = useContext(SocketContext)
 	//TODO use store/selector
 	const [users, setUsers] = useState([])
 	const [selectedUser, setSelectedUser] = useState(null)
 
-	const handleSendMessage = useCallback(() => {
+	const handleSendMessage = useCallback((content) => {
 		if (selectedUser) {
 			socket.emit("private message", {
 				content,
@@ -28,7 +29,9 @@ const Chat = (prop) => {
 
 	//TODO move to central service
 	useEffect(() => {
+		console.log("chat mount");
 		socket.on("connect", () => {
+			console.log("chat mounté du balcon");
 			users.forEach((user) => {
 				if (user.self) {
 					user.connected = true
@@ -43,6 +46,8 @@ const Chat = (prop) => {
 			})
 		})
 		socket.on("users", (newusers) => {
+			console.log("new users : " + JSON.stringify(newusers));
+			const newUsersState = []
 			newusers.forEach((user) => {
 				user.messages.forEach((message) => {
 					message.fromSelf = message.from === socket.userID
@@ -65,6 +70,8 @@ const Chat = (prop) => {
 				if (a.username < b.username) return -1
 				return a.username > b.username ? 1 : 0
 			})
+			setUsers([...users]);
+			console.log(users);
 		})
 		socket.on("user connected", (user) => {
 			for (let i = 0; i < users.length; i++) {
@@ -100,6 +107,7 @@ const Chat = (prop) => {
 		})
 		//Component unmount => destroy
 		return () => {
+			console.log("chat mount");
 			socket.off("connect")
 			socket.off("disconnect")
 			socket.off("users")
@@ -107,13 +115,14 @@ const Chat = (prop) => {
 			socket.off("user disconnected")
 			socket.off("private message")
 		}
-	}, [socket])
+	}, [/* socket */])
 
 	return (
 		<div>
-			<div class="left-panel">
+			{console.log("chat rognard")}
+			<div className="left-panel">
 				{users.map((user, i) => {
-					;<User
+					<User
 						key={i}
 						user={user}
 						selected={selectedUser === user}
@@ -124,8 +133,8 @@ const Chat = (prop) => {
 			{selectedUser && (
 				<MessagePanel
 					user={selectedUser}
-					input={handleSendMessage}
-					class="right-panel"
+					onInput={handleSendMessage}
+					className="right-panel"
 				/>
 			)}
 		</div>
