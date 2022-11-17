@@ -43,6 +43,11 @@ public class CardRestConsumer implements ICardRest {
     }
 
     @Override
+    public ResponseEntity<CardDto> createCardForUser(Integer userId) {
+        return restTemplate.postForEntity(BASE_PATH + CREATE_CARD_USER, userId, CardDto.class);
+    }
+
+    @Override
     public List<CardDto> getAllCards() {
         return Arrays.asList(restTemplate.getForEntity(BASE_PATH + GET_ALL, CardDto[].class).getBody());
     }

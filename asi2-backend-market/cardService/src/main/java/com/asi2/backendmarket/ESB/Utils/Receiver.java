@@ -21,6 +21,10 @@ public class Receiver {
     @JmsListener(destination = "${spring-messaging.queue.name}")
     public void receiveMessage(CardMessage message) {
         log.info(message);
-        cardService.updateCard(message.getCardId(), message.getCardDto());
+        if(message.getCardDto()==null){
+            cardService.createCardForUser(message.getCardId());
+        }else{
+            cardService.updateCard(message.getCardId(), message.getCardDto());
+        }
     }
 }

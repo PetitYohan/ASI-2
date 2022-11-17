@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.asi2.backendmarket.dto.card.CardDto;
@@ -75,9 +76,12 @@ public class CardModelService {
 		cardRepository.deleteById(id);
 	}
 
-	public List<CardModel> getRandCard(int nbr) {
-		List<CardModel> cardList = new ArrayList<>();
-		for (int i = 0; i < nbr; i++) {
+	public CardDto createCardForUser(Integer userId){
+		CardModel cDb = cardRepository.save(getRandCard(userId));
+		return mapper.map(cDb, CardDto.class);
+	}
+
+	public CardModel getRandCard(int userId) {
 			CardReference currentCardRef = cardRefService.getRandCardRef();
 			CardModel currentCard = new CardModel(currentCardRef);
 			currentCard.setAttack(rand.nextFloat() * 100);
@@ -85,11 +89,10 @@ public class CardModelService {
 			currentCard.setEnergy(100);
 			currentCard.setHp(rand.nextFloat() * 100);
 			currentCard.setPrice(currentCard.computePrice());
+			currentCard.setUserId(userId);
 			// save new card before sending for user creation
 			// this.addCard(currentCard);
-			cardList.add(currentCard);
-		}
-		return cardList;
+		return currentCard;
 	}
 
 	public List<CardDto> getAllCardToSell() {

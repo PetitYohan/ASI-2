@@ -21,6 +21,7 @@ public interface ICardRest extends IRest {
 	public final String UPDATE_CARD = ROOT_PATH + "/{id}";
 	public final String DELETE_CARD = ROOT_PATH + "/{id}";
 	public final String ADD_CARD = ROOT_PATH + "/";
+	public final String CREATE_CARD_USER = ROOT_PATH + "/cards_to_create";
 	public final String GET_ALL = ROOT_PATH + "/cards";
 	public final String GET_CARDS_TO_SELL = ROOT_PATH + "/cards_to_sell";
 	public final String GET_USER_CARDS = ROOT_PATH + "/user/{id}";
@@ -36,6 +37,8 @@ public interface ICardRest extends IRest {
 
 	@PostMapping(ADD_CARD)
 	public ResponseEntity<CardDto> addCard(@RequestBody CardDto cardDto);
+	@PostMapping(CREATE_CARD_USER)
+	public ResponseEntity<CardDto> createCardForUser(@RequestBody Integer userId);
 
 	@GetMapping(GET_ALL)
 	public List<CardDto> getAllCards();
