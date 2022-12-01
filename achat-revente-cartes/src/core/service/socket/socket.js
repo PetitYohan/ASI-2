@@ -1,13 +1,13 @@
 import { io } from "socket.io-client"
-import { createContext } from "react"
+import { registerBaseEvents } from "./event"
 const URL = "http://localhost:3000"
 // connect when regisse ok
-const socket = io(URL/* , { autoConnect: false } */)
+const socket = io(URL /* , { autoConnect: false } */)
 
 socket.onAny((event, ...args) => {
 	console.log(event, args)
 })
 
-const SocketContext = createContext();
+registerBaseEvents(socket)
 
-export {socket, SocketContext}
+export default socket

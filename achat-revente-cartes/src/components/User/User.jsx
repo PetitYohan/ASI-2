@@ -1,16 +1,19 @@
-import React, { useState, useContext, useCallback, useEffect } from "react"
-import { SocketContext } from "../../service/socket"
+import React from "react"
+import { useDispatch, useSelector } from "react-redux"
 
-const User = ({user, selected}) => {
-
-	console.log(user);
-	const socket = useContext(SocketContext)
-	const handleClick = () => {
-		socket.emit("select")
+const User = ({ user }) => {
+	console.log(user)
+	const dispatch = useDispatch()
+	const selectedChatRecipient = useSelector(selectSelectedChatRecipient)
+	const handleSelectRecipient = (user) => {
+		dispatch(setSelectedChatRecipient(user))
 	}
 
 	return (
-		<div classNameName={`user ${selected}`} onClick={handleClick}>
+		<div
+			classNameName={`user ${selectedChatRecipient === user}`}
+			onClick={handleSelectRecipient}
+		>
 			<div className="description">
 				<div className="name">
 					{user.username} {user.self ? " (yourself)" : ""}
