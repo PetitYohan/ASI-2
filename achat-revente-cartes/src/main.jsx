@@ -37,11 +37,12 @@ const router = createBrowserRouter([
 ]);
 console.log("main");
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <SocketContext.Provider value={socket}>
-      <React.StrictMode>
-        <RouterProvider router={router} />
-      </React.StrictMode>
-    </SocketContext.Provider>
-  </Provider>
-);
+	<Provider store={store}>
+		{/* TODO déplacer plus bas */}
+		<SocketContext.Provider value={socket}>
+			<React.StrictMode>
+				<RouterProvider router={router} />
+			</React.StrictMode>
+		</SocketContext.Provider>
+	</Provider>
+)

@@ -11,22 +11,24 @@ export default {
 		const messageStore = new InMemoryMessageStore()
 
 		io.use((socket, next) => {
-			const sessionID = socket.handshake.auth.sessionID
-			if (sessionID) {
-				const session = sessionStore.findSession(sessionID)
-				if (session) {
-					socket.sessionID = sessionID
-					socket.userID = session.userID
-					socket.username = session.username
-					return next()
-				}
+			if (!socket.handshake.user) {
+				return next(new Error("invalid user"))
 			}
-			const username = randomId()//socket.handshake.auth.username
+			//TODO validate token avec call vers backend spring que token user == user
+			const userId = socket.handshake.user.id
+			const username = socket.handshake.user.login
+			const session = sessionStore.findSession(userId)
+			if (session) {
+				socket.sessionID = session.sessionID
+				socket.userID = session.userID
+				socket.username = session.username
+				return next()
+			}
 			if (!username) {
 				return next(new Error("invalid username"))
 			}
 			socket.sessionID = randomId()
-			socket.userID = randomId()
+			socket.userID = userId
 			socket.username = username
 			next()
 		})
