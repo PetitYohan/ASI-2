@@ -1,5 +1,8 @@
 import React from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { setSelectedChatRecipient } from "../../core/actions"
+import { selectSelectedChatRecipient } from "../../core/selectors"
+//import "./User.css"
 
 const User = ({ user }) => {
 	console.log(user)

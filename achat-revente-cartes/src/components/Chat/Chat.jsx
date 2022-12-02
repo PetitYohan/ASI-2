@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { useSelector } from "react-redux"
 import User from "../User/User"
 import MessagePanel from "../MessagePanel/MessagePanel"
-import "./Chat.css"
+//import "./Chat.css"
 import {
 	selectChatRecipients,
 	selectSelectedChatRecipient,
@@ -31,34 +31,6 @@ const Chat = () => {
 					}
 				})
 			}) 
-			socket.on("users", (newusers) => {
-				console.log("new users : " + JSON.stringify(newusers))
-				const newUsersState = []
-				newusers.forEach((user) => {
-					user.messages.forEach((message) => {
-						message.fromSelf = message.from === socket.userID
-					})
-					for (let i = 0; i < recipients.length; i++) {
-						const existingUser = recipients[i]
-						if (existingUser.userID === user.userID) {
-							existingUser.connected = user.connected
-							existingUser.messages = user.messages
-							return
-						}
-					}
-					user.self = user.userID === socket.userID
-					recipients.push(user)
-				})
-				// put the current user first, and sort by username
-				recipients.sort((a, b) => {
-					if (a.self) return -1
-					if (b.self) return 1
-					if (a.username < b.username) return -1
-					return a.username > b.username ? 1 : 0
-				})
-				setUsers([...recipients])
-				console.log(recipients)
-			})
 			socket.on("user connected", (user) => {
 				for (let i = 0; i < users.length; i++) {
 					const existingUser = users[i]
@@ -110,9 +82,11 @@ const Chat = () => {
 	return (
 		<div>
 			{console.log("chat rognard")}
+			
 			<div className="left-panel">
 				{recipients.map((user, i) => {
-					;<User key={i} user={user} />
+					{console.log(user)}
+					<User key={i} user={user} />
 				})}
 			</div>
 			{selectedChatRecipient && (

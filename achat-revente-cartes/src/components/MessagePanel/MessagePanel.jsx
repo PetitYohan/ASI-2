@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import { selectSelectedChatRecipient } from "../../core/selectors"
 import { events } from "../../core/service/socket/event"
 import SocketContext from "../../core/service/socket/socket-context"
-import "./MessagePanel.css"
+//import "./MessagePanel.css"
 
 const MessagePanel = ({ user }) => {
 	const socket = useContext(SocketContext)

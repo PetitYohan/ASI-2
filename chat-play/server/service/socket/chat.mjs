@@ -1,6 +1,7 @@
 import crypto from "crypto"
 import InMemorySessionStore from "./sessionStore.mjs"
 import InMemoryMessageStore from "./messageStore.mjs"
+import { events } from "./event.mjs"
 
 export default {
 	ChatSocketIO: (io) => {
@@ -30,7 +31,7 @@ export default {
 			next()
 		})
 
-		io.on("connection", (socket) => {
+		io.on(events.CONNECTION, (socket) => {
 			console.log("new socket :" + socket.id);
 			// persist session
 			sessionStore.saveSession(socket.sessionID, {
@@ -70,10 +71,10 @@ export default {
 				})
 			})
 
-			socket.emit("users", users)
+			socket.emit(events.USERS, users)
 
 			// notify existing users
-			socket.broadcast.emit("user connected", {
+			socket.broadcast.emit(events.USER_CONNECTED, {
 				userID: socket.userID,
 				username: socket.username,
 				connected: true,
@@ -81,22 +82,23 @@ export default {
 			})
 
 			// forward the private message to the right recipient (and to other tabs of the sender)
-			socket.on("private message", ({ content, to }) => {
+			socket.on(events.NEW_MESSAGE, ({ content, to }) => {
+				console.log("new message from " + socket.userID);
 				const message = {
 					content,
 					from: socket.userID,
 					to,
 				}
-				socket.to(to).to(socket.userID).emit("private message", message)
+				socket.to(to).to(socket.userID).emit(events.NEW_MESSAGE, message)
 				messageStore.saveMessage(message)
 			})
 
 			// notify users upon disconnection
-			socket.on("disconnect", async () => {
+			socket.on(events.DISCONNECT, async () => {
 				const matchingSockets = await io.in(socket.userID).allSockets()
 				const isDisconnected = matchingSockets.size === 0
 				if (isDisconnected) {
-					socket.broadcast.emit("user disconnected", socket.userID)
+					socket.broadcast.emit(events.USER_DISCONNECTED, socket.userID)
 					sessionStore.saveSession(socket.sessionID, {
 						userID: socket.userID,
 						username: socket.username,

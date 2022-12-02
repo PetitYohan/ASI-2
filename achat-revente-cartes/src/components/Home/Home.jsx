@@ -21,14 +21,9 @@ const Home = () => {
         </div>
 
         <div class="choice">
-          <Button
-            variant="outlined"
-            onClick={() => {
-              alert("Coming soon");
-            }}
-          >
-            🕹️ Play 🕹️
-          </Button>
+          <Link to="/game">
+            <Button variant="outlined">🕹️ Play 🕹️</Button>
+          </Link>
         </div>
       </div>
     </>

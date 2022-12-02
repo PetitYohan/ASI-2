@@ -9,6 +9,7 @@ export const events = {
 	USER_DISCONNECTED: "user disconnected",
 	NEW_MESSAGE: "new_message",
 }
+
 export function registerBaseEvents(socket) {
 	socket.on(events.CONNECT, (data) => {
 		console.log("socket connected")
@@ -23,7 +24,7 @@ export function registerBaseEvents(socket) {
 
 export function registerChatEvents(socket) {
 	socket.on(events.USERS, (users) => {
-		store.dispatch(setChatRecipients(users))
+		store.dispatch(setChatRecipients(users, socket))
 	})
 	socket.on(events.USER_CONNECTED, (data) => {
 		console.log("socket USER_CONNECTED : " + data)
