@@ -14,11 +14,13 @@ const NavBar = ({ title }) => {
       <div id="user">
         <Link to="/home">
           <span>{userSelect.surName}</span>
-          <img
-            id="profile"
-            src="./src/assets/profil_logo.png"
-            alt="photo de profil"
-          ></img>
+          <Link to="/">
+            <img
+              id="profile"
+              src="./src/assets/profil_logo.png"
+              alt="photo de profil"
+            ></img>
+          </Link>
         </Link>
       </div>
     </div>

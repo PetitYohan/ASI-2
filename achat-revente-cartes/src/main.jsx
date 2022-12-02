@@ -9,6 +9,7 @@ import { createStore } from "redux";
 import globalReducer from "./core/reducers";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
+import Game from "./components/game/Game";
 
 const store = createStore(globalReducer);
 
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: "/sell",
     element: <CardTransfert transac="sell" />,
+  },
+  {
+    path: "/play",
+    element: <Game />,
   },
 ]);
 

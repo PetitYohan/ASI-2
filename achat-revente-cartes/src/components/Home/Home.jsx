@@ -1,7 +1,7 @@
 import NavBar from "../NavBar/NavBar";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
-import "./home.css";
+import "./Home.css";
 
 const title = "HOME";
 
@@ -21,14 +21,9 @@ const Home = () => {
         </div>
 
         <div class="choice">
-          <Button
-            variant="outlined"
-            onClick={() => {
-              alert("Coming soon");
-            }}
-          >
-            🕹️ Play 🕹️
-          </Button>
+          <Link to="/play">
+            <Button variant="outlined">🕹️ Play 🕹️</Button>
+          </Link>
         </div>
       </div>
     </>
