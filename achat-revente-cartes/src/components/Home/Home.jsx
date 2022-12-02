@@ -1,5 +1,5 @@
 import NavBar from "../NavBar/NavBar";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import "./Home.css";
 
@@ -21,7 +21,7 @@ const Home = () => {
         </div>
 
         <div class="choice">
-          <Link to="/play">
+          <Link to="/game">
             <Button variant="outlined">🕹️ Play 🕹️</Button>
           </Link>
         </div>
