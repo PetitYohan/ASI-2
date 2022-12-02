@@ -1,5 +1,5 @@
-import gestionRoom from "./gestionRoom";
-import maitreDeJeu from "./maitreDeJeu";
+import gestionRoom from "./gestionRoom.mjs";
+import maitreDeJeu from "./maitreDeJeu.mjs";
 
 const express = require("express");
 const socketio = require("socket.io");
@@ -20,7 +20,7 @@ io.on("connection", function (socket, userCards) {
   gestionRoom.joinRoom(socket, userCards);
 
   //Sur appui fin de game
-  gestionRoom.disconnectRoom(socket, rooms);
+  gestionRoom.disconnectRoom(socket);
 
   //Sur appui attack
   socket.on("attack", (cardAlly, cardEnemy) => {

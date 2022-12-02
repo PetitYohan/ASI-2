@@ -1,15 +1,15 @@
 import NavBar from "../NavBar/NavBar";
+import Chat from "../Chat/Chat";
 import "./Game.css";
-import io from "socket.io-client";
 import Button from "@material-ui/core/Button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import SocketContext from "../../core/service/socket/socket-context";
 
 const title = "Game";
-const socket = io();
 
 const Game = () => {
+  const socket = useContext(SocketContext);
   const [isConnected, setIsConnected] = useState(socket.connected);
-  const [lastPong, setLastPong] = useState(null);
 
   useEffect(() => {
     socket.on("co", () => {
@@ -17,31 +17,42 @@ const Game = () => {
       setIsConnected(true);
     });
 
-    socket.on("disconnect", () => {
+    socket.on("deco", () => {
       setIsConnected(false);
-    });
-
-    socket.on("pong", () => {
-      setLastPong(new Date().toISOString());
     });
 
     return () => {
       socket.off("co");
-      socket.off("disconnect");
-      socket.off("pong");
+      socket.off("deco");
     };
   }, []);
 
-  const sendPing = () => {
-    socket.emit("co");
+  const sendConnect = () => {
+    socket.emit("connectio");
+  };
+
+  const sendDeconnect = () => {
+    socket.emit("deconnectio");
+  };
+
+  const sendJoinRoom = () => {
+    const userCards = [{ cardId: 12 }];
+    socket.emit("joinRoom", userCards);
+  };
+
+  const sendDisconnectRoom = () => {
+    socket.emit("disconnect");
   };
 
   return (
     <>
       <NavBar title={title} />
+      <Chat />
       <p>Connected: {"" + isConnected}</p>
-      <p>Last pong: {lastPong || "-"}</p>
-      <button onClick={sendPing}>Send ping</button>
+      <button onClick={sendConnect}>Send Connect</button>
+      <button onClick={sendDeconnect}>Send Deconnect</button>
+      <button onClick={sendJoinRoom}>Send joinRoom</button>
+      <button onClick={sendDisconnectRoom}>Send disconnectRoom</button>
       <Button
         variant="outlined"
         onClick={() => {

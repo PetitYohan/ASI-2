@@ -1,6 +1,6 @@
-import { rooms } from "./gestinonRoom";
+import { rooms } from "./gestionRoom.mjs";
 
-function attack(socket, cardAlly, cardEnemy) {
+export function attack(socket, cardAlly, cardEnemy) {
   let room = rooms.findIndex(
     (room) =>
       room.players[0].id === socket.id || room.players[1].id === socket.id

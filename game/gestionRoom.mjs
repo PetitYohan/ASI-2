@@ -1,10 +1,11 @@
 //Initialisaion de la waiting list
 const waitingList = [];
 export const rooms = [];
-export default { rooms: rooms };
 
-function joinRoom(socket, userCards) {
-  socket.on("joinRoom", () => {
+export function joinRoom(socket, io) {
+  socket.on("joinRoom", (userCards) => {
+    console.log("demande de join room");
+    console.log(userCards);
     waitingList.push({ userId: socket.id, cards: userCards });
 
     if (waitingList.length > 1) {
@@ -34,14 +35,14 @@ function joinRoom(socket, userCards) {
 
       rooms.push(roomCreated);
 
-      socket.broadcast
-        .to(room)
-        .emit("message", formatMessage(`${u2.id} has joined the room`));
+      socket.broadcast.to(room).emit("message", function (data) {
+        alert(`${u2.id} has joined the room`);
+      });
     }
   });
 }
 
-function disconnectRoom(socket) {
+export function disconnectRoom(socket) {
   //Handle disconnect
   socket.on("disconnect", () => {
     //Remove the disconnected user from the users list
