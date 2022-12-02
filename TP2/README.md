@@ -12,9 +12,13 @@ Membres :
 
 ## Activités réalisées
 
-Front en React par **Yohan**
-Backend Microservices : **Bertrand, Loïc, Catherine**
-ESB : **Catherine**
+**Yohan** :
+
+**Bertrand** : 
+
+**Loïc** :
+
+**Catherine** :
 
 ## Lien GitHub
 
@@ -26,13 +30,6 @@ BackEnd : asi2-backend-market
 
 ## Elements réalisés
 
-**Yohan** :
-
-**Bertrand** : 
-
-**Loïc** :
-
-**Catherine** :
 
 ## Elements non-réalisés
 
