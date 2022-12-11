@@ -8,7 +8,7 @@ const MessagePanel = ({ user }) => {
 	const [input, setInput] = useState("")
 	const dispatch = useDispatch()
 	const selectedChatRecipient = useSelector(selectSelectedChatRecipient)
-
+	console.log(selectedChatRecipient)
 	const handleSendMessage = (e) => {
 		e.preventDefault()
 		if (selectedChatRecipient) {
@@ -24,22 +24,26 @@ const MessagePanel = ({ user }) => {
 	const displaySender = (message, index) => {
 		return (
 			index === 0 ||
-			user.messages[index - 1].fromSelf !== user.messages[index].fromSelf
+			selectedChatRecipient.messages[index - 1].fromSelf !==
+				selectedChatRecipient.messages[index].fromSelf
 		)
 	}
 
 	return (
 		<div>
 			<div className="header">
-				<i className="icon .icon.connected"></i>${user.username}
+				<i className="icon .icon.connected"></i>$
+				{selectedChatRecipient.username}
 			</div>
 			<ul className="messages">
-				{user.messages.map((message, i) => {
+				{selectedChatRecipient.messages.map((message, i) => {
 					return (
 						<li className="message" key={i}>
 							{displaySender(message, i) && (
 								<div className="sender">
-									{message.fromSelf ? "(yourself)" : user.username}
+									{message.fromSelf
+										? "(yourself)"
+										: selectedChatRecipient.username}
 								</div>
 							)}
 							{message.content}

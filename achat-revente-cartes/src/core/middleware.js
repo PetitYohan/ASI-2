@@ -8,7 +8,7 @@ import {
 } from "./actions"
 import { events } from "./service/socket/event"
 
-const URL = "http://localhost:3000"
+const URL = "http://127.0.0.1:3000"
 //TODO test
 var socket = null
 
@@ -17,7 +17,10 @@ export const socketMiddleware = (store) => (next) => (action) => {
 		// User request to connect
 		case SOCKET_CONNECT:
 			// Configure the object
-			socket = io(URL, { query: { user: action.user } })
+			console.log(action.user)
+			socket = io(URL, {
+				auth: { user: action.user },
+			})
 			socket.onAny((event, ...args) => {
 				console.log(event, args)
 			})

@@ -30,6 +30,8 @@ const Login = () => {
 			fetch("http://127.0.0.1/api/auth/login", requestOptions)
 				.then((response) => response.json())
 				.then((user) => {
+					console.log("login ok user : ")
+					console.log(user)
 					dispatch(setUser(user))
 					dispatch(connectSocket(user))
 				})
@@ -47,19 +49,19 @@ const Login = () => {
 	}
 
 	return (
-		<>
+		<div>
 			<h3>Sign In</h3>
 			<form onSubmit={handleSubmit}>
-				<div class="imgcontainer">
+				<div className="imgcontainer">
 					<img
 						src="./src/assets/profil_logo.png"
 						alt="Avatar"
-						class="avatar"
+						className="avatar"
 					></img>
 				</div>
 
-				<div class="container">
-					<label for="uname">
+				<div className="container">
+					<label htmlFor="uname">
 						<b>Username</b>
 					</label>
 					<input
@@ -69,7 +71,7 @@ const Login = () => {
 						required
 					></input>
 
-					<label for="pwd">
+					<label htmlFor="pwd">
 						<b>Password</b>
 					</label>
 					<input
@@ -78,18 +80,18 @@ const Login = () => {
 						{...bindPwd}
 						required
 					></input>
-					<button type="submit" class="loginbtn">
+					<button type="submit" className="loginbtn">
 						Login
 					</button>
 				</div>
 
-				<div class="container">
-					<button type="button" class="cancelbtn">
+				<div className="container">
+					<button type="button" className="cancelbtn">
 						Cancel
 					</button>
 				</div>
 			</form>
-		</>
+		</div>
 	)
 }
 export default Login

@@ -1,15 +1,16 @@
-import { createServer } from "http";
-import express from "express";
-import { Server } from "socket.io";
-import socketRegisters from "./service/socket/chat.mjs";
-import socketRegistersGame from "./service/socket/game.mjs";
-import cors from "cors";
+import { createServer } from "http"
+import express from "express"
+import { Server } from "socket.io"
+import socketRegisters from "./service/socket/chat.mjs"
+import cors from "cors"
 
-const app = express();
-app.use(cors());
-const httpServer = createServer(app);
+const app = express()
+app.use(cors())
+const httpServer = createServer(app)
 
-const io = new Server(httpServer, { cors: { origin: "*" } });
+const io = new Server(httpServer, {
+	cors: { origin: "*" },
+})
 
 socketRegisters.ChatSocketIO(io);
 socketRegistersGame.GameSocketIO(io);

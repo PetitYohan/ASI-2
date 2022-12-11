@@ -21,7 +21,7 @@ const Chat = () => {
 					{
 						console.log(user)
 					}
-					;<User key={i} user={user} />
+					return <User key={i} user={user} />
 				})}
 			</div>
 			{selectedChatRecipient && (

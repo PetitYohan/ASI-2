@@ -11,13 +11,17 @@ export default {
 		const messageStore = new InMemoryMessageStore()
 
 		io.use((socket, next) => {
-			if (!socket.handshake.user) {
+			console.log(socket.handshake.auth)
+			if (!socket.handshake.auth.user) {
 				return next(new Error("invalid user"))
 			}
-			//TODO validate token avec call vers backend spring que token user == user
-			const userId = socket.handshake.user.id
-			const username = socket.handshake.user.login
+			const user = socket.handshake.auth.user
+			console.log(user)
+			//TODO validate auth token avec call vers backend spring que token user == user
+			const userId = user.idUser
+			const username = user.login
 			const session = sessionStore.findSession(userId)
+			//TODO fix duplication si reconnection du meme user
 			if (session) {
 				socket.sessionID = session.sessionID
 				socket.userID = session.userID
@@ -34,7 +38,7 @@ export default {
 		})
 
 		io.on(events.CONNECTION, (socket) => {
-			console.log("new socket :" + socket.id);
+			console.log("new socket :" + socket.id)
 			// persist session
 			sessionStore.saveSession(socket.sessionID, {
 				userID: socket.userID,
@@ -85,7 +89,7 @@ export default {
 
 			// forward the private message to the right recipient (and to other tabs of the sender)
 			socket.on(events.NEW_MESSAGE, ({ content, to }) => {
-				console.log("new message from " + socket.userID);
+				console.log("new message from " + socket.userID)
 				const message = {
 					content,
 					from: socket.userID,
@@ -109,5 +113,5 @@ export default {
 				}
 			})
 		})
-	}
+	},
 }
