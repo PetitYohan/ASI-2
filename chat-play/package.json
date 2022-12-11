@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.mjs"
+    "start": "set DEBUG=socket* && node index.mjs"
   },
   "author": "",
   "license": "MIT",

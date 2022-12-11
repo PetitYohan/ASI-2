@@ -1,28 +1,22 @@
 import React, { useState, useContext } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { sendMessage } from "../../core/actions"
 import { selectSelectedChatRecipient } from "../../core/selectors"
-import { events } from "../../core/service/socket/event"
-import SocketContext from "../../core/service/socket/socket-context"
 //import "./MessagePanel.css"
 
 const MessagePanel = ({ user }) => {
-	const socket = useContext(SocketContext)
 	const [input, setInput] = useState("")
-	//TODO utiliser une fct dans service socket qui se charge du emit
+	const dispatch = useDispatch()
 	const selectedChatRecipient = useSelector(selectSelectedChatRecipient)
 
 	const handleSendMessage = (e) => {
 		e.preventDefault()
 		if (selectedChatRecipient) {
-			socket.emit(events.NEW_MESSAGE, {
+			const payload = {
 				content: input,
-				to: selectedChatRecipient.userID,
-			})
-			//TODO delete, store updated par le .on new msg
-			selectedChatRecipient.messages.push({
-				content: input,
-				fromSelf: true,
-			})
+				to: selectedChatRecipient.username,
+			}
+			dispatch(sendMessage(payload))
 		}
 		setInput("")
 	}

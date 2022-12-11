@@ -1,4 +1,8 @@
-import { UPDATE_SELECTED_RECIPIENT, UPDATE_RECIPIENTS } from "../actions"
+import {
+	UPDATE_CHAT_SELECTED_RECIPIENT,
+	UPDATE_CHAT_RECIPIENTS,
+	APPEND_CHAT_RECIPIENT_MESSAGE,
+} from "../actions"
 
 const initialState = {
 	recipients: [],
@@ -10,15 +14,27 @@ const initialState = {
  */
 const chatReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case UPDATE_SELECTED_RECIPIENT:
+		case UPDATE_CHAT_SELECTED_RECIPIENT:
 			return {
 				...state,
 				selectedRecipient: action.selectedRecipient,
 			}
-		case UPDATE_RECIPIENTS:
+		case UPDATE_CHAT_RECIPIENTS:
 			return {
 				...state,
 				recipients: action.recipients, //TODO quel structure ? pour l'instant map (otherUser -> messages) + order by timestamp asc !
+			}
+		case APPEND_CHAT_RECIPIENT_MESSAGE:
+			return {
+				...state,
+				recipients: state.recipients.map((r) => {
+					if (action.payload.recipient === r.username) {
+						const messages = [...r.messages, action.payload.message]
+						return { ...r, messages }
+					} else {
+						return r
+					}
+				}),
 			}
 		default:
 			return state

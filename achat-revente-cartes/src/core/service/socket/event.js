@@ -1,6 +1,8 @@
 import store from "../../store"
 import { setChatRecipients } from "../../actions"
 
+//TODO delete ou move dans middleware
+
 export const events = {
 	CONNECT: "connect",
 	DISCONNECT: "disconnect",
