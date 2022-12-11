@@ -22,8 +22,6 @@ export function setSelectedChatRecipient(selectedRecipient) {
 	return { type: UPDATE_SELECTED_RECIPIENT, selectedRecipient }
 }
 export function setChatRecipients(recipients, socket) {
-	console.log("setting recipients : " + JSON.stringify(recipients))
-	console.log(Object.keys(socket));
 	const newRecipients = []
 	recipients.forEach((user) => {
 		user.messages.forEach((message) => {
@@ -47,6 +45,5 @@ export function setChatRecipients(recipients, socket) {
 	//	if (a.username < b.username) return -1
 	//	return a.username > b.username ? 1 : 0
 	//})
-	console.log(newRecipients)
 	return { type: UPDATE_RECIPIENTS, recipients : newRecipients }
 }

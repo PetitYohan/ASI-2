@@ -1,7 +1,7 @@
 import InMemorySessionStore from "./sessionStore.mjs";
 import { events } from "./event.mjs";
-import { joinRoom, disconnectRoom } from "../../../../game/gestionRoom.mjs";
-import { attack } from "../../../../game/maitreDeJeu.mjs";
+import { joinRoom, disconnectRoom } from "../composants/gestionRoom.mjs";
+import { attack } from "../composants/maitreDeJeu.mjs";
 
 export default {
   GameSocketIO: (io) => {
@@ -28,7 +28,7 @@ export default {
       joinRoom(socket, io);
 
       //Sur appui fin de game
-      disconnectRoom(socket);
+      disconnectRoom(socket, io);
 
       //Sur appui attack
       socket.on("attack", (cardAlly, cardEnemy) => {

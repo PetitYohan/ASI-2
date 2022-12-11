@@ -15,7 +15,6 @@ const Chat = () => {
 	//TODO move to central service
 	useEffect(
 		() => {
-			console.log("chat mount")
 			/* socket.on("connect", () => {
 				console.log("chat mounté du balcon")
 				users.forEach((user) => {
@@ -81,11 +80,9 @@ const Chat = () => {
 
 	return (
 		<div>
-			{console.log("chat rognard")}
 			
 			<div className="left-panel">
 				{recipients.map((user, i) => {
-					{console.log(user)}
 					<User key={i} user={user} />
 				})}
 			</div>

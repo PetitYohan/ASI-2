@@ -1,15 +1,21 @@
 import NavBar from "../NavBar/NavBar";
 import Chat from "../Chat/Chat";
 import "./Game.css";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import { useEffect, useState, useContext } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUser, selectCards } from "../../core/selectors";
+import { setCards } from "../../core/actions";
 import SocketContext from "../../core/service/socket/socket-context";
 
 const title = "Game";
 
 const Game = () => {
+  const dispatch = useDispatch();
   const socket = useContext(SocketContext);
   const [isConnected, setIsConnected] = useState(socket.connected);
+  const userCards = useSelector(selectCards);
+  const userSelect = useSelector(selectUser);
 
   useEffect(() => {
     socket.on("co", () => {
@@ -21,11 +27,20 @@ const Game = () => {
       setIsConnected(false);
     });
 
+    const getUserCards = async () => {
+      const resp = await fetch("http://127.0.0.1/api/card/user/"+userSelect.idUser);
+      const cards = await resp.json();
+      dispatch(setCards(cards));
+    };
+
+    getUserCards();
+
     return () => {
       socket.off("co");
       socket.off("deco");
     };
   }, []);
+
 
   const sendConnect = () => {
     socket.emit("connectio");
@@ -36,12 +51,12 @@ const Game = () => {
   };
 
   const sendJoinRoom = () => {
-    const userCards = [{ cardId: 12 }];
-    socket.emit("joinRoom", userCards);
+    const userCardsSelected = [{ cardId: 12},{ cardId: 13 }];
+    socket.emit("joinRoom", userCardsSelected);
   };
 
   const sendDisconnectRoom = () => {
-    socket.emit("disconnect");
+    socket.emit("disconnectRoom");
   };
 
   return (
@@ -53,6 +68,13 @@ const Game = () => {
       <button onClick={sendDeconnect}>Send Deconnect</button>
       <button onClick={sendJoinRoom}>Send joinRoom</button>
       <button onClick={sendDisconnectRoom}>Send disconnectRoom</button>
+      <select>
+        {userCards.map((card) => {
+          return(
+          <option value={card.cardId}>{card.name}</option>
+          )
+        })}
+      </select>
       <Button
         variant="outlined"
         onClick={() => {

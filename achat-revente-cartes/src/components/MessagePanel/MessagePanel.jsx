@@ -10,9 +10,7 @@ const MessagePanel = ({ user }) => {
 	const [input, setInput] = useState("")
 	//TODO utiliser une fct dans service socket qui se charge du emit
 	const selectedChatRecipient = useSelector(selectSelectedChatRecipient)
-	console.log(
-		"selectedChatRecipient : " + JSON.stringify(selectedChatRecipient)
-	)
+
 	const handleSendMessage = (e) => {
 		e.preventDefault()
 		if (selectedChatRecipient) {
@@ -38,7 +36,6 @@ const MessagePanel = ({ user }) => {
 
 	return (
 		<div>
-			{console.log("message panel render")}
 			<div className="header">
 				<i className="icon .icon.connected"></i>${user.username}
 			</div>
