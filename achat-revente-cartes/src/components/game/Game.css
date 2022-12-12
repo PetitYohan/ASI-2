@@ -1,0 +1,29 @@
+section {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cardToSelect {
+    margin: 2vw;
+    text-align: center;
+    background-color: rgb(44, 44, 44);
+    border: 0.2em solid rgb(44, 44, 44);
+    border-radius: 5%;
+    width: 15vw;
+}
+
+#first_card {
+    width: 15vw;
+    word-spacing: 1.5vw
+}
+
+#img_cardGame {
+    width: max-content;
+    height: max-content;
+    max-width: 15vw;
+    max-height: 15vh;
+}
+
+#desc_card {
+    width: 15vw;
+}
