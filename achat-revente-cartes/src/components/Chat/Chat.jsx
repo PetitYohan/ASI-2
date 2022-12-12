@@ -1,31 +1,22 @@
-import React, { useEffect } from "react"
-import { useSelector } from "react-redux"
-import User from "../User/User"
-import MessagePanel from "../MessagePanel/MessagePanel"
+import React from "react"
 //import "./Chat.css"
+import RecipientSelector from "./RecipientSelector"
+import MessagePanel from "./MessagePanel"
+import { useSelector } from "react-redux"
 import {
 	selectChatRecipients,
 	selectSelectedChatRecipient,
 } from "../../core/selectors"
 
 const Chat = () => {
-	const recipients = useSelector(selectChatRecipients)
+	const chatRecipients = useSelector(selectChatRecipients)
 	const selectedChatRecipient = useSelector(selectSelectedChatRecipient)
-
 	return (
 		<div>
 			{console.log("chat rognard")}
-
-			<div className="left-panel">
-				{recipients.map((user, i) => {
-					{
-						console.log(user)
-					}
-					return <User key={i} user={user} />
-				})}
-			</div>
-			{selectedChatRecipient && (
-				<MessagePanel user={selectedChatRecipient} className="right-panel" />
+			<RecipientSelector users={chatRecipients} />
+			{selectedChatRecipient && selectedChatRecipient.username && (
+				<MessagePanel user={selectedChatRecipient} />
 			)}
 		</div>
 	)

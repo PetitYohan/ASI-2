@@ -2,9 +2,10 @@ import { io } from "socket.io-client"
 import {
 	appendReceiveMessage,
 	appendSentMessage,
-	setChatRecipients,
+	initChatRecipients,
 	SOCKET_CONNECT,
 	SOCKET_SEND,
+	upsertchatRecipient,
 } from "./actions"
 import { events } from "./service/socket/event"
 
@@ -31,7 +32,14 @@ export const socketMiddleware = (store) => (next) => (action) => {
 			)
 			//TODO test if currying works
 			socket.on(events.USERS, (users) => {
-				store.dispatch(setChatRecipients(users, action.user))
+				store.dispatch(initChatRecipients(users))
+			})
+
+			socket.on(events.USER_CONNECTED, (user) => {
+				store.dispatch(upsertchatRecipient(user))
+			})
+			socket.on(events.USER_DISCONNECTED, (user) => {
+				store.dispatch(upsertchatRecipient(user))
 			})
 
 			break

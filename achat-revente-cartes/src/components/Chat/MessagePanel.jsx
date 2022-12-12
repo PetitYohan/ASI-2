@@ -7,14 +7,14 @@ import { selectSelectedChatRecipient } from "../../core/selectors"
 const MessagePanel = ({ user }) => {
 	const [input, setInput] = useState("")
 	const dispatch = useDispatch()
-	const selectedChatRecipient = useSelector(selectSelectedChatRecipient)
-	console.log(selectedChatRecipient)
+
+	console.log(user)
 	const handleSendMessage = (e) => {
 		e.preventDefault()
-		if (selectedChatRecipient) {
+		if (user) {
 			const payload = {
 				content: input,
-				to: selectedChatRecipient.username,
+				to: user.userId,
 			}
 			dispatch(sendMessage(payload))
 		}
@@ -24,26 +24,22 @@ const MessagePanel = ({ user }) => {
 	const displaySender = (message, index) => {
 		return (
 			index === 0 ||
-			selectedChatRecipient.messages[index - 1].fromSelf !==
-				selectedChatRecipient.messages[index].fromSelf
+			user.messages[index - 1].fromSelf !== user.messages[index].fromSelf
 		)
 	}
 
 	return (
 		<div>
 			<div className="header">
-				<i className="icon .icon.connected"></i>$
-				{selectedChatRecipient.username}
+				<i className="icon .icon.connected"></i>${user.username}
 			</div>
 			<ul className="messages">
-				{selectedChatRecipient.messages.map((message, i) => {
+				{user.messages.map((message, i) => {
 					return (
 						<li className="message" key={i}>
 							{displaySender(message, i) && (
 								<div className="sender">
-									{message.fromSelf
-										? "(yourself)"
-										: selectedChatRecipient.username}
+									{message.fromSelf ? "(yourself)" : user.username}
 								</div>
 							)}
 							{message.content}
