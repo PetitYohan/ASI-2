@@ -16,19 +16,11 @@ export default {
         connected: true,
       });
 
-      socket.on("connectio", function (data) {
-        socket.emit("co");
-      });
-
-      socket.on("deconnectio", function (data) {
-        socket.emit("deco");
-      });
-
       //Sur appui join room
       joinRoom(socket, io);
 
       //Sur appui fin de game
-      disconnectRoom(socket, io);
+      disconnectRoom(socket);
 
       //Sur appui attack
       socket.on("attack", (cardAlly, cardEnemy) => {

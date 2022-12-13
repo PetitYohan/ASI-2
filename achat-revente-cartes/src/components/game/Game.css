@@ -27,3 +27,11 @@ section {
 #desc_card {
     width: 15vw;
 }
+
+#buttonGame {
+    text-align: center;
+}
+
+#buttonGame>* {
+    margin: 1vw;
+}

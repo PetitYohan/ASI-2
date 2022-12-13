@@ -4,45 +4,44 @@ export const rooms = [];
 
 export function joinRoom(socket, io) {
   socket.on("joinRoom", (userCards) => {
-    console.log("demande de join room");
-    console.log(userCards);
-    waitingList.push({ userId: socket.id, cards: userCards });
+    waitingList.push({ userSocket: socket, cards: userCards });
 
     if (waitingList.length > 1) {
       const user1 = waitingList.pop();
       const user2 = waitingList.pop();
 
-      const room = user1.userId + "#" + user2.userId;
+      const room = user1.userSocket.id + "#" + user2.userSocket.id;
 
       socket.join(room);
 
       const u1 = {
-        id: user1.userId,
+        id: user1.userSocket.id,
         energy: 2,
         cards: user1.cards,
         room: room,
       };
       const u2 = {
-        id: user2.userId,
+        id: user2.userSocket.id,
         energy: 2,
         cards: user2.cards,
         room: room,
       };
 
-      io.in(u2.id).socketsJoin(room);
+      user2.userSocket.join(room);
 
       const roomCreated = { RoomId: room, players: [u1, u2] };
 
       rooms.push(roomCreated);
 
-      socket.broadcast.to(room).emit("message", function (data) {
+      io.to(room).emit("message", function (data) {
         console.log(`${u2.id} has joined the room`);
       });
+      io.to(room).emit("roomCreated", roomCreated);
     }
   });
 }
 
-export function disconnectRoom(socket, io) {
+export function disconnectRoom(socket) {
   //Handle disconnect
   socket.on("disconnectRoom", () => {
     //Remove the disconnected user from the users list
@@ -52,7 +51,7 @@ export function disconnectRoom(socket, io) {
     );
     if (room !== -1) {
       //Notify the last user
-      console.log(socket.id+" abandonne");
+      console.log(socket.id + " abandonne");
       //Remove the room from roomList
       rooms.splice(room, 1);
     }
