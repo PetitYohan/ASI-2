@@ -17,7 +17,7 @@ const Game = () => {
   const userSelect = useSelector(selectUser);
   const cardsList = [];
   const [enemyCards, setenemyCards] = useState([]);
-  let room;
+  const [room, setRoom] = useState({ players: [{ id: null }, { id: null }] });
   const [gameStart, setGameStart] = useState(false);
 
   useEffect(() => {
@@ -32,15 +32,25 @@ const Game = () => {
     getUserCards();
 
     socket.on("roomCreated", (roomCreated) => {
-      room = roomCreated;
+      setRoom((room) => ({
+        ...room,
+        ...roomCreated,
+      }));
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log(room);
+    if (room.players[0].id != null) {
+      console.log("il y a un player");
       if (socket.id == room.players[0].id) {
         setenemyCards(room.players[1].cards);
       } else {
         setenemyCards(room.players[0].cards);
       }
       setGameStart(true);
-    });
-  }, []);
+    }
+  }, [room]);
 
   const sendJoinRoom = () => {
     if (cardsList.length == 5) {
@@ -106,30 +116,32 @@ const Game = () => {
           );
         })}
       </section>
-      {enemyCards.length > 0 && <h2>Enemy Cards</h2>}
-      <section>
-        {enemyCards.map((card) => {
-          return (
-            <div
-              class="cardToSelect"
-              id={card.id}
-              onClick={() => {
-                playWithThisCard(card);
-              }}
-            >
-              <div id="first_card">
-                {card.energy}⚡ {card.name} {card.hp}❤️
+      {gameStart && <h2>Enemy Cards</h2> && (
+        <section>
+          {enemyCards.map((card) => {
+            return (
+              <div
+                class="cardToSelect"
+                id={card.id}
+                onClick={() => {
+                  playWithThisCard(card);
+                }}
+              >
+                <div id="first_card">
+                  {card.energy}⚡ {card.name} {card.hp}❤️
+                </div>
+                <img
+                  id="img_cardGame"
+                  src={card.smallImgUrl}
+                  alt="Image de la carte"
+                ></img>
+                <div id="desc_card">{card.description}</div>
               </div>
-              <img
-                id="img_cardGame"
-                src={card.smallImgUrl}
-                alt="Image de la carte"
-              ></img>
-              <div id="desc_card">{card.description}</div>
-            </div>
-          );
-        })}
-      </section>
+            );
+          })}
+        </section>
+      )}
+
       <div id="buttonGame">
         {!gameStart && (
           <Button variant="outlined" onClick={sendJoinRoom}>
@@ -137,9 +149,12 @@ const Game = () => {
           </Button>
         )}
         {gameStart && (
-          <Button variant="outlined" onClick={sendAttack}>
-            ⚔️ Attack ⚔️
-          </Button>
+          <>
+            <Button variant="outlined" onClick={sendAttack}>
+              ⚔️ Attack ⚔️
+            </Button>
+            {room.players[1].energy}
+          </>
         )}
         <Button variant="outlined" onClick={sendDisconnectRoom}>
           🚪 Disconnect 🚪
