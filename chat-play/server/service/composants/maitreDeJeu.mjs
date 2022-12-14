@@ -1,6 +1,6 @@
 import { rooms } from "./gestionRoom.mjs";
 
-export function attack(socket, cardAlly, cardEnemy) {
+export function attack(socket, io, cardAlly, cardEnemy) {
   let room = rooms.findIndex(
     (room) =>
       room.players[0].id === socket.id || room.players[1].id === socket.id
@@ -10,15 +10,17 @@ export function attack(socket, cardAlly, cardEnemy) {
     let players = rooms[room].players;
 
     if (players[0].id == socket.id) {
-      const attack = doAttack(players[0], player[1], cardAlly, cardEnemy);
+      const attack = doAttack(players[0], players[1], cardAlly, cardEnemy);
       players[0] = attack.myPlayer;
-      player[1] = attack.enemyPlayer;
+      players[1] = attack.enemyPlayer;
     } else if (players[1].id == socket.id) {
-      const attack = doAttack(player[1], players[0], cardAlly, cardEnemy);
-      player[1] = attack.myPlayer;
+      const attack = doAttack(players[1], players[0], cardAlly, cardEnemy);
+      players[1] = attack.myPlayer;
       players[0] = attack.enemyPlayer;
     }
   }
+  console.log(rooms[room]);
+  io.to(rooms[room].RoomId).emit("AttackDone", rooms[room]);
 }
 
 function doAttack(myPlayer, enemyPlayer, cardAlly, cardEnemy) {

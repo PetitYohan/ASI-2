@@ -17,8 +17,11 @@ const Game = () => {
   const userSelect = useSelector(selectUser);
   const cardsList = [];
   const [enemyCards, setenemyCards] = useState([]);
+  const [myCards, setMyCards] = useState([]);
   const [room, setRoom] = useState({ players: [{ id: null }, { id: null }] });
   const [gameStart, setGameStart] = useState(false);
+  const [myCard, setMyCard] = useState(0);
+  const [enemyCard, setEnemyCard] = useState(0);
 
   useEffect(() => {
     const getUserCards = async () => {
@@ -37,16 +40,23 @@ const Game = () => {
         ...roomCreated,
       }));
     });
+
+    socket.on("AttackDone", (roomUpdate) => {
+      setRoom((room) => ({
+        ...room,
+        ...roomUpdate,
+      }));
+    });
   }, []);
 
   useEffect(() => {
-    console.log(room);
     if (room.players[0].id != null) {
-      console.log("il y a un player");
       if (socket.id == room.players[0].id) {
         setenemyCards(room.players[1].cards);
+        setMyCards(room.players[0].cards);
       } else {
         setenemyCards(room.players[0].cards);
+        setMyCards(room.players[1].cards);
       }
       setGameStart(true);
     }
@@ -67,11 +77,13 @@ const Game = () => {
 
   const sendAttack = () => {
     console.log("ATTACK !!!");
+    socket.emit("attack", [myCard, enemyCard]);
   };
 
   const sendDisconnectRoom = () => {
     socket.emit("disconnectRoom");
     setenemyCards([]);
+    setGameStart(false);
   };
 
   function playWithThisCard(card) {
@@ -88,34 +100,79 @@ const Game = () => {
     }
   }
 
+  function thisIsEnemyCard(cardSelect) {
+    enemyCards.forEach((card) => {
+      document.getElementById(card.id).style.border =
+        "0.2em solid rgb(44, 44, 44)";
+    });
+    document.getElementById(cardSelect.id).style.border = "0.2em solid green";
+    setEnemyCard(cardSelect.id);
+  }
+
+  function thisIsMyCard(cardSelect) {
+    myCards.forEach((card) => {
+      document.getElementById(card.id).style.border =
+        "0.2em solid rgb(44, 44, 44)";
+    });
+    document.getElementById(cardSelect.id).style.border = "0.2em solid green";
+    setMyCard(cardSelect.id);
+  }
+
   return (
     <>
       <NavBar title={title} />
       <Chat />
       <h2>My Cards</h2>
-      <section>
-        {userCards.map((card) => {
-          return (
-            <div
-              class="cardToSelect"
-              id={card.id}
-              onClick={() => {
-                playWithThisCard(card);
-              }}
-            >
-              <div id="first_card">
-                {card.energy}⚡ {card.name} {card.hp}❤️
+      {!gameStart && (
+        <section>
+          {userCards.map((card) => {
+            return (
+              <div
+                class="cardToSelect"
+                id={card.id}
+                onClick={() => {
+                  playWithThisCard(card);
+                }}
+              >
+                <div id="first_card">
+                  {card.energy}⚡ {card.name} {card.hp}❤️
+                </div>
+                <img
+                  id="img_cardGame"
+                  src={card.smallImgUrl}
+                  alt="Image de la carte"
+                ></img>
+                <div id="desc_card">{card.description}</div>
               </div>
-              <img
-                id="img_cardGame"
-                src={card.smallImgUrl}
-                alt="Image de la carte"
-              ></img>
-              <div id="desc_card">{card.description}</div>
-            </div>
-          );
-        })}
-      </section>
+            );
+          })}
+        </section>
+      )}
+      {gameStart && (
+        <section>
+          {myCards.map((card) => {
+            return (
+              <div
+                class="cardToSelect"
+                id={card.id}
+                onClick={() => {
+                  thisIsMyCard(card);
+                }}
+              >
+                <div id="first_card">
+                  {card.energy}⚡ {card.name} {card.hp}❤️
+                </div>
+                <img
+                  id="img_cardGame"
+                  src={card.smallImgUrl}
+                  alt="Image de la carte"
+                ></img>
+                <div id="desc_card">{card.description}</div>
+              </div>
+            );
+          })}
+        </section>
+      )}
       {gameStart && <h2>Enemy Cards</h2> && (
         <section>
           {enemyCards.map((card) => {
@@ -124,7 +181,7 @@ const Game = () => {
                 class="cardToSelect"
                 id={card.id}
                 onClick={() => {
-                  playWithThisCard(card);
+                  thisIsEnemyCard(card);
                 }}
               >
                 <div id="first_card">
@@ -160,6 +217,8 @@ const Game = () => {
           🚪 Disconnect 🚪
         </Button>
       </div>
+      {myCard}
+      {enemyCard}
     </>
   );
 };
