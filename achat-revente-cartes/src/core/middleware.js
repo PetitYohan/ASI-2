@@ -2,10 +2,11 @@ import { io } from "socket.io-client"
 import {
 	appendReceiveMessage,
 	appendSentMessage,
+	chatRecipientConnected,
+	chatRecipientDisconnected,
 	initChatRecipients,
 	SOCKET_CONNECT,
 	SOCKET_SEND,
-	upsertchatRecipient,
 } from "./actions"
 import { events } from "./service/socket/event"
 
@@ -36,10 +37,10 @@ export const socketMiddleware = (store) => (next) => (action) => {
 			})
 
 			socket.on(events.USER_CONNECTED, (user) => {
-				store.dispatch(upsertchatRecipient(user))
+				store.dispatch(chatRecipientConnected(user))
 			})
 			socket.on(events.USER_DISCONNECTED, (user) => {
-				store.dispatch(upsertchatRecipient(user))
+				store.dispatch(chatRecipientDisconnected(user))
 			})
 
 			break

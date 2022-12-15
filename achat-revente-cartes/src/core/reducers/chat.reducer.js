@@ -2,12 +2,13 @@ import {
 	UPDATE_CHAT_SELECTED_RECIPIENT,
 	INIT_CHAT_RECIPIENTS,
 	APPEND_CHAT_RECIPIENT_MESSAGE,
-	UPSERT_CHAT_RECIPIENT,
+	CHAT_RECIPIENT_CONNECTED,
+	CHAT_RECIPIENT_DISCONNECTED,
 } from "../actions"
 
 const initialState = {
 	recipients: [],
-	selectedRecipient: { messages: [] },
+	selectedRecipientId: undefined,
 }
 
 /**
@@ -16,21 +17,18 @@ const initialState = {
 const chatReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case UPDATE_CHAT_SELECTED_RECIPIENT:
-			const recipientToSelect = state.recipients.find(
-				(r) => r.id === action.selectedRecipientId
-			)
-			//|| initialState.selectedRecipient
-			console.log(recipientToSelect)
-			return {
-				...state,
-				selectedRecipient: recipientToSelect,
-			}
+			console.log(action.selectedRecipientId)
+			if (state.recipients.find((r) => r.userId == action.selectedRecipientId))
+				return {
+					...state,
+					selectedRecipientId: action.selectedRecipientId,
+				}
 		case INIT_CHAT_RECIPIENTS:
 			return {
 				...state,
 				recipients: action.recipients, //TODO quel structure ? pour l'instant map (otherUser -> messages) + order by timestamp asc !
 			}
-		case UPSERT_CHAT_RECIPIENT:
+		case CHAT_RECIPIENT_CONNECTED:
 			if (state.recipients.find((r) => r.userId === action.recipient.userId)) {
 				const update_list = state.recipients.map((r) => {
 					if (r.userId === action.recipient.userId) {
@@ -46,7 +44,22 @@ const chatReducer = (state = initialState, action) => {
 			} else {
 				return {
 					...state,
-					recipients: [...state.recipients, action.recipients],
+					recipients: [...state.recipients, action.recipient],
+				}
+			}
+
+		case CHAT_RECIPIENT_DISCONNECTED:
+			if (state.recipients.find((r) => r.userId === action.recipientId)) {
+				const update_list = state.recipients.map((r) => {
+					if (r.userId === action.recipientId) {
+						return { ...r, connected: false }
+					} else {
+						return r
+					}
+				})
+				return {
+					...state,
+					recipients: update_list,
 				}
 			}
 

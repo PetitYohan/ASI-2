@@ -16,7 +16,6 @@ export default {
 				return next(new Error("invalid user"))
 			}
 			const user = socket.handshake.auth.user
-			console.log(user)
 			//TODO validate auth token avec call vers backend spring que token user == user
 			const userId = user.idUser
 			const username = user.login
@@ -42,6 +41,9 @@ export default {
 				username: socket.username,
 				connected: true,
 			})
+
+			// utiliser map de correspondance si problématique avec les id de room de jeu
+			socket.join(socket.userId)
 
 			// fetch existing users
 			const users = []
@@ -76,14 +78,16 @@ export default {
 			})
 
 			// forward the private message to the right recipient (and to other tabs of the sender)
-			socket.on(events.NEW_MESSAGE, ({ content, to }) => {
+			socket.on(events.NEW_MESSAGE, ({ content, to }, cb) => {
 				console.log("new message from " + socket.userId)
 				const message = {
 					content,
 					from: socket.userId,
 					to,
 				}
-				socket.to(to).to(socket.userId).emit(events.NEW_MESSAGE, message)
+				// si utilisation de map de correspondance : .to(to).to(socket.userId) => .to(sockeUsers[to]).to(socket.id)
+				socket.to(to).emit(events.NEW_MESSAGE, message)
+				cb(message)
 				messageStore.saveMessage(message)
 			})
 

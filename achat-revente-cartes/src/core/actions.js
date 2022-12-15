@@ -6,7 +6,8 @@ export const UPDATE_CARD = "@@card/UPDATE_CARD"
 export const UPDATE_USER = "@@user/UPDATE_USER"
 export const UPDATE_CHAT_SELECTED_RECIPIENT = "@@chat/UPDATE_SELECTED_RECIPIENT"
 export const INIT_CHAT_RECIPIENTS = "@@chat/INIT_RECIPIENTS"
-export const UPSERT_CHAT_RECIPIENT = "@@chat/UPSERT_RECIPIENT"
+export const CHAT_RECIPIENT_CONNECTED = "@@chat/RECIPIENT_CONNECTED"
+export const CHAT_RECIPIENT_DISCONNECTED = "@@chat/RECIPIENT_DISCONNECTED"
 export const APPEND_CHAT_RECIPIENT_MESSAGE = "@@chat/APPEND_NEW_MESSAGE"
 export const SOCKET_CONNECT = "@@socket/CONNECT"
 export const SOCKET_SEND = "@@socket/SEND"
@@ -23,7 +24,9 @@ export function setUser(user) {
 	return { type: UPDATE_USER, user }
 }
 export function updateSelectedChatRecipient(selectedRecipientId) {
-	console.log("initChatRecipients : " + JSON.stringify(selectedRecipientId))
+	console.log(
+		"updateSelectedChatRecipient : " + JSON.stringify(selectedRecipientId)
+	)
 	return { type: UPDATE_CHAT_SELECTED_RECIPIENT, selectedRecipientId }
 }
 export function initChatRecipients(recipients) {
@@ -31,9 +34,14 @@ export function initChatRecipients(recipients) {
 	return { type: INIT_CHAT_RECIPIENTS, recipients }
 }
 
-export function upsertchatRecipient(recipient) {
+export function chatRecipientConnected(recipient) {
 	console.log("chatRecipientConnected : " + JSON.stringify(recipient))
-	return { type: UPSERT_CHAT_RECIPIENT, recipient }
+	return { type: CHAT_RECIPIENT_CONNECTED, recipient }
+}
+
+export function chatRecipientDisconnected(recipientId) {
+	console.log("chatRecipientDisconnected : " + JSON.stringify(recipientId))
+	return { type: CHAT_RECIPIENT_DISCONNECTED, recipientId }
 }
 
 export function connectSocket(user) {

@@ -7,11 +7,10 @@ import NativeSelect from "@mui/material/NativeSelect"
 const RecipientSelector = ({ users }) => {
 	console.log(users)
 	const dispatch = useDispatch()
-	const handleSelectRecipient = (user) => {
-		if (user.self) {
-		}
-		dispatch(updateSelectedChatRecipient(user.userId))
+	const handleSelectRecipient = (userId) => {
+		dispatch(updateSelectedChatRecipient(parseInt(userId)))
 	}
+	//TODO search bar + mode list à droite du chat + "🔵" : "⚪"
 
 	return (
 		<NativeSelect
@@ -22,9 +21,9 @@ const RecipientSelector = ({ users }) => {
 			}} */
 			onChange={(e) => handleSelectRecipient(e.target.value)}
 		>
-			{users.map((u) => {
+			{users.map((u, index) => {
 				return (
-					<option value={u} key={u.id}>
+					<option value={u.userId} key={index}>
 						{u.username}
 					</option>
 				)

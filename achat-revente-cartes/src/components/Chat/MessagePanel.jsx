@@ -1,7 +1,16 @@
+import {
+	Divider,
+	Fab,
+	Grid,
+	List,
+	ListItem,
+	ListItemText,
+	TextField,
+} from "@mui/material"
+import SendIcon from "@mui/icons-material/Send"
 import React, { useState, useContext } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { sendMessage } from "../../core/actions"
-import { selectSelectedChatRecipient } from "../../core/selectors"
 //import "./MessagePanel.css"
 
 const MessagePanel = ({ user }) => {
@@ -28,38 +37,62 @@ const MessagePanel = ({ user }) => {
 		)
 	}
 
+	//todo en fonction de from self : align="right" ou left + secondary : timestamp
+	//todo en-tete avec destinataire : user.username
 	return (
-		<div>
-			<div className="header">
-				<i className="icon .icon.connected"></i>${user.username}
-			</div>
-			<ul className="messages">
+		<Grid container>
+			<List>
+				<ListItem key={user.userId}>
+					<ListItemText secondary={user.connected ? "🔵" : "⚪"} align="right">
+						{user.username}
+					</ListItemText>
+				</ListItem>
+			</List>
+			<Divider orientation="horizontal" />
+			<List style={{ overflowY: "auto" }}>
 				{user.messages.map((message, i) => {
 					return (
-						<li className="message" key={i}>
-							{displaySender(message, i) && (
-								<div className="sender">
-									{message.fromSelf ? "(yourself)" : user.username}
-								</div>
-							)}
-							{message.content}
-						</li>
+						<ListItem key={i}>
+							<Grid container>
+								<Grid item xs={12}>
+									<ListItemText
+										align={message.fromSelf ? "right" : "left"}
+										primary={message.content}
+									></ListItemText>
+								</Grid>
+								<Grid item xs={12}>
+									<ListItemText
+										align={message.fromSelf ? "right" : "left"}
+										secondary={undefined /* message.time */}
+									></ListItemText>
+								</Grid>
+							</Grid>
+						</ListItem>
 					)
 				})}
-			</ul>
-
-			<form onSubmit={handleSendMessage} className="form">
-				<textarea
-					placeholder="Your message..."
-					className="input"
+			</List>
+			<Divider />
+			<Grid container style={{ padding: "20px" }}>
+				<TextField
+					id="outlined-multiline-flexible"
+					label="Message"
+					multiline
+					maxRows={4}
 					value={input}
-					onChange={(event) => setInput(event.target.value)}
+					onChange={(e) => setInput(e.target.value)}
 				/>
-				<button disabled={!input.length > 0} className="send-button">
-					Send
-				</button>
-			</form>
-		</div>
+				<Fab
+					color="primary"
+					aria-label="add"
+					disabled={!input.length > 0}
+					size="small"
+					style={{ alignSelf: "center" }}
+					onClick={handleSendMessage}
+				>
+					<SendIcon />
+				</Fab>
+			</Grid>
+		</Grid>
 	)
 }
 

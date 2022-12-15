@@ -7,18 +7,24 @@ import {
 	selectChatRecipients,
 	selectSelectedChatRecipient,
 } from "../../core/selectors"
+import { Grid, Typography } from "@mui/material"
 
 const Chat = () => {
 	const chatRecipients = useSelector(selectChatRecipients)
 	const selectedChatRecipient = useSelector(selectSelectedChatRecipient)
 	return (
-		<div>
+		<Grid container>
+			<Grid item xs={12}>
+				<Typography variant="h5" className="header-message">
+					Chat
+				</Typography>
+			</Grid>
 			{console.log("chat rognard")}
 			<RecipientSelector users={chatRecipients} />
 			{selectedChatRecipient && selectedChatRecipient.username && (
 				<MessagePanel user={selectedChatRecipient} />
 			)}
-		</div>
+		</Grid>
 	)
 }
 
