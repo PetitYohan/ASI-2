@@ -26,7 +26,6 @@ export default {
       socket.on("attack", (cards) => {
         const cardAlly = cards[0];
         const cardEnemy = cards[1];
-        console.log("a l'attaque " + cardAlly + cardEnemy);
         attack(socket, io, cardAlly, cardEnemy);
       });
     });

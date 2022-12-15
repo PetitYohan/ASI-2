@@ -37,6 +37,7 @@ export function joinRoom(socket, io) {
         console.log(`${u2.id} has joined the room`);
       });
       io.to(room).emit("roomCreated", roomCreated);
+      io.to(room).emit("turnOf", u2.id);
     }
   });
 }
