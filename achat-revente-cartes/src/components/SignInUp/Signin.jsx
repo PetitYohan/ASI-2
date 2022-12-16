@@ -4,13 +4,16 @@ import { setUser } from "../../core/actions";
 import { selectUser } from "../../core/selectors";
 import "./Signin.css";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { connectSocket } from "../../core/service/socket/util";
+import SocketContext from "../../core/service/socket/socket-context";
 
 const Login = () => {
   const dispatch = useDispatch();
   const { value: uname, bind: bindUname, reset: resetUname } = useInput("");
   const { value: pwd, bind: bindPwd, reset: resetPwd } = useInput("");
   const userSelect = useSelector(selectUser);
+  const socket = useContext(SocketContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (evt) => {
@@ -27,12 +30,12 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: uname, password: pwd }),
       };
-      const resp = await fetch(
-        "http://127.0.0.1/api/auth/login",
-        requestOptions
-      ).then((response) => response.json());
-
-      dispatch(setUser(resp));
+      fetch("http://127.0.0.1/api/auth/login", requestOptions)
+        .then((response) => response.json())
+        .then((user) => {
+          dispatch(setUser(user));
+          connectSocket(socket, user);
+        });
     }
   }
 
@@ -47,7 +50,7 @@ const Login = () => {
   }
 
   return (
-    <>
+    <div>
       <h3>Sign In</h3>
       <form onSubmit={handleSubmit}>
         <div class="imgcontainer">
@@ -89,7 +92,7 @@ const Login = () => {
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 export default Login;

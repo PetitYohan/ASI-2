@@ -46,7 +46,7 @@ const columns = [
 
 let rows = [];
 
-const CardList = ({ cardList, user, transac }) => {
+const CardList = (props) => {
   const dispatch = useDispatch();
 
   const onCardSelected = (card) => {
@@ -57,11 +57,11 @@ const CardList = ({ cardList, user, transac }) => {
     onCardSelected(params.row);
   };
 
-  if (cardList.length != 0) {
+  if (props.cardList.length != 0) {
     rows = [];
-    cardList.forEach((card) => {
-      if (transac === "sell") {
-        if (card.userId === user) {
+    props.cardList.forEach((card) => {
+      if (props.transac === "sell") {
+        if (card.userId === props.user) {
           rows.push({
             id: card.id,
             name: card.name,
@@ -75,7 +75,7 @@ const CardList = ({ cardList, user, transac }) => {
           });
         }
       } else {
-        if (card.userId !== user) {
+        if (card.userId !== props.user) {
           rows.push({
             id: card.id,
             name: card.name,

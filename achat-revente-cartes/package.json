@@ -19,16 +19,20 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.4.3",
     "redux": "^4.2.0",
-    "sort-by": "^1.2.0",
+    "socket.io": "^4.5.4",
+    "socket.io-client": "^4.5.3",
+    "sort-by": "^0.0.2",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
-    "@types/react": "^18.0.24",
-    "@types/react-dom": "^18.0.8",
-    "@vitejs/plugin-react": "^2.2.0",
     "@mui/material": "^5.10.14",
     "@mui/styled-engine-sc": "^5.10.6",
     "@mui/x-data-grid": "^5.17.11",
-    "vite": "^3.2.3"
+    "@types/react": "^18.0.24",
+    "@types/react-dom": "^18.0.8",
+    "@vitejs/plugin-react": "^2.2.0",
+    "vite": "^3.2.3",
+    "socket.io": "^4.5.4",
+    "socket.io-client": "^4.5.3"
   }
 }
