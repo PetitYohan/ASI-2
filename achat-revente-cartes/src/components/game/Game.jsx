@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const title = "Game";
 
-const Game = () => {
+const Game = (props) => {
   const dispatch = useDispatch();
   const socket = useContext(SocketContext);
   const userCards = useSelector(selectCards);
@@ -158,6 +158,8 @@ const Game = () => {
     <>
       <NavBar title={title} />
       <Chat />
+      {gameStart && playerTurn == socket.id && <h2 class="Turn">My Turn</h2>}
+      {gameStart && playerTurn != socket.id && <h2 class="Turn">Enemy Turn</h2>}
       <h2>My Cards</h2>
       {!gameStart && (
         <section>
@@ -249,7 +251,7 @@ const Game = () => {
             <Button variant="outlined" onClick={sendAttack}>
               ⚔️ Attack ⚔️
             </Button>
-            {room.players[myPlayer].energy}
+            💧{room.players[myPlayer].energy}
           </>
         )}
         <Button variant="outlined" onClick={sendDisconnectRoom}>

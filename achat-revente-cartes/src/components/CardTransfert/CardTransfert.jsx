@@ -10,7 +10,7 @@ import "./CardTransfert.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const CardTransfert = ({ transac }) => {
+const CardTransfert = (props) => {
   const dispatch = useDispatch();
   const cardList = useSelector(selectCards);
   const card = useSelector(selectCard);
@@ -26,7 +26,7 @@ const CardTransfert = ({ transac }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: userSelect.idUser, cardId: card.id }),
     };
-    fetch("http://127.0.0.1/api/store/" + transac, requestOptions).then(
+    fetch("http://127.0.0.1/api/store/" + props.transac, requestOptions).then(
       (response) => response.json()
     );
     setRefresh(!refresh);
@@ -49,7 +49,7 @@ const CardTransfert = ({ transac }) => {
     updateSolde();
   }, [refresh]);
 
-  if (transac == "sell") {
+  if (props.transac == "sell") {
     title = "SELL";
     txtbtn = "Sell";
     titlepage = "My Card";
@@ -64,7 +64,7 @@ const CardTransfert = ({ transac }) => {
           <CardList
             cardList={cardList}
             user={userSelect.idUser}
-            transac={transac}
+            transac={props.transac}
           />
         </div>
         <div id="cardshort" class="carddisplay">
