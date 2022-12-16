@@ -28,11 +28,11 @@ export const socketMiddleware = (store) => (next) => (action) => {
 			})
 			// Attach the callbacks
 			socket.on("connect", () => console.log("socket connected")) // TODO dispatch(setSocketConnected) ?
-			socket.on(events.NEW_MESSAGE, (message) =>
+			socket.on(events.NEW_MESSAGE, (message) => {
 				store.dispatch(
-					appendMessage(message, selectUser(store.getState())?.login)
+					appendMessage(message, selectUser(store.getState())?.idUser)
 				)
-			)
+			})
 			//TODO test if currying works
 			socket.on(events.USERS, (users) => {
 				store.dispatch(initChatRecipients(users))
@@ -48,10 +48,12 @@ export const socketMiddleware = (store) => (next) => (action) => {
 			break
 
 		case SOCKET_SEND:
-			socket.emit(events.NEW_MESSAGE, action.message, (message) =>
+			socket.emit(
+				events.NEW_MESSAGE,
+				action.message /* , (message) =>
 				store.dispatch(
 					appendMessage(message, selectUser(store.getState())?.login)
-				)
+				) */
 			)
 			break
 

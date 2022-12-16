@@ -76,7 +76,7 @@ export default {
 			})
 
 			// forward the private message to the right recipient (and to other tabs of the sender)
-			socket.on(events.NEW_MESSAGE, ({ content, to }, cb) => {
+			socket.on(events.NEW_MESSAGE, ({ content, to } /* , cb */) => {
 				console.log("new message from " + socket.userId)
 				const message = {
 					content,
@@ -84,9 +84,10 @@ export default {
 					to,
 				}
 				// si utilisation de map de correspondance : .to(to).to(socket.userId) => .to(sockeUsers[to]).to(socket.id)
-				socket.to(to).emit(events.NEW_MESSAGE, message)
-				cb(message)
+				io.to([to, socket.userId]).emit(events.NEW_MESSAGE, message)
+				//cb(message)
 				messageStore.saveMessage(message)
+				console.log("saved new message : " + JSON.stringify(message))
 			})
 
 			// notify users upon disconnection
