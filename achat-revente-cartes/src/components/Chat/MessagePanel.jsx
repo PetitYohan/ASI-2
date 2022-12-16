@@ -17,7 +17,6 @@ const MessagePanel = ({ user }) => {
 	const [input, setInput] = useState("")
 	const dispatch = useDispatch()
 
-	console.log(user)
 	const handleSendMessage = (e) => {
 		e.preventDefault()
 		if (user) {

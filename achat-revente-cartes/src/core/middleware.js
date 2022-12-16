@@ -1,13 +1,13 @@
 import { io } from "socket.io-client"
 import {
-	appendReceiveMessage,
-	appendSentMessage,
+	appendMessage,
 	chatRecipientConnected,
 	chatRecipientDisconnected,
 	initChatRecipients,
 	SOCKET_CONNECT,
 	SOCKET_SEND,
 } from "./actions"
+import { selectUser } from "./selectors"
 import { events } from "./service/socket/event"
 
 const URL = "http://127.0.0.1:3000"
@@ -28,8 +28,10 @@ export const socketMiddleware = (store) => (next) => (action) => {
 			})
 			// Attach the callbacks
 			socket.on("connect", () => console.log("socket connected")) // TODO dispatch(setSocketConnected) ?
-			socket.on(events.NEW_MESSAGE, (payload) =>
-				store.dispatch(appendReceiveMessage(payload))
+			socket.on(events.NEW_MESSAGE, (message) =>
+				store.dispatch(
+					appendMessage(message, selectUser(store.getState())?.login)
+				)
 			)
 			//TODO test if currying works
 			socket.on(events.USERS, (users) => {
@@ -46,9 +48,10 @@ export const socketMiddleware = (store) => (next) => (action) => {
 			break
 
 		case SOCKET_SEND:
-			//TODO test ack callback
-			socket.emit(events.NEW_MESSAGE, action.payload, (callback_payload) =>
-				store.dispatch(appendSentMessage(callback_payload))
+			socket.emit(events.NEW_MESSAGE, action.message, (message) =>
+				store.dispatch(
+					appendMessage(message, selectUser(store.getState())?.login)
+				)
 			)
 			break
 

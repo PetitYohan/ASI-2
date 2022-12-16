@@ -5,8 +5,6 @@ import { events } from "./event.mjs"
 
 export default {
 	ChatSocketIO: (io) => {
-		const randomId = () => crypto.randomBytes(8).toString("hex")
-
 		const sessionStore = new InMemorySessionStore()
 		const messageStore = new InMemoryMessageStore()
 

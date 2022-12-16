@@ -1,27 +1,27 @@
 #navbar {
-    display: flex;
-    align-items: center;
-    margin: 0;
-    padding: 2vh 3vh;
-    overflow: hidden;
-    background-color: #333;
-    justify-content: space-between;
+	display: flex;
+	align-items: center;
+	margin: 0;
+	padding: 2vh 3vh;
+	overflow: hidden;
+	background-color: #333;
+	justify-content: space-between;
 }
 
 span {
-    font-size: 20px;
-    color: white;
+	font-size: 20px;
+	/* color: white; */
 }
 
 #titre {
-    font-size: 30px;
+	font-size: 30px;
 }
 
 #profile {
-    width: 3vw;
-    height: 3vw;
-    min-width: 30px;
-    min-height: 30px;
-    vertical-align: middle;
-    margin-left: 1em;
+	width: 3vw;
+	height: 3vw;
+	min-width: 30px;
+	min-height: 30px;
+	vertical-align: middle;
+	margin-left: 1em;
 }

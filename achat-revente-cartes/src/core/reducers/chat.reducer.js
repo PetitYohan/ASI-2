@@ -63,11 +63,14 @@ const chatReducer = (state = initialState, action) => {
 				}
 			}
 
-		//TODO test
 		case APPEND_CHAT_RECIPIENT_MESSAGE:
+			//fromself dirty way
+			const recipientId = action.message.fromSelf
+				? action.message.to
+				: action.message.from
 			const new_recipients_list = state.recipients.map((r) => {
-				if (action.payload.recipient === r.userId) {
-					const messages = [...r.messages, action.payload.content]
+				if (recipientId === r.userId) {
+					const messages = [...r.messages, action.message]
 					return { ...r, messages }
 				} else {
 					return r

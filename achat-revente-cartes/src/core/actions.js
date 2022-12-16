@@ -49,19 +49,13 @@ export function connectSocket(user) {
 	return { type: SOCKET_CONNECT, user }
 }
 
-export function sendMessage(payload) {
-	console.log("sendMessage : " + JSON.stringify(payload))
-	return { type: SOCKET_SEND, payload }
+export function sendMessage(message) {
+	console.log("sendMessage : " + JSON.stringify(message))
+	return { type: SOCKET_SEND, message }
 }
 
-export function appendSentMessage(payload) {
-	console.log("appendSentMessage : " + JSON.stringify(payload))
-	const newpayload = { ...payload, recipient: payload.to }
-	return { type: APPEND_CHAT_RECIPIENT_MESSAGE, payload: newpayload }
-}
-
-export function appendReceiveMessage(payload) {
-	console.log("appendReceiveMessage : " + JSON.stringify(payload))
-	const newpayload = { ...payload, recipient: payload.from }
-	return { type: APPEND_CHAT_RECIPIENT_MESSAGE, payload: newpayload }
+export function appendMessage(message, selfId) {
+	console.log("appendMessage : " + JSON.stringify(message))
+	const newpayload = { ...message, fromSelf: message.from === selfId }
+	return { type: APPEND_CHAT_RECIPIENT_MESSAGE, message: newpayload }
 }
