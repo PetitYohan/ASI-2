@@ -1,11 +1,12 @@
-import store from "../../store"
-import { initChatRecipients } from "../../actions"
+import store from "../store"
+import { initChatRecipients } from "../actions"
 
 //TODO delete ou move dans middleware
 
 export const events = {
 	CONNECT: "connect",
 	DISCONNECT: "disconnect",
+	LOGIN: "login",
 	USERS: "users",
 	USER_CONNECTED: "user_connected",
 	USER_DISCONNECTED: "user disconnected",

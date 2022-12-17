@@ -1,11 +1,5 @@
-/* abstract */ class MessageStore {
-	saveMessage(message) {}
-	findMessagesForUser(id) {}
-}
-
-class InMemoryMessageStore extends MessageStore {
+class InMemoryMessageStore {
 	constructor() {
-		super()
 		this.messages = []
 	}
 

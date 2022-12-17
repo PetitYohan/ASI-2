@@ -1,5 +1,5 @@
 import React from "react"
-//import "./Chat.css"
+import "./Chat.css"
 import RecipientSelector from "./RecipientSelector"
 import MessagePanel from "./MessagePanel"
 import { useSelector } from "react-redux"
@@ -7,19 +7,19 @@ import {
 	selectChatRecipients,
 	selectSelectedChatRecipient,
 } from "../../core/selectors"
-import { Grid, Typography } from "@mui/material"
+import { Divider, Grid, Typography } from "@mui/material"
 
 const Chat = () => {
 	const chatRecipients = useSelector(selectChatRecipients)
 	const selectedChatRecipient = useSelector(selectSelectedChatRecipient)
 	return (
-		<Grid container>
+		<Grid container id="chat">
 			<Grid item xs={12}>
 				<Typography variant="h5" className="header-message">
 					Chat
 				</Typography>
 			</Grid>
-			{console.log("chat rognard")}
+			<Divider orientation="vertical" />
 			<RecipientSelector users={chatRecipients} />
 			{selectedChatRecipient && selectedChatRecipient.username && (
 				<MessagePanel user={selectedChatRecipient} />

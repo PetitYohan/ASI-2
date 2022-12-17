@@ -1,12 +1,5 @@
-/* abstract */ class SessionStore {
-	findSession(id) {}
-	saveSession(id, session) {}
-	findAllSessions() {}
-}
-
-class InMemorySessionStore extends SessionStore {
+class InMemorySessionStore {
 	constructor() {
-		super()
 		this.sessions = new Map()
 	}
 

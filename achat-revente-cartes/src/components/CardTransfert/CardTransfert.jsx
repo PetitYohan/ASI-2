@@ -26,7 +26,7 @@ const CardTransfert = ({ transac }) => {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ userId: userSelect.idUser, cardId: card.id }),
 		}
-		fetch("http://127.0.0.1/api/store/" + transac, requestOptions).then(
+		fetch("http://localhost/api/store/" + transac, requestOptions).then(
 			(response) => response.json()
 		)
 		setRefresh(!refresh)
@@ -34,12 +34,12 @@ const CardTransfert = ({ transac }) => {
 
 	useEffect(() => {
 		const getCards = async () => {
-			const resp = await fetch("http://127.0.0.1/api/card/cards")
+			const resp = await fetch("http://localhost/api/card/cards")
 			const cards = await resp.json()
 			dispatch(setCards(cards))
 		}
 		const updateSolde = async () => {
-			const resp = await fetch("http://127.0.0.1/api/user/" + userSelect.idUser)
+			const resp = await fetch("http://localhost/api/user/" + userSelect.idUser)
 			const user = await resp.json()
 			dispatch(setUser(user))
 		}

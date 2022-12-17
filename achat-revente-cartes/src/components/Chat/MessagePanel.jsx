@@ -10,8 +10,8 @@ import {
 import SendIcon from "@mui/icons-material/Send"
 import React, { useState, useContext } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { sendMessage } from "../../core/actions"
-//import "./MessagePanel.css"
+import { chatService } from "../../core/service/chatService"
+import "./MessagePanel.css"
 
 const MessagePanel = ({ user }) => {
 	const [input, setInput] = useState("")
@@ -24,72 +24,63 @@ const MessagePanel = ({ user }) => {
 				content: input,
 				to: user.userId,
 			}
-			dispatch(sendMessage(payload))
+			chatService.sendMessage(payload)
 		}
 		setInput("")
-	}
-
-	const displaySender = (message, index) => {
-		return (
-			index === 0 ||
-			user.messages[index - 1].fromSelf !== user.messages[index].fromSelf
-		)
 	}
 
 	//todo en fonction de from self : align="right" ou left + secondary : timestamp
 	//todo en-tete avec destinataire : user.username
 	return (
-		<Grid container>
-			<List>
-				<ListItem key={user.userId}>
-					<ListItemText secondary={user.connected ? "🔵" : "⚪"} align="right">
-						{user.username}
-					</ListItemText>
-				</ListItem>
-			</List>
-			<Divider orientation="horizontal" />
-			<List style={{ overflowY: "auto" }}>
-				{user.messages.map((message, i) => {
-					return (
-						<ListItem key={i}>
+		<Grid container direction={"column"}>
+			<Grid item>
+				<List style={{ overflowY: "scroll", width: "100%" }}>
+					{user.messages.map((message, i) => {
+						return (
 							<Grid container>
-								<Grid item xs={12}>
-									<ListItemText
-										align={message.fromSelf ? "right" : "left"}
-										primary={message.content}
-									></ListItemText>
-								</Grid>
-								<Grid item xs={12}>
-									<ListItemText
-										align={message.fromSelf ? "right" : "left"}
-										secondary={undefined /* message.time */}
-									></ListItemText>
-								</Grid>
+								<ListItem key={i}>
+									<Grid
+										item
+										xs={12}
+										className={message.fromSelf ? "right" : "left"}
+									>
+										<ListItemText primary={message.content}></ListItemText>
+										<ListItemText
+											secondary={new Date(message.timestamp).toLocaleTimeString(
+												"fr-FR"
+											)}
+										></ListItemText>
+									</Grid>
+								</ListItem>
 							</Grid>
-						</ListItem>
-					)
-				})}
-			</List>
+						)
+					})}
+				</List>
+			</Grid>
 			<Divider />
-			<Grid container style={{ padding: "20px" }}>
-				<TextField
-					id="outlined-multiline-flexible"
-					label="Message"
-					multiline
-					maxRows={4}
-					value={input}
-					onChange={(e) => setInput(e.target.value)}
-				/>
-				<Fab
-					color="primary"
-					aria-label="add"
-					disabled={!input.length > 0}
-					size="small"
-					style={{ alignSelf: "center" }}
-					onClick={handleSendMessage}
-				>
-					<SendIcon />
-				</Fab>
+			<Grid item container direction={"row"}>
+				<Grid item xs={10}>
+					<TextField
+						id="outlined-multiline-flexible"
+						label="Message"
+						multiline
+						maxRows={4}
+						value={input}
+						onChange={(e) => setInput(e.target.value)}
+						style={{ width: "100%" }}
+					/>
+				</Grid>
+				<Grid item xs={1} style={{ alignSelf: "center", marginLeft: "8px" }}>
+					<Fab
+						color="primary"
+						aria-label="add"
+						disabled={!input.length > 0}
+						size="small"
+						onClick={handleSendMessage}
+					>
+						<SendIcon />
+					</Fab>
+				</Grid>
 			</Grid>
 		</Grid>
 	)

@@ -10,7 +10,7 @@ export const CHAT_RECIPIENT_CONNECTED = "@@chat/RECIPIENT_CONNECTED"
 export const CHAT_RECIPIENT_DISCONNECTED = "@@chat/RECIPIENT_DISCONNECTED"
 export const APPEND_CHAT_RECIPIENT_MESSAGE = "@@chat/APPEND_NEW_MESSAGE"
 export const SOCKET_CONNECT = "@@socket/CONNECT"
-export const SOCKET_SEND = "@@socket/SEND"
+export const SOCKET_SEND_MESSAGE = "@@socket/SEND_MESSAGE"
 /*
  * action creators
  */
@@ -51,7 +51,7 @@ export function connectSocket(user) {
 
 export function sendMessage(message) {
 	console.log("sendMessage : " + JSON.stringify(message))
-	return { type: SOCKET_SEND, message }
+	return { type: SOCKET_SEND_MESSAGE, message }
 }
 
 export function appendMessage(message, selfId) {

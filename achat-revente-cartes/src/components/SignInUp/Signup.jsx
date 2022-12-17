@@ -31,7 +31,7 @@ const Login = () => {
 			}),
 		}
 		const resp = await fetch(
-			"http://127.0.0.1/api/auth/register",
+			"http://localhost/api/auth/register",
 			requestOptions
 		).then((response) => response)
 		if (resp.status === 200) {

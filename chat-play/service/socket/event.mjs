@@ -1,4 +1,5 @@
 export const events = {
+	LOGIN: "login",
 	CONNECTION: "connection",
 	DISCONNECT: "disconnect",
 	USERS: "users",

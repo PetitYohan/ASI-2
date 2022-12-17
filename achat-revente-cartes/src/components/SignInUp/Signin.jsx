@@ -1,10 +1,11 @@
 import { useInput } from "./input-hook"
 import { useDispatch, useSelector } from "react-redux"
-import { connectSocket, setUser } from "../../core/actions"
+import { setUser } from "../../core/actions"
 import { selectUser } from "../../core/selectors"
 import "./Signin.css"
 import { useNavigate } from "react-router-dom"
-import { useContext, useEffect } from "react"
+import { useEffect } from "react"
+import { userService } from "../../core/service/userService"
 
 const Login = () => {
 	const dispatch = useDispatch()
@@ -28,13 +29,13 @@ const Login = () => {
 				body: JSON.stringify({ username: uname, password: pwd }),
 			}
 			//TODO catch error => popup alert
-			fetch("http://127.0.0.1/api/auth/login", requestOptions)
+			fetch("http://localhost/api/auth/login", requestOptions)
 				.then((response) => response.json())
 				.then((user) => {
 					console.log("login ok user : ")
 					console.log(user)
 					dispatch(setUser(user))
-					dispatch(connectSocket(user))
+					userService.login(user)
 				})
 		}
 	}
@@ -55,7 +56,7 @@ const Login = () => {
 			<form onSubmit={handleSubmit}>
 				<div className="imgcontainer">
 					<img
-						src="./src/assets/profil_logo.png"
+						src="/src/assets/profil_logo.png"
 						alt="Avatar"
 						className="avatar"
 					></img>
