@@ -13,7 +13,9 @@ socket.on(events.NEW_MESSAGE, (message) => {
 	store.dispatch(appendMessage(message, selectUser(store.getState())?.idUser))
 })
 socket.on(events.USERS, (users) => {
-	store.dispatch(initChatRecipients(users))
+	store.dispatch(
+		initChatRecipients(users, selectUser(store.getState())?.idUser)
+	)
 })
 
 socket.on(events.USER_CONNECTED, (user) => {

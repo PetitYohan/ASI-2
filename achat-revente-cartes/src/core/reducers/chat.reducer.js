@@ -26,7 +26,7 @@ const chatReducer = (state = initialState, action) => {
 		case INIT_CHAT_RECIPIENTS:
 			return {
 				...state,
-				recipients: action.recipients, //TODO quel structure ? pour l'instant map (otherUser -> messages) + order by timestamp asc !
+				recipients: action.recipients,
 			}
 		case CHAT_RECIPIENT_CONNECTED:
 			if (state.recipients.find((r) => r.userId === action.recipient.userId)) {

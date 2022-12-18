@@ -29,9 +29,18 @@ export function updateSelectedChatRecipient(selectedRecipientId) {
 	)
 	return { type: UPDATE_CHAT_SELECTED_RECIPIENT, selectedRecipientId }
 }
-export function initChatRecipients(recipients) {
+export function initChatRecipients(recipients, selfId) {
 	console.log("initChatRecipients : " + JSON.stringify(recipients))
-	return { type: INIT_CHAT_RECIPIENTS, recipients }
+
+	recipients.forEach((r) => {
+		r.messages.forEach((m) => {
+			m["fromSelf"] = m.from === selfId
+		})
+	})
+	return {
+		type: INIT_CHAT_RECIPIENTS,
+		recipients,
+	}
 }
 
 export function chatRecipientConnected(recipient) {

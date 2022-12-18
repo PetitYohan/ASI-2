@@ -36,6 +36,8 @@ const Login = () => {
 		).then((response) => response)
 		if (resp.status === 200) {
 			alert("User created, you can now login with the Sign In section 😊")
+		} else {
+			alert("Error encountered while registering")
 		}
 	}
 

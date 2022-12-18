@@ -33,8 +33,9 @@ const Game = () => {
 			const resp = await fetch(
 				"http://localhost/api/card/user/" + userSelect.idUser
 			)
-			const cards = await resp.json()
-			dispatch(setCards(cards))
+				.then((res) => res.json())
+				.then((cards) => dispatch(setCards(cards)))
+				.catch((err) => console.log(err))
 		}
 
 		getUserCards()
@@ -176,7 +177,7 @@ const Game = () => {
 					<h2>My Cards</h2>
 					{!gameStart && (
 						<section id="cardChoiceList">
-							{userCards.map((card) => {
+							{userCards?.map((card) => {
 								return (
 									<div
 										className="cardToSelect"
