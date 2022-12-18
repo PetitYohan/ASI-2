@@ -72,6 +72,7 @@ const CardList = ({ cardList, user, transac }) => {
 						defence: card.defence,
 						attack: card.attack,
 						price: card.price,
+						smallImgUrl: card.smallImgUrl,
 					})
 				}
 			} else {
@@ -86,6 +87,7 @@ const CardList = ({ cardList, user, transac }) => {
 						defence: card.defence,
 						attack: card.attack,
 						price: card.price,
+						smallImgUrl: card.smallImgUrl,
 					})
 				}
 			}
