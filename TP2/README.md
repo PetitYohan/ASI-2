@@ -19,6 +19,12 @@ Membres :
 
 **Catherine** : chat + jeu
 
+## Lien Youtube :
+
+https://www.youtube.com/watch?v=Oqu1h9OOhJQ
+
+NB : Sur la capture on ne voit pas la liste dropdown des utilisateurs du chat.
+
 ## Lien GitHub
 
 https://github.com/PetitYohan/ASI-2.git
