@@ -26,6 +26,7 @@ const Game = () => {
 	const [enemyCard, setEnemyCard] = useState(0)
 	const [myPlayer, setMyPlayer] = useState(0)
 	const [playerTurn, setPlayerTurn] = useState("")
+	const [waitingState, setWaitingState] = useState(false)
 	const navigate = useNavigate()
 
 	useEffect(() => {
@@ -83,6 +84,7 @@ const Game = () => {
 				setMyPlayer(1)
 			}
 			setGameStart(true)
+			setWaitingState(false)
 		}
 	}, [room])
 
@@ -90,7 +92,9 @@ const Game = () => {
 		if (cardsList.length == 5) {
 			const userCardsSelected = cardsList
 			//TODO dispatch
-			socket.emit("joinRoom", userCardsSelected)
+			socket.emit("joinRoom", userCardsSelected, (ack) => {
+				setWaitingState(true)
+			})
 			cardsList.map((card) => {
 				document.getElementById(card.id).style.border =
 					"0.2em solid rgb(44, 44, 44)"
@@ -123,7 +127,9 @@ const Game = () => {
 
 	const sendDisconnectRoom = () => {
 		//TODO dispatch
-		socket.emit("disconnectRoom")
+		socket.emit("disconnectRoom", (ack) => {
+			setWaitingState(false)
+		})
 		setenemyCards([])
 		setGameStart(false)
 	}
@@ -175,8 +181,10 @@ const Game = () => {
 						<h2 className="Turn">Enemy Turn</h2>
 					)}
 					<h2>My Cards</h2>
+					{console.log("en attente : " + waitingState)}
+					{waitingState && <span>{"En attente de joueur"}</span>}
 					{!gameStart && (
-						<section id="cardChoiceList">
+						<section className="cardList">
 							{userCards?.map((card) => {
 								return (
 									<div
@@ -205,7 +213,7 @@ const Game = () => {
 						</section>
 					)}
 					{gameStart && (
-						<section>
+						<section className="cardList">
 							{myCards.map((card) => {
 								return (
 									<div
@@ -232,7 +240,7 @@ const Game = () => {
 					{gameStart && (
 						<>
 							<h2>Enemy Cards</h2>
-							<section>
+							<section className="cardList">
 								{enemyCards.map((card) => {
 									return (
 										<div
@@ -257,7 +265,6 @@ const Game = () => {
 							</section>
 						</>
 					)}
-
 					<div id="buttonGame">
 						{!gameStart && (
 							<Button variant="outlined" onClick={sendJoinRoom}>

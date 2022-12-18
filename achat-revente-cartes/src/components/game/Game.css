@@ -28,7 +28,7 @@ section {
 	width: 15vw;
 }
 
-#cardChoiceList {
+.cardList {
 	color: white;
 	justify-content: center;
 }

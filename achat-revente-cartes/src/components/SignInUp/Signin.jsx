@@ -29,14 +29,18 @@ const Login = () => {
 				body: JSON.stringify({ username: uname, password: pwd }),
 			}
 			//TODO catch error => popup alert
-			fetch("http://localhost/api/auth/login", requestOptions)
-				.then((response) => response.json())
-				.then((user) => {
-					console.log("login ok user : ")
-					console.log(user)
-					dispatch(setUser(user))
-					userService.login(user)
-				})
+			const resp = await fetch(
+				"http://localhost/api/auth/login",
+				requestOptions
+			)
+			if (resp.status === 200) {
+				const user = await resp.json()
+				console.log("login ok user : ")
+				dispatch(setUser(user))
+				userService.login(user)
+			} else {
+				alert("Error encountered while login")
+			}
 		}
 	}
 
