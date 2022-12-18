@@ -3,7 +3,7 @@ const waitingList = []
 export const rooms = []
 
 export function joinRoom(socket, io) {
-	socket.on("joinRoom", (userCards, cb) => {
+	socket.on("joinRoom", (userCards) => {
 		waitingList.push({ userSocket: socket, cards: userCards })
 
 		if (waitingList.length > 1) {
@@ -39,13 +39,12 @@ export function joinRoom(socket, io) {
 			io.to(room).emit("roomCreated", roomCreated)
 			io.to(room).emit("turnOf", u2.id)
 		}
-		cb()
 	})
 }
 
 export function disconnectRoom(socket) {
 	//Handle disconnect
-	socket.on("disconnectRoom", (cb) => {
+	socket.on("disconnectRoom", () => {
 		//Remove the disconnected user from the users list
 		let room = rooms.findIndex(
 			(room) =>
@@ -57,6 +56,5 @@ export function disconnectRoom(socket) {
 			//Remove the room from roomList
 			rooms.splice(room, 1)
 		}
-		cb()
 	})
 }

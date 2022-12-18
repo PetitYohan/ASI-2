@@ -26,7 +26,6 @@ const Game = () => {
 	const [enemyCard, setEnemyCard] = useState(0)
 	const [myPlayer, setMyPlayer] = useState(0)
 	const [playerTurn, setPlayerTurn] = useState("")
-	const [waitingState, setWaitingState] = useState(false)
 	const navigate = useNavigate()
 
 	useEffect(() => {
@@ -64,11 +63,11 @@ const Game = () => {
 			if (socket.id == player) {
 				alert("👑 You WON 👑")
 				navigate("/home")
-			} else if (playerTurn == player) {
+			} else {
 				alert("😵 You LOSE 😵")
-				sendDisconnectRoom()
 				navigate("/home")
 			}
+			sendDisconnectRoom()
 		})
 	}, [])
 
@@ -84,7 +83,6 @@ const Game = () => {
 				setMyPlayer(1)
 			}
 			setGameStart(true)
-			setWaitingState(false)
 		}
 	}, [room])
 
@@ -92,9 +90,7 @@ const Game = () => {
 		if (cardsList.length == 5) {
 			const userCardsSelected = cardsList
 			//TODO dispatch
-			socket.emit("joinRoom", userCardsSelected, (ack) => {
-				setWaitingState(true)
-			})
+			socket.emit("joinRoom", userCardsSelected)
 			cardsList.map((card) => {
 				document.getElementById(card.id).style.border =
 					"0.2em solid rgb(44, 44, 44)"
@@ -127,9 +123,7 @@ const Game = () => {
 
 	const sendDisconnectRoom = () => {
 		//TODO dispatch
-		socket.emit("disconnectRoom", (ack) => {
-			setWaitingState(false)
-		})
+		socket.emit("disconnectRoom")
 		setenemyCards([])
 		setGameStart(false)
 	}
@@ -181,8 +175,6 @@ const Game = () => {
 						<h2 className="Turn">Enemy Turn</h2>
 					)}
 					<h2>My Cards</h2>
-					{console.log("en attente : " + waitingState)}
-					{waitingState && <span>{"En attente de joueur"}</span>}
 					{!gameStart && (
 						<section className="cardList">
 							{userCards?.map((card) => {
