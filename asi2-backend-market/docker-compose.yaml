@@ -77,6 +77,32 @@ services:
     networks:
       - store-service-network
       - general-network
+  
+  chat-history-db:
+    image: postgres:14-alpine
+    container_name: chat-history-db
+    restart: always
+    environment:
+      POSTGRES_USER: login
+      POSTGRES_PASSWORD: pwd
+      POSTGRES_DB: bd
+    networks:
+      - chat-history-service-network
+
+  chat-history-service:
+    build: chatHistoryService/
+    container_name: chat-history-service
+    depends_on:
+      - "chat-history-db"
+      - "activemq"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://chat-history-db:5432/bd
+      - SPRING_DATASOURCE_USERNAME=login
+      - SPRING_DATASOURCE_PASSWORD=pwd
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    networks:
+      - chat-history-service-network
+      - general-network
 
   auth-service:
     build: authService/
@@ -107,6 +133,7 @@ services:
       - "user-service"
       - "store-service"
       - "auth-service"
+      - "chat-history-service"
       - "static"
     networks:
       - general-network
@@ -122,5 +149,6 @@ networks:
   card-service-network:
   user-service-network:
   store-service-network:
+  chat-history-service-network:
   auth-service-network:
   general-network:
