@@ -1,11 +1,16 @@
 /*
  * action types
  */
-export const UPDATE_CARDS = "UPDATE_CARDS"
-export const UPDATE_CARD = "UPDATE_CARD"
-export const UPDATE_USER = "UPDATE_USER"
-export const UPDATE_SELECTED_RECIPIENT = "UPDATE_SELECTED_RECIPIENT"
-export const UPDATE_RECIPIENTS = "UPDATE_RECIPIENTS"
+export const UPDATE_CARDS = "@@card/UPDATE_CARDS"
+export const UPDATE_CARD = "@@card/UPDATE_CARD"
+export const UPDATE_USER = "@@user/UPDATE_USER"
+export const UPDATE_CHAT_SELECTED_RECIPIENT = "@@chat/UPDATE_SELECTED_RECIPIENT"
+export const INIT_CHAT_RECIPIENTS = "@@chat/INIT_RECIPIENTS"
+export const CHAT_RECIPIENT_CONNECTED = "@@chat/RECIPIENT_CONNECTED"
+export const CHAT_RECIPIENT_DISCONNECTED = "@@chat/RECIPIENT_DISCONNECTED"
+export const APPEND_CHAT_RECIPIENT_MESSAGE = "@@chat/APPEND_NEW_MESSAGE"
+export const SOCKET_CONNECT = "@@socket/CONNECT"
+export const SOCKET_SEND_MESSAGE = "@@socket/SEND_MESSAGE"
 /*
  * action creators
  */
@@ -18,32 +23,48 @@ export function setSelectedCard(card) {
 export function setUser(user) {
 	return { type: UPDATE_USER, user }
 }
-export function setSelectedChatRecipient(selectedRecipient) {
-	return { type: UPDATE_SELECTED_RECIPIENT, selectedRecipient }
+export function updateSelectedChatRecipient(selectedRecipientId) {
+	console.log(
+		"updateSelectedChatRecipient : " + JSON.stringify(selectedRecipientId)
+	)
+	return { type: UPDATE_CHAT_SELECTED_RECIPIENT, selectedRecipientId }
 }
-export function setChatRecipients(recipients, socket) {
-	const newRecipients = []
-	recipients.forEach((user) => {
-		user.messages.forEach((message) => {
-			message.fromSelf = message.from === socket.user.userID
+export function initChatRecipients(recipients, selfId) {
+	console.log("initChatRecipients : " + JSON.stringify(recipients))
+
+	recipients.forEach((r) => {
+		r.messages.forEach((m) => {
+			m["fromSelf"] = m.from === selfId
 		})
-		for (let i = 0; i < recipients.length; i++) {
-			const existingUser = recipients[i]
-			if (existingUser.userID === user.userID) {
-				existingUser.connected = user.connected
-				existingUser.messages = user.messages
-				break
-			}
-		}
-		user.self = user.userID === socket.user.userID
-		newRecipients.push(user)
 	})
-	// put the current user first, and sort by username
-	//newRecipients.sort((a, b) => {
-	//	if (a.self) return -1
-	//	if (b.self) return 1
-	//	if (a.username < b.username) return -1
-	//	return a.username > b.username ? 1 : 0
-	//})
-	return { type: UPDATE_RECIPIENTS, recipients : newRecipients }
+	return {
+		type: INIT_CHAT_RECIPIENTS,
+		recipients,
+	}
+}
+
+export function chatRecipientConnected(recipient) {
+	console.log("chatRecipientConnected : " + JSON.stringify(recipient))
+	return { type: CHAT_RECIPIENT_CONNECTED, recipient }
+}
+
+export function chatRecipientDisconnected(recipientId) {
+	console.log("chatRecipientDisconnected : " + JSON.stringify(recipientId))
+	return { type: CHAT_RECIPIENT_DISCONNECTED, recipientId }
+}
+
+export function connectSocket(user) {
+	console.log("connectSocket : " + JSON.stringify(user))
+	return { type: SOCKET_CONNECT, user }
+}
+
+export function sendMessage(message) {
+	console.log("sendMessage : " + JSON.stringify(message))
+	return { type: SOCKET_SEND_MESSAGE, message }
+}
+
+export function appendMessage(message, selfId) {
+	console.log("appendMessage : " + JSON.stringify(message))
+	const newpayload = { ...message, fromSelf: message.from === selfId }
+	return { type: APPEND_CHAT_RECIPIENT_MESSAGE, message: newpayload }
 }

@@ -1,10 +1,10 @@
 #auth {
-    padding: 1em;
-    text-align: center;
-    color: white;
+	padding: 2em;
+	text-align: center;
+	/* color: white; */
 }
 
 #menu {
-    display: inline-block;
-    width: 100px;
+	display: inline-block;
+	width: 100px;
 }

@@ -1,9 +1,12 @@
-import store from "../../store"
-import { setChatRecipients } from "../../actions"
+import store from "../store"
+import { initChatRecipients } from "../actions"
+
+//TODO delete ou move dans middleware
 
 export const events = {
 	CONNECT: "connect",
 	DISCONNECT: "disconnect",
+	LOGIN: "login",
 	USERS: "users",
 	USER_CONNECTED: "user_connected",
 	USER_DISCONNECTED: "user disconnected",
@@ -24,7 +27,7 @@ export function registerBaseEvents(socket) {
 
 export function registerChatEvents(socket) {
 	socket.on(events.USERS, (users) => {
-		store.dispatch(setChatRecipients(users, socket))
+		store.dispatch(initChatRecipients(users, socket))
 	})
 	socket.on(events.USER_CONNECTED, (data) => {
 		console.log("socket USER_CONNECTED : " + data)
